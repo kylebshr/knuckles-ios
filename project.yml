@@ -1,0 +1,23 @@
+name: knuckles
+options:
+  bundleIdPrefix: com.kylebashour
+configFiles:
+  Debug: Project-Debug.xcconfig
+  Release: Project-Release.xcconfig
+targets:
+  knuckles:
+    configFiles:
+      Debug: Sources/knuckles-Debug.xcconfig
+      Release: Sources/knuckles-Release.xcconfig
+    preBuildScripts:
+      - path: tools/swiftlint.sh
+        name: Run swiftlint
+    type: application
+    platform: iOS
+    scheme: {}
+    sources:
+      - path: Sources
+    settings:
+      VERSIONING_SYSTEM: Apple Generic
+      CURRENT_PROJECT_VERSION: 1
+      TARGETED_DEVICE_FAMILY: 1

@@ -1,0 +1,8 @@
+disabled_rules:
+  - identifier_name
+  - unused_setter_value
+  - opening_brace
+
+line_length: 160
+trailing_comma:
+  mandatory_comma: true

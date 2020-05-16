@@ -1,0 +1,74 @@
+#include "Project-Shared.xcconfig"
+
+
+// Debug Information Format
+// 
+// The type of debug information to produce.
+// 
+// * *DWARF:* Object files and linked products will use DWARF as the debug information
+// format. [dwarf]
+// * *DWARF with dSYM File:* Object files and linked products will use DWARF as the debug
+// information format, and Xcode will also produce a dSYM file containing the debug
+// information from the individual object files (except that a dSYM file is not needed
+// and will not be created for static library or object file products). [dwarf-with-dsym]
+
+DEBUG_INFORMATION_FORMAT = dwarf
+
+
+
+// Enable Testability
+// 
+// When this setting is activated, the product will be built with options appropriate for
+// running automated tests, such as making private interfaces accessible to the tests.
+// This may result in tests running slower than they would without testability enabled.
+
+ENABLE_TESTABILITY = YES
+
+
+
+GCC_DYNAMIC_NO_PIC = NO
+
+
+
+GCC_OPTIMIZATION_LEVEL = 0
+
+
+
+GCC_PREPROCESSOR_DEFINITIONS = DEBUG=1 $(inherited)
+
+
+
+// Produce Debugging Information
+// 
+// Debugging information is required for shader debugging and profiling.
+
+MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE
+
+
+
+// Build Active Architecture Only
+// 
+// If enabled, only the active architecture is built. This setting will be ignored when
+// building with a run destination which does not define a specific architecture, such as
+// a 'Generic Device' run destination.
+
+ONLY_ACTIVE_ARCH = YES
+
+
+
+// Active Compilation Conditions
+// 
+// A list of compilation conditions to enable for conditional compilation expressions.
+
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG
+
+
+
+// Swift Optimization Level
+// 
+// * *None:* Compile without any optimization. [-Onone]
+// * *Optimize for Speed:* [-O]
+// * *Optimize for Size:* [-Osize]
+// * *Whole Module Optimization:* [-O -whole-module-optimization]
+
+SWIFT_OPTIMIZATION_LEVEL = -Onone
