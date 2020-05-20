@@ -197,7 +197,7 @@ class PayPeriodTests: XCTestCase {
             "03/13/2020",
             "03/31/2020",
             "04/15/2020",
-            "04/30/2020",
+//            "04/30/2020",
         ]
 
         XCTAssertEqual(dates, payPeriod.from(date: previousDate, to: nextDate))
