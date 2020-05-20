@@ -5,7 +5,7 @@ configFiles:
   Debug: Project-Debug.xcconfig
   Release: Project-Release.xcconfig
 targets:
-  knuckles:
+  Knuckles:
     configFiles:
       Debug: Sources/knuckles-Debug.xcconfig
       Release: Sources/knuckles-Release.xcconfig
@@ -21,3 +21,10 @@ targets:
       VERSIONING_SYSTEM: Apple Generic
       CURRENT_PROJECT_VERSION: 1
       TARGETED_DEVICE_FAMILY: 1
+  KnucklesTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: Tests
+    dependencies:
+      - target: Knuckles
