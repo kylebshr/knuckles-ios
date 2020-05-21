@@ -21,6 +21,16 @@ task :set_build_number, :build_number do |t, args|
     `agvtool new-version #{build_number}`
 end
 
+task :test do
+    if command?('xcpretty')
+        test()
+    else
+        puts 'Installing xcpretty'
+        `sudo gem install xcpretty`
+        test()
+    end
+end
+
 def command?(name)
     `which #{name}`
     $?.success?
@@ -34,4 +44,8 @@ end
 def install_xcodegen()
 	puts 'Installing xcodegen...'
 	`brew install xcodegen`
+end
+
+def test()
+    `set -o pipefail && xcodebuild test -scheme Knuckles -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.4.1' | xcpretty`
 end
