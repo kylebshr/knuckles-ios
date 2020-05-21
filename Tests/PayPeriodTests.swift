@@ -35,6 +35,7 @@ class PayPeriodTests: XCTestCase {
         let nextDate: Date = "01/31/2020"
 
         let dates: [Date] = [
+            "01/02/2020",
             "01/09/2020",
             "01/16/2020",
             "01/23/2020",
@@ -46,14 +47,25 @@ class PayPeriodTests: XCTestCase {
 
     func testWeeklyEndsOnPayPeriod() {
         let payPeriod = PayPeriod.weekly(day: 5)
-        let previousDate: Date = "01/02/2020"
+        let previousDate: Date = "01/03/2020"
         let nextDate: Date = "01/30/2020"
 
         let dates: [Date] = [
             "01/09/2020",
             "01/16/2020",
             "01/23/2020",
-            "01/30/2020",
+        ]
+
+        XCTAssertEqual(dates, payPeriod.from(date: previousDate, to: nextDate))
+    }
+
+    func testWeeklyStartAndEndOnSamePayDay() {
+        let payPeriod = PayPeriod.weekly(day: 5)
+        let previousDate: Date = "01/02/2020"
+        let nextDate: Date = "01/02/2020"
+
+        let dates: [Date] = [
+            "01/02/2020",
         ]
 
         XCTAssertEqual(dates, payPeriod.from(date: previousDate, to: nextDate))
@@ -67,6 +79,7 @@ class PayPeriodTests: XCTestCase {
         let nextDate: Date = "01/31/2020"
 
         let dates: [Date] = [
+            "01/01/2020",
             "01/15/2020",
         ]
 
@@ -83,12 +96,11 @@ class PayPeriodTests: XCTestCase {
 
     func testFirstAndFifteenthEndsOnPayPeriod() {
         let payPeriod = PayPeriod.firstAndFifteenth(adjustForWeekends: false)
-        let previousDate: Date = "01/01/2020"
+        let previousDate: Date = "01/02/2020"
         let nextDate: Date = "02/01/2020"
 
         let dates: [Date] = [
             "01/15/2020",
-            "02/01/2020",
         ]
 
         XCTAssertEqual(dates, payPeriod.from(date: previousDate, to: nextDate))
@@ -130,6 +142,18 @@ class PayPeriodTests: XCTestCase {
         XCTAssertEqual(dates, payPeriod.from(date: previousDate, to: nextDate))
     }
 
+    func testFirstAndFifteenthStartAndEndOnSamePayDay() {
+        let payPeriod = PayPeriod.firstAndFifteenth(adjustForWeekends: false)
+        let previousDate: Date = "01/01/2020"
+        let nextDate: Date = "01/01/2020"
+
+        let dates: [Date] = [
+            "01/01/2020",
+        ]
+
+        XCTAssertEqual(dates, payPeriod.from(date: previousDate, to: nextDate))
+    }
+
     // MARK: - Fifteenth and last
 
     func testFifteenthAndLastFirstMatches() {
@@ -138,6 +162,7 @@ class PayPeriodTests: XCTestCase {
         let nextDate: Date = "02/01/2020"
 
         let dates: [Date] = [
+            "01/15/2020",
             "01/31/2020",
         ]
 
@@ -159,7 +184,6 @@ class PayPeriodTests: XCTestCase {
 
         let dates: [Date] = [
             "01/15/2020",
-            "01/31/2020",
         ]
 
         XCTAssertEqual(dates, payPeriod.from(date: previousDate, to: nextDate))
@@ -198,6 +222,18 @@ class PayPeriodTests: XCTestCase {
             "03/31/2020",
             "04/15/2020",
             "04/30/2020",
+        ]
+
+        XCTAssertEqual(dates, payPeriod.from(date: previousDate, to: nextDate))
+    }
+
+    func testFifteenthAndLastStartAndEndOnSamePayDay() {
+        let payPeriod = PayPeriod.fifteenthAndLast(adjustForWeekends: false)
+        let previousDate: Date = "01/15/2020"
+        let nextDate: Date = "01/15/2020"
+
+        let dates: [Date] = [
+            "01/15/2020",
         ]
 
         XCTAssertEqual(dates, payPeriod.from(date: previousDate, to: nextDate))

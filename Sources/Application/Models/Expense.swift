@@ -32,18 +32,18 @@ struct Expense: Codable, Equatable {
     }
 
     func amountSaved(using period: PayPeriod, on date: Date = Date()) -> Decimal {
-        let date = calendar.date(byAdding: .day, value: 1, to: date)!
-        let payDays = period.from(date: previousDueDate(from: date), to: date)
+        let nextDay = calendar.date(byAdding: .day, value: 1, to: date)!
+        let payDays = period.from(date: previousDueDate(from: date), to: nextDay)
         return nextAmountSaved(using: period, on: date) * Decimal(payDays.count)
     }
 
     func nextDueDate(from date: Date) -> Date  {
-        if calendar.component(.day, from: date) == dayDueAt { return date }
         let components = DateComponents(calendar: calendar, day: dayDueAt)
         return calendar.nextDate(after: date, matching: components, matchingPolicy: .nextTime)!
     }
 
     func previousDueDate(from date: Date) -> Date {
+        if calendar.component(.day, from: date) == dayDueAt { return date }
         let components = DateComponents(calendar: calendar, day: dayDueAt)
         return calendar.nextDate(after: date, matching: components, matchingPolicy: .nextTime, direction: .backward)!
     }

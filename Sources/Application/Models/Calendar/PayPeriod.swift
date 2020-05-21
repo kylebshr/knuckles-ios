@@ -40,10 +40,11 @@ enum PayPeriod {
         let to = calendar.startOfDay(for: to)
 
         let components = DateComponents(weekday: on)
-        var date = calendar.nextDate(after: from, matching: components, matchingPolicy: .nextTime)!
+        var date = calendar.component(.weekday, from: from) == on ? from
+            : calendar.nextDate(after: from, matching: components, matchingPolicy: .nextTime)!
         var dates: [Date] = []
 
-        while date <= to {
+        while date < to || date == from {
             dates.append(date)
             date = calendar.date(byAdding: .weekOfYear, value: 1, to: date)!
         }
@@ -57,6 +58,10 @@ enum PayPeriod {
 
         var date = from
         var dates: [Date] = []
+
+        if calendar.component(.day, from: from) == 15 || calendar.component(.day, from: from) == 1 {
+            dates.append(from)
+        }
 
         repeat {
             let day = calendar.component(.day, from: date)
@@ -72,13 +77,13 @@ enum PayPeriod {
 
             if adjustForWeekends, let weekendStart = calendar.dateIntervalOfWeekend(containing: date)?.start {
                 let date = calendar.date(byAdding: .day, value: -1, to: weekendStart)!
-                if date <= to && date > from {
+                if date < to && date >= from {
                     dates.append(date)
                 }
-            } else if date <= to {
+            } else if date < to {
                 dates.append(date)
             }
-        } while date <= to
+        } while date < to
 
         return dates
     }
@@ -91,21 +96,17 @@ enum PayPeriod {
         var dates: [Date] = []
 
         let day = calendar.component(.day, from: from)
-        let lastDay = calendar.component(.day, from: from.endOfMonth())
 
-        if day < 15 {
+        if day <= 15 {
             date = calendar.date(bySetting: .day, value: 15, of: from)!
-        } else if day == lastDay {
-            date = calendar.date(bySetting: .day, value: 15, of: date)!
-            date = calendar.date(byAdding: .month, value: 1, to: date)!
         } else {
             date = from.endOfMonth()
         }
 
-        while date <= to {
+        while date < to || date == from {
             if adjustForWeekends, let weekendStart = calendar.dateIntervalOfWeekend(containing: date)?.start {
                 let date = calendar.date(byAdding: .day, value: -1, to: weekendStart)!
-                if date > from {
+                if date >= from {
                     dates.append(date)
                 }
             } else {
