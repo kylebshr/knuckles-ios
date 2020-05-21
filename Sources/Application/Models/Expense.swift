@@ -7,7 +7,7 @@
 
 import Foundation
 
-private let calendar = Calendar.autoupdatingCurrent
+private let calendar = Calendar(identifier: .gregorian)
 
 struct Expense: Codable, Equatable {
 
@@ -17,17 +17,23 @@ struct Expense: Codable, Equatable {
 
     var amount: Decimal
 
-    var nextAmountSaved: Decimal {
-        return 0
+    func nextAmountSaved(using period: PayPeriod) -> Decimal {
+        let payDays = period.from(date: previousDueDate, to: nextDueDate)
+        return amount / Decimal(payDays.count)
     }
 
-    var amountSaved: Decimal {
-        return 0
+    func amountSaved(using period: PayPeriod) -> Decimal {
+        let payDays = period.from(date: previousDueDate, to: Date())
+        return nextAmountSaved(using: period) * Decimal(payDays.count)
     }
 
     var nextDueDate: Date {
-        let components = DateComponents(calendar: calendar, day: dayDueAt, hour: 0, minute: 0, second: 0)
+        let components = DateComponents(calendar: calendar, day: dayDueAt)
         return calendar.nextDate(after: Date(), matching: components, matchingPolicy: .nextTime)!
     }
 
+    var previousDueDate: Date {
+        let components = DateComponents(calendar: calendar, day: dayDueAt)
+        return calendar.nextDate(after: Date(), matching: components, matchingPolicy: .nextTime, direction: .backward)!
+    }
 }
