@@ -203,15 +203,3 @@ class PayPeriodTests: XCTestCase {
         XCTAssertEqual(dates, payPeriod.from(date: previousDate, to: nextDate))
     }
 }
-
-extension Date: ExpressibleByStringLiteral {
-    static let formatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM/dd/yyyy"
-        return formatter
-    }()
-
-    public init(stringLiteral: String) {
-        self = Date.formatter.date(from: stringLiteral)!
-    }
-}

@@ -26,23 +26,25 @@ struct Expense: Codable, Equatable {
         self.createdAt = calendar.startOfDay(for: Date())
     }
 
-    func nextAmountSaved(using period: PayPeriod) -> Decimal {
-        let payDays = period.from(date: previousDueDate, to: nextDueDate)
+    func nextAmountSaved(using period: PayPeriod, on date: Date = Date()) -> Decimal {
+        let payDays = period.from(date: previousDueDate(from: date), to: nextDueDate(from: date))
         return amount / Decimal(payDays.count)
     }
 
-    func amountSaved(using period: PayPeriod) -> Decimal {
-        let payDays = period.from(date: previousDueDate, to: Date())
-        return nextAmountSaved(using: period) * Decimal(payDays.count)
+    func amountSaved(using period: PayPeriod, on date: Date = Date()) -> Decimal {
+        let date = calendar.date(byAdding: .day, value: 1, to: date)!
+        let payDays = period.from(date: previousDueDate(from: date), to: date)
+        return nextAmountSaved(using: period, on: date) * Decimal(payDays.count)
     }
 
-    var nextDueDate: Date {
+    func nextDueDate(from date: Date) -> Date  {
+        if calendar.component(.day, from: date) == dayDueAt { return date }
         let components = DateComponents(calendar: calendar, day: dayDueAt)
-        return calendar.nextDate(after: Date(), matching: components, matchingPolicy: .nextTime)!
+        return calendar.nextDate(after: date, matching: components, matchingPolicy: .nextTime)!
     }
 
-    var previousDueDate: Date {
+    func previousDueDate(from date: Date) -> Date {
         let components = DateComponents(calendar: calendar, day: dayDueAt)
-        return calendar.nextDate(after: Date(), matching: components, matchingPolicy: .nextTime, direction: .backward)!
+        return calendar.nextDate(after: date, matching: components, matchingPolicy: .nextTime, direction: .backward)!
     }
 }
