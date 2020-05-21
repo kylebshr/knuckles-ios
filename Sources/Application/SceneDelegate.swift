@@ -1,6 +1,6 @@
 //
 //  SceneDelegate.swift
-//  StepTimer
+//  Knuckles
 //
 //  Created by Kyle Bashour on 4/25/20.
 //  Copyright © 2020 Kyle Bashour. All rights reserved.

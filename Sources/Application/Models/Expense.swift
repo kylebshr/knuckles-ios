@@ -11,11 +11,20 @@ private let calendar = Calendar(identifier: .gregorian)
 
 struct Expense: Codable, Equatable {
 
-    var createdAt: Date
+    var name: String
+
+    var amount: Decimal
 
     var dayDueAt: Int
 
-    var amount: Decimal
+    var createdAt: Date
+
+    init(name: String, amount: Decimal, dayDueAt: Int) {
+        self.name = name
+        self.amount = amount
+        self.dayDueAt = dayDueAt
+        self.createdAt = calendar.startOfDay(for: Date())
+    }
 
     func nextAmountSaved(using period: PayPeriod) -> Decimal {
         let payDays = period.from(date: previousDueDate, to: nextDueDate)
