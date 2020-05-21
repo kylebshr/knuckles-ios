@@ -13,7 +13,7 @@ class ExpenseTests: XCTestCase {
 
      */
 
-    func testExpenseDueOnPayDay() {
+    func testExpenseDueOnPayDayWeeklyFunding() {
         let expense = Expense(name: "Fri May 1", amount: 100, dayDueAt: 1)
         let payPeriod = PayPeriod.weekly(day: 6)
 
@@ -34,7 +34,7 @@ class ExpenseTests: XCTestCase {
                        "It should be funded the correct amount in between pay days")
     }
 
-    func testExpenseDueOffPayDay() {
+    func testExpenseDueOffPayDayWeeklyFunding() {
         let expense = Expense(name: "Wed May 5", amount: 100, dayDueAt: 5)
         let payPeriod = PayPeriod.weekly(day: 6)
 
@@ -54,4 +54,51 @@ class ExpenseTests: XCTestCase {
         XCTAssertEqual(expense.amountSaved(using: payPeriod, on: dayInbetweenPayDays), 50,
                        "It should be funded the correct amount in between pay days")
     }
+
+    func testExpenseDueOnPayDayFirstFifteenFunding() {
+        let expense = Expense(name: "Fri May 1", amount: 100, dayDueAt: 1)
+        let payPeriod = PayPeriod.firstAndFifteenth(adjustForWeekends: false)
+
+        let dayBeforeDue: Date = "04/30/2020"
+        XCTAssertEqual(expense.amountSaved(using: payPeriod, on: dayBeforeDue), expense.amount,
+                       "It should be fully funded the day before it's due")
+
+        let dayDue: Date = "05/01/2020"
+        XCTAssertEqual(expense.amountSaved(using: payPeriod, on: dayDue), 50,
+                       "It should be funded once the day it's due")
+
+        let dayOfAnotherPayDay: Date = "05/15/2020"
+        XCTAssertEqual(expense.amountSaved(using: payPeriod, on: dayOfAnotherPayDay), expense.amount,
+                       "It should be funded on pay day")
+
+        let dayInbetweenPayDays: Date = "05/16/2020"
+        XCTAssertEqual(expense.amountSaved(using: payPeriod, on: dayInbetweenPayDays), expense.amount,
+                       "It should be funded the correct amount in between pay days")
+    }
+
+    func testExpenseDueOffPayDayFifteenLastFunding() {
+        let expense = Expense(name: "Wed May 5", amount: 100, dayDueAt: 5)
+        let payPeriod = PayPeriod.fifteenthAndLast(adjustForWeekends: false)
+
+        let dayBeforeDue: Date = "05/04/2020"
+        XCTAssertEqual(expense.amountSaved(using: payPeriod, on: dayBeforeDue), expense.amount,
+                       "It should be fully funded the day before it's due")
+
+        let dayDue: Date = "05/05/2020"
+        XCTAssertEqual(expense.amountSaved(using: payPeriod, on: dayDue), 0,
+                       "It should be empty the day it's due")
+
+        let payDay: Date = "05/15/2020"
+        XCTAssertEqual(expense.amountSaved(using: payPeriod, on: payDay), 50,
+                       "It should be funded on pay day")
+
+        let dayInbetweenPayDays: Date = "05/16/2020"
+        XCTAssertEqual(expense.amountSaved(using: payPeriod, on: dayInbetweenPayDays), 50,
+                       "It should be funded the correct amount in between pay days")
+
+        let lastPayDayBeforeDue: Date = "05/31/2020"
+        XCTAssertEqual(expense.amountSaved(using: payPeriod, on: lastPayDayBeforeDue), expense.amount,
+                       "It should be fully funded on the pay day before due")
+    }
+
 }
