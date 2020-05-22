@@ -14,9 +14,6 @@ class RootViewController: UIViewController {
         super.viewDidLoad()
 
         let viewController = ExpenseViewController()
-        let navigationController = UINavigationController(rootViewController: viewController)
-        navigationController.navigationBar.prefersLargeTitles = true
-
-        add(navigationController)
+        add(viewController)
     }
 }

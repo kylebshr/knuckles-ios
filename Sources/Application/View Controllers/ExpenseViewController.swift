@@ -19,6 +19,12 @@ class ExpenseViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Expenses"
+
+        let informationalViewController = InformationalViewController()
+        add(informationalViewController) { view in
+            view.frame = view.bounds
+            self.tableView.tableHeaderView = view
+        }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
