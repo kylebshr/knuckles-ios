@@ -8,8 +8,14 @@
 import UIKit
 
 protocol KeyPadDelegate: AnyObject {
-    func keyPad(_ keyPad: KeyPad, didTap character: Character)
-    func keyPadDidTapDelete(_ keyPad: KeyPad)
+    func keyPad(_ keyPad: KeyPad, didUpdateText text: String)
+}
+
+protocol KeyPadFormatter {
+    var text: String { get }
+
+    func appendCharacter(character: Character)
+    func removeCharacter()
 }
 
 class KeyPad: UIView {
@@ -17,9 +23,12 @@ class KeyPad: UIView {
     weak var delegate: KeyPadDelegate?
 
     private let mainStackView = UIStackView()
+    private let formatter: KeyPadFormatter
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(formatter: KeyPadFormatter) {
+        self.formatter = formatter
+
+        super.init(frame: .zero)
 
         addSubview(mainStackView)
         mainStackView.pinEdges(to: self)
@@ -65,11 +74,13 @@ class KeyPad: UIView {
     }
 
     @objc private func tappedButton(sender: KeyPadButton) {
-        delegate?.keyPad(self, didTap: sender.character)
+        formatter.appendCharacter(character: sender.character)
+        delegate?.keyPad(self, didUpdateText: formatter.text)
     }
 
     @objc private func tappedDelete(sender: DeleteButton) {
-        delegate?.keyPadDidTapDelete(self)
+        formatter.removeCharacter()
+        delegate?.keyPad(self, didUpdateText: formatter.text)
     }
 }
 
