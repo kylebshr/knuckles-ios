@@ -37,19 +37,31 @@ class ExpenseViewController: UITableViewController {
         tableView.register(view: HeaderView.self)
     }
 
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        tableView.contentOffset.y = view.safeAreaInsets.top
+        tableView.contentInset.top = -view.safeAreaInsets.top
+    }
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         expenses.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ExpenseCell()
+        let cell = tableView.dequeue(for: indexPath) as ExpenseCell
         let expense = expenses[indexPath.row]
         cell.display(expense: expense, in: payPeriod)
         return cell
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return tableView.dequeue() as HeaderView
+        let header = tableView.dequeue() as HeaderView
+        header.label.text = section == 0 ? "Expenses" : "Goals"
+        return header
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -129,8 +141,8 @@ private class ExpenseCell: UITableViewCell {
 }
 
 private class HeaderView: UITableViewHeaderFooterView {
-    private let label = UILabel()
 
+    let label = UILabel()
     let addButton = UIButton(type: .system)
 
     override init(reuseIdentifier: String?) {
@@ -138,13 +150,9 @@ private class HeaderView: UITableViewHeaderFooterView {
 
         preservesSuperviewLayoutMargins = true
 
-        let backgroundView = UIView()
-        backgroundView.backgroundColor = .systemBackground
-
         contentView.layoutMargins.bottom = 15
         contentView.layoutMargins.top = 80
-        contentView.addSubview(backgroundView)
-        backgroundView.pinEdges(to: contentView, insets: .init(top: -100, left: 0, bottom: 0, right: 0))
+        contentView.backgroundColor = .systemBackground
 
         contentView.addSubview(label)
         label.text = "Expenses"

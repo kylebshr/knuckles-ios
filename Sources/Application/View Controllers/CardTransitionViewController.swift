@@ -12,7 +12,6 @@ class CardTransitionViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let mainContainerView = UIView()
     private let secondaryContainerView = UIView()
-    private let realContainerView = UIView()
 
     let mainViewController: UIViewController
     let secondaryViewController: UIViewController
@@ -31,21 +30,19 @@ class CardTransitionViewController: UIViewController {
         super.viewDidLoad()
 
         view.addSubview(scrollView)
-        scrollView.showsVerticalScrollIndicator = false
+        scrollView.showsHorizontalScrollIndicator = false
         scrollView.isPagingEnabled = true
-        scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.pinEdges(to: view)
 
         scrollView.addSubview(mainContainerView)
-        scrollView.addSubview(realContainerView)
         scrollView.addSubview(secondaryContainerView)
 
-        mainContainerView.pinEdges([.left, .right, .top], to: scrollView)
+        mainContainerView.pinEdges([.left, .top, .bottom], to: scrollView)
         mainContainerView.widthAnchor.pin(to: scrollView.widthAnchor)
         mainContainerView.heightAnchor.pin(to: scrollView.heightAnchor)
 
-        secondaryContainerView.pinEdges([.left, .right, .bottom], to: scrollView)
-        secondaryContainerView.topAnchor.pin(to: mainContainerView.bottomAnchor)
+        secondaryContainerView.pinEdges([.right, .top, .bottom], to: scrollView)
+        secondaryContainerView.leadingAnchor.pin(to: mainContainerView.trailingAnchor)
         secondaryContainerView.widthAnchor.pin(to: scrollView.widthAnchor)
         secondaryContainerView.heightAnchor.pin(to: scrollView.heightAnchor)
 
@@ -62,10 +59,5 @@ class CardTransitionViewController: UIViewController {
             self.secondaryContainerView.insertSubview(view, at: 0)
             view.pinEdges(to: self.secondaryContainerView)
         }
-    }
-
-    override func viewSafeAreaInsetsDidChange() {
-        super.viewSafeAreaInsetsDidChange()
-        mainViewController.additionalSafeAreaInsets.bottom = view.safeAreaInsets.bottom
     }
 }
