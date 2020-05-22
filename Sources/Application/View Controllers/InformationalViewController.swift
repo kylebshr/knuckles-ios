@@ -9,7 +9,7 @@ import UIKit
 
 class InformationalViewController: UIViewController {
 
-    private let balanceLabel = UILabel(font: .boldSystemFont(ofSize: 32))
+    private let balanceLabel = UILabel(font: .rubik(ofSize: 32, weight: .medium))
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,13 +30,13 @@ class InformationalViewController: UIViewController {
         let topView = UIView()
         stackView.addArrangedSubview(topView)
 
-        let helloLabel = UILabel(font: .systemFont(ofSize: 18))
-        helloLabel.text = "Hello Jason 🌙"
+        let helloLabel = UILabel(font: .rubik(ofSize: 18, weight: .regular))
+        helloLabel.text = "Hello Jason 🎉"
         stackView.addArrangedSubview(helloLabel)
 
         let label = UILabel()
         label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 36, weight: .heavy)
+        label.font = .rubik(ofSize: 36, weight: .bold)
 
         let string = "What if you could change the world with just your mind?"
         let attributedString = NSMutableAttributedString(string: string)
@@ -62,7 +62,7 @@ class InformationalViewController: UIViewController {
 
         balanceLabel.text = NumberFormatter.currency.string(from: 1337.69)
 
-        let availableLabel = UILabel(font: .systemFont(ofSize: 14), color: .secondaryLabel)
+        let availableLabel = UILabel(font: .rubik(ofSize: 14, weight: .regular), color: .secondaryLabel)
         availableLabel.text = "cash available"
 
         let labelStack = UIStackView(arrangedSubviews: [balanceLabel, availableLabel])

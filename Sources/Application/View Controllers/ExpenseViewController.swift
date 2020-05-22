@@ -29,6 +29,8 @@ class ExpenseViewController: UITableViewController {
         super.viewDidLoad()
         navigationItem.title = "Expenses"
 
+        tableView.layoutMargins.left = 24
+        tableView.layoutMargins.right = 24
         tableView.showsVerticalScrollIndicator = false
         tableView.separatorStyle = .none
         tableView.register(cell: ExpenseCell.self)
@@ -56,17 +58,19 @@ class ExpenseViewController: UITableViewController {
 }
 
 private class ExpenseCell: UITableViewCell {
-    private let nameLabel = UILabel(font: .systemFont(ofSize: 18, weight: .bold))
-    private let amountLabel = UILabel(font: .systemFont(ofSize: 18, weight: .bold))
+    private let nameLabel = UILabel(font: .rubik(ofSize: 18, weight: .medium))
+    private let amountLabel = UILabel(font: .rubik(ofSize: 18, weight: .medium))
     private let nextAmountLabel = AmountLabel()
-    private let cadenceLabel = UILabel(font: .systemFont(ofSize: 13, weight: .medium))
-    private let emojiView = UILabel(font: .systemFont(ofSize: 24))
-    private let readyLabel = UILabel(font: .systemFont(ofSize: 13, weight: .medium), color: .secondaryLabel)
+    private let cadenceLabel = UILabel(font: .rubik(ofSize: 13, weight: .medium))
+    private let emojiView = UILabel(font: .rubik(ofSize: 24, weight: .regular))
+    private let readyLabel = UILabel(font: .rubik(ofSize: 13, weight: .medium), color: .secondaryLabel)
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         emojiView.setHuggingAndCompression(to: .required)
+
+        preservesSuperviewLayoutMargins = true
 
         contentView.layoutMargins.top = 20
         contentView.layoutMargins.right = 20
@@ -127,8 +131,12 @@ private class ExpenseCell: UITableViewCell {
 private class HeaderView: UITableViewHeaderFooterView {
     private let label = UILabel()
 
+    let addButton = UIButton(type: .system)
+
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
+
+        preservesSuperviewLayoutMargins = true
 
         let backgroundView = UIView()
         backgroundView.backgroundColor = .systemBackground
@@ -140,8 +148,16 @@ private class HeaderView: UITableViewHeaderFooterView {
 
         contentView.addSubview(label)
         label.text = "Expenses"
-        label.font = .systemFont(ofSize: 32, weight: .heavy)
+        label.font = .rubik(ofSize: 32, weight: .bold)
         label.pinEdges(to: contentView.layoutMarginsGuide)
+
+        contentView.addSubview(addButton)
+        addButton.tintColor = .label
+        let config = UIImage.SymbolConfiguration(pointSize: 24)
+        addButton.setImage(UIImage(systemName: "plus.circle", withConfiguration: config), for: .normal)
+
+        addButton.trailingAnchor.pin(to: contentView.layoutMarginsGuide.trailingAnchor)
+        addButton.centerYAnchor.pin(to: label.centerYAnchor)
     }
 
     required init?(coder: NSCoder) {
@@ -161,7 +177,7 @@ private class AmountLabel: UIView {
         addSubview(label)
         label.pinEdges(to: self, insets: .init(vertical: 2, horizontal: 6))
         label.textColor = .white
-        label.font = .systemFont(ofSize: 13, weight: .bold)
+        label.font = .rubik(ofSize: 13, weight: .medium)
     }
 
     required init?(coder: NSCoder) {
