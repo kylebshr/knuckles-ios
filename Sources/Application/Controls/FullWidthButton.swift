@@ -19,6 +19,7 @@ class FullWidthButton: Control {
         super.init(frame: frame)
 
         addSubview(label)
+        label.setHuggingAndCompression(to: .required)
         label.textColor = .white
         label.pinEdges(to: safeAreaLayoutGuide, insets: .init(all: 24))
     }

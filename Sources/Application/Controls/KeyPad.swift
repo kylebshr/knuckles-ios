@@ -69,6 +69,10 @@ class KeyPad: UIView {
         mainStackView.addArrangedSubview(bottomStackView)
     }
 
+    override var intrinsicContentSize: CGSize {
+        CGSize(width: UIView.noIntrinsicMetric, height: 280)
+    }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -94,7 +98,7 @@ private class DeleteButton: Control {
         let image = UIImage(systemName: "delete.left", withConfiguration: config)!
 
         addSubview(imageView)
-        imageView.pinEdges(to: self, insets: .init(vertical: 18, horizontal: 0))
+        imageView.pinEdges(to: self, insets: .init(vertical: 4, horizontal: 0))
         imageView.contentMode = .center
         imageView.tintColor = .label
         imageView.image = image
@@ -102,5 +106,27 @@ private class DeleteButton: Control {
 
     override func updateState() {
         imageView.alpha = isHighlighted ? 0.3 : 1
+    }
+}
+
+private class KeyPadButton: Control {
+
+    let character: Character
+
+    private let label = UILabel(font: .rubik(ofSize: 24, weight: .medium))
+
+    init(character: Character) {
+        self.character = character
+
+        super.init(frame: .zero)
+
+        addSubview(label)
+        label.text = "\(character)"
+        label.pinEdges(to: self, insets: .init(vertical: 4, horizontal: 0))
+        label.textAlignment = .center
+    }
+
+    override func updateState() {
+        label.alpha = isHighlighted ? 0.3 : 1
     }
 }

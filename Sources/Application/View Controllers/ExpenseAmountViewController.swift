@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ExpenseAmountViewController: UIViewController, KeyPadDelegate {
+class ExpenseAmountViewController: FlowViewController, KeyPadDelegate {
 
     private let button = FullWidthButton()
     private let amountLabel = UILabel(font: .monospacedRubik(ofSize: 64, weight: .bold), alignment: .center)
@@ -15,26 +15,40 @@ class ExpenseAmountViewController: UIViewController, KeyPadDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationView.text = "How much is it?"
+
         button.text = "Next"
+
+        amountLabel.setHuggingAndCompression(to: .required)
         amountLabel.adjustsFontSizeToFitWidth = true
         amountLabel.text = "$0"
         view.backgroundColor = .systemBackground
+
+        let topView = UIView()
+        let middleView = UIView()
+        let bottomView = UIView()
 
         let keyPad = KeyPad(formatter: KeyPadCurrencyFormatter())
         keyPad.delegate = self
 
         let perMonthLabel = UILabel(font: .rubik(ofSize: 18, weight: .regular), color: .secondaryLabel, alignment: .center)
+        perMonthLabel.setHuggingAndCompression(to: .required)
         perMonthLabel.text = "per month"
 
-        let stackView = UIStackView(arrangedSubviews: [UIView(), amountLabel, perMonthLabel, keyPad, button])
+        let stackView = UIStackView(arrangedSubviews: [
+            topView, amountLabel, perMonthLabel, middleView, keyPad, bottomView, button,
+        ])
+
         view.addSubview(stackView)
         stackView.alignment = .fill
         stackView.axis = .vertical
         stackView.spacing = 10
-        stackView.setCustomSpacing(40, after: keyPad)
-        stackView.setCustomSpacing(30, after: perMonthLabel)
-        stackView.pinEdges([.left, .right, .top], to: view.safeAreaLayoutGuide)
+        stackView.pinEdges([.left, .right], to: view.safeAreaLayoutGuide)
         stackView.bottomAnchor.pin(to: view.bottomAnchor)
+        stackView.topAnchor.pin(to: navigationView.bottomAnchor)
+
+        middleView.heightAnchor.pin(to: topView.heightAnchor, multiplier: 0.2)
+        bottomView.heightAnchor.pin(to: topView.heightAnchor, multiplier: 0.7)
     }
 
     func keyPad(_ keyPad: KeyPad, didUpdateText text: String) {
