@@ -15,15 +15,17 @@ class InformationalViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .systemBackground
+        view.layoutMargins = UIEdgeInsets(all: 36)
 
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 4
-        view.addSubview(stackView)
-
-        stackView.pinEdges(to: view.layoutMarginsGuide)
         stackView.distribution = .fill
         stackView.alignment = .fill
+        stackView.spacing = 35
+
+        view.addSubview(stackView)
+        stackView.pinEdges(to: view.layoutMarginsGuide)
 
         let topView = UIView()
         stackView.addArrangedSubview(topView)
@@ -31,7 +33,6 @@ class InformationalViewController: UIViewController {
         let helloLabel = UILabel(font: .systemFont(ofSize: 18))
         helloLabel.text = "Hello Jason 🌙"
         stackView.addArrangedSubview(helloLabel)
-        stackView.setCustomSpacing(40, after: helloLabel)
 
         let label = UILabel()
         label.numberOfLines = 0
@@ -51,15 +52,23 @@ class InformationalViewController: UIViewController {
         label.attributedText = attributedString
         stackView.addArrangedSubview(label)
 
+        let pageControl = PageControl()
+        pageControl.numberOfPages = 3
+        stackView.addArrangedSubview(pageControl)
+
         let middleView = UIView()
         stackView.addArrangedSubview(middleView)
         middleView.heightAnchor.pin(to: topView.heightAnchor, multiplier: 0.6)
 
-        stackView.addArrangedSubview(balanceLabel)
         balanceLabel.text = NumberFormatter.currency.string(from: 1337.69)
 
         let availableLabel = UILabel(font: .systemFont(ofSize: 14), color: .secondaryLabel)
         availableLabel.text = "cash available"
-        stackView.addArrangedSubview(availableLabel)
+
+        let labelStack = UIStackView(arrangedSubviews: [balanceLabel, availableLabel])
+        labelStack.spacing = 4
+        labelStack.axis = .vertical
+
+        stackView.addArrangedSubview(labelStack)
     }
 }
