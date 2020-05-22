@@ -30,6 +30,7 @@ class CardTransitionViewController: UIViewController {
         super.viewDidLoad()
 
         view.addSubview(scrollView)
+        scrollView.backgroundColor = .systemBackground
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.isPagingEnabled = true
         scrollView.pinEdges(to: view)

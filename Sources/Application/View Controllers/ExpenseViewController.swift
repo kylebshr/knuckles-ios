@@ -29,10 +29,9 @@ class ExpenseViewController: UITableViewController {
         super.viewDidLoad()
         navigationItem.title = "Expenses"
 
-        tableView.layoutMargins.left = 24
-        tableView.layoutMargins.right = 24
+        tableView.layoutMargins.left = 20
+        tableView.layoutMargins.right = 20
         tableView.showsVerticalScrollIndicator = false
-        tableView.separatorStyle = .none
         tableView.register(cell: ExpenseCell.self)
         tableView.register(view: HeaderView.self)
     }

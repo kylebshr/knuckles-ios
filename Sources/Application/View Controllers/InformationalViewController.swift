@@ -54,10 +54,6 @@ class InformationalViewController: UIViewController {
         label.attributedText = attributedString
         stackView.addArrangedSubview(label)
 
-        let pageControl = PageControl()
-        pageControl.numberOfPages = 4
-        stackView.addArrangedSubview(pageControl)
-
         let middleView = UIView()
         stackView.addArrangedSubview(middleView)
         middleView.heightAnchor.pin(to: topView.heightAnchor, multiplier: 0.6)
