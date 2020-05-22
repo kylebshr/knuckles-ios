@@ -5,15 +5,17 @@
 //  Created by Kyle Bashour on 5/17/20.
 //
 
-import Foundation
+import UIKit
 
 private let calendar = Calendar(identifier: .gregorian)
 
-struct Expense: Codable, Equatable {
+struct Expense: Equatable {
 
     var name: String
 
     var amount: Decimal
+
+    var tintColor: UIColor
 
     var dayDueAt: Int
 
@@ -23,7 +25,12 @@ struct Expense: Codable, Equatable {
         self.name = name
         self.amount = amount
         self.dayDueAt = dayDueAt
+        self.tintColor = [UIColor.systemBlue, .systemGreen, .systemRed, .systemYellow, .systemPurple, .systemPink, .systemTeal].randomElement()!
         self.createdAt = calendar.startOfDay(for: Date())
+    }
+
+    func isFunded(using period: PayPeriod) -> Bool {
+        return amountSaved(using: period) == amount
     }
 
     func nextAmountSaved(using period: PayPeriod, on date: Date = Date()) -> Decimal {
@@ -37,12 +44,12 @@ struct Expense: Codable, Equatable {
         return nextAmountSaved(using: period, on: date) * Decimal(payDays.count)
     }
 
-    func nextDueDate(from date: Date) -> Date  {
+    func nextDueDate(from date: Date = Date()) -> Date  {
         let components = DateComponents(calendar: calendar, day: dayDueAt)
         return calendar.nextDate(after: date, matching: components, matchingPolicy: .nextTime)!
     }
 
-    func previousDueDate(from date: Date) -> Date {
+    func previousDueDate(from date: Date = Date()) -> Date {
         if calendar.component(.day, from: date) == dayDueAt { return date }
         let components = DateComponents(calendar: calendar, day: dayDueAt)
         return calendar.nextDate(after: date, matching: components, matchingPolicy: .nextTime, direction: .backward)!
