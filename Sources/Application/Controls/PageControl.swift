@@ -13,17 +13,31 @@ class PageControl: Control {
     private let space: CGFloat = 6
     private let extra: CGFloat = 44
 
-    var numberOfPages = 0 {
+    var numberOfPages = 1 {
         didSet { update() }
     }
 
-    var page = 0 {
+    var page = -1 {
         didSet { setNeedsStateUpdate(animated: true) }
     }
+
+    private var startTime: TimeInterval = 0
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setHuggingAndCompression(to: .required)
+
+        Timer.scheduledTimer(withTimeInterval: 12, repeats: true) { _ in
+            self.page = (self.page + 1) % self.numberOfPages
+            self.startTime = Date().timeIntervalSince1970
+        }.fire()
+
+        let link = CADisplayLink(target: self, selector: #selector(updateProgress))
+        link.add(to: .current, forMode: .common)
+    }
+
+    @objc private func updateProgress() {
+        (self.subviews[self.page] as? ProgressView)?.progress = CGFloat((Date().timeIntervalSince1970 - startTime) / 12)
     }
 
     private func update() {
@@ -49,6 +63,8 @@ class PageControl: Control {
             var frame = CGRect(origin: .zero, size: .init(width: height, height: height))
             frame.origin.x += CGFloat(index) * (height + space)
 
+            (dot as? ProgressView)?.progress = 0
+
             if index > page {
                 frame.origin.x += CGFloat(extra)
             }
@@ -57,7 +73,6 @@ class PageControl: Control {
                 frame.origin.y += 1
                 frame.size.height -= 2
                 frame.size.width += CGFloat(extra)
-                (dot as? ProgressView)?.progress = 0.3
             }
 
             dot.layer.cornerRadius = frame.midY
@@ -65,7 +80,7 @@ class PageControl: Control {
         }
     }
 
-    override func setNeedsStateUpdate(animated: Bool) {
+    override func updateState() {
         setNeedsLayout()
         layoutIfNeeded()
     }

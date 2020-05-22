@@ -53,7 +53,7 @@ class InformationalViewController: UIViewController {
         stackView.addArrangedSubview(label)
 
         let pageControl = PageControl()
-        pageControl.numberOfPages = 3
+        pageControl.numberOfPages = 4
         stackView.addArrangedSubview(pageControl)
 
         let middleView = UIView()
