@@ -13,6 +13,8 @@ struct Expense: Equatable {
 
     var name: String
 
+    var emoji: Character
+
     var amount: Decimal
 
     var tintColor: UIColor
@@ -21,7 +23,8 @@ struct Expense: Equatable {
 
     var createdAt: Date
 
-    init(name: String, amount: Decimal, dayDueAt: Int) {
+    init(emoji: Character, name: String, amount: Decimal, dayDueAt: Int) {
+        self.emoji = emoji
         self.name = name
         self.amount = amount
         self.dayDueAt = dayDueAt
@@ -53,5 +56,17 @@ struct Expense: Equatable {
         if calendar.component(.day, from: date) == dayDueAt { return date }
         let components = DateComponents(calendar: calendar, day: dayDueAt)
         return calendar.nextDate(after: date, matching: components, matchingPolicy: .nextTime, direction: .backward)!
+    }
+
+    func isDue(on date: Date = Date()) -> Bool {
+        calendar.component(.day, from: date) == dayDueAt
+    }
+
+    func sortingDate(from date: Date = Date()) -> Date {
+        if isDue(on: date) {
+            return calendar.startOfDay(for: Date())
+        } else {
+            return nextDueDate(from: date)
+        }
     }
 }

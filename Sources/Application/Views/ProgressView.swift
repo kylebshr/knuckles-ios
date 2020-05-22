@@ -16,17 +16,20 @@ class ProgressView: UIView {
     private let fillView = UIView()
 
     override var intrinsicContentSize: CGSize {
-        CGSize(width: UIView.noIntrinsicMetric, height: 8)
+        CGSize(width: 8, height: 26)
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = .secondarySystemFill
+        layer.borderWidth = 2
+        tintColor = .label
         clipsToBounds = true
 
         fillView.clipsToBounds = true
         addSubview(fillView)
+
+        setHuggingAndCompression(to: .required)
     }
 
     required init?(coder: NSCoder) {
@@ -42,9 +45,10 @@ class ProgressView: UIView {
         super.layoutSubviews()
 
         fillView.frame = bounds
-        fillView.frame.size.width *= progress
+        fillView.frame.size.height *= progress
+        fillView.frame.origin.y = frame.height - fillView.frame.height
 
-        fillView.layer.cornerRadius = bounds.midY
-        layer.cornerRadius = bounds.midY
+        layer.borderColor = tintColor.cgColor
+        layer.cornerRadius = bounds.midX
     }
 }
