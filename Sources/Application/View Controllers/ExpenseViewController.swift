@@ -61,6 +61,7 @@ class ExpenseViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeue() as HeaderView
         header.label.text = section == 0 ? "Expenses" : "Goals"
+        header.addButton.addTarget(self, action: #selector(presentCreateExpense), for: .touchUpInside)
         return header
     }
 
@@ -70,6 +71,7 @@ class ExpenseViewController: UITableViewController {
 
     @objc private func presentCreateExpense() {
         let viewController = ExpenseAmountViewController()
+        viewController.modalPresentationStyle = .fullScreen
         present(viewController, animated: true, completion: nil)
     }
 }
@@ -156,7 +158,7 @@ private class HeaderView: UITableViewHeaderFooterView {
         preservesSuperviewLayoutMargins = true
 
         contentView.layoutMargins.bottom = 15
-        contentView.layoutMargins.top = 80
+        contentView.layoutMargins.top = 74
         contentView.backgroundColor = .systemBackground
 
         contentView.addSubview(label)

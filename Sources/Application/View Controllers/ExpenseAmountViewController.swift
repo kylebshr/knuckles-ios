@@ -15,6 +15,7 @@ class ExpenseAmountViewController: FlowViewController, KeyPadDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationView.closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
         navigationView.text = "How much is it?"
 
         button.text = "Next"
@@ -53,5 +54,9 @@ class ExpenseAmountViewController: FlowViewController, KeyPadDelegate {
 
     func keyPad(_ keyPad: KeyPad, didUpdateText text: String) {
         amountLabel.text = text
+    }
+
+    @objc private func close() {
+        dismiss(animated: true, completion: nil)
     }
 }

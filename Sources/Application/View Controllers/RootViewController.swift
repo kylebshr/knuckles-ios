@@ -13,14 +13,14 @@ class RootViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        let expenseViewController = ExpenseViewController()
-//        let informationalViewController = InformationalViewController()
-//
-//        let cardViewController = CardTransitionViewController(
-//            mainViewController: informationalViewController,
-//            secondaryViewController: expenseViewController
-//        )
+        let expenseViewController = ExpenseViewController()
+        let informationalViewController = InformationalViewController()
 
-        add(ExpenseAmountViewController())
+        let cardViewController = CardTransitionViewController(
+            mainViewController: informationalViewController,
+            secondaryViewController: expenseViewController
+        )
+
+        add(cardViewController)
     }
 }
