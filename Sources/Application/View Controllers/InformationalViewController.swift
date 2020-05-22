@@ -5,6 +5,8 @@
 //  Created by Kyle Bashour on 5/21/20.
 //
 
+//swiftlint:disable function_body_length
+
 import UIKit
 
 class InformationalViewController: UIViewController {

@@ -67,6 +67,11 @@ class ExpenseViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
     }
+
+    @objc private func presentCreateExpense() {
+        let viewController = ExpenseAmountViewController()
+        present(viewController, animated: true, completion: nil)
+    }
 }
 
 private class ExpenseCell: UITableViewCell {
@@ -157,7 +162,8 @@ private class HeaderView: UITableViewHeaderFooterView {
         contentView.addSubview(label)
         label.text = "Expenses"
         label.font = .rubik(ofSize: 32, weight: .bold)
-        label.pinEdges(to: contentView.layoutMarginsGuide)
+        label.pinEdges([.left, .right, .top], to: contentView.layoutMarginsGuide)
+        label.bottomAnchor.pin(to: contentView.layoutMarginsGuide.bottomAnchor, priority: .defaultHigh)
 
         contentView.addSubview(addButton)
         addButton.tintColor = .label
