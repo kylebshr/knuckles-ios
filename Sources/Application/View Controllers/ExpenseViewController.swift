@@ -9,21 +9,8 @@ import UIKit
 
 class ExpenseViewController: UITableViewController {
 
-    let expenses = [
-        Expense(emoji: "📱", name: "Phone", amount: 35, dayDueAt: 25),
-        Expense(emoji: "🏠", name: "Renter’s Insurance", amount: 11.42, dayDueAt: 27),
-        Expense(emoji: "💻", name: "Github", amount: 4, dayDueAt: 27),
-        Expense(emoji: "📺", name: "HBO", amount: 14.99, dayDueAt: 27),
-        Expense(emoji: "💎", name: "Betterment", amount: 1000, dayDueAt: 1),
-        Expense(emoji: "🖥", name: "G-Suite", amount: 6, dayDueAt: 2),
-        Expense(emoji: "📺", name: "Netflix", amount: 15.99, dayDueAt: 2),
-        Expense(emoji: "🎵", name: "Apple Music", amount: 9.99, dayDueAt: 10),
-        Expense(emoji: "🏠", name: "Rent", amount: 1369, dayDueAt: 15),
-        Expense(emoji: "🎧", name: "Spotify", amount: 10.94, dayDueAt: 21),
-        Expense(emoji: "📚", name: "Kindle", amount: 9.99, dayDueAt: 22),
-    ].sorted { $0.sortingDate() < $1.sortingDate() }
-
-    let payPeriod = PayPeriod.firstAndFifteenth(adjustForWeekends: true)
+    private let payPeriod = PayPeriod.firstAndFifteenth(adjustForWeekends: true)
+    private var expenses: [Expense] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,8 +19,16 @@ class ExpenseViewController: UITableViewController {
         tableView.layoutMargins.left = 20
         tableView.layoutMargins.right = 20
         tableView.showsVerticalScrollIndicator = false
+        tableView.tableFooterView = UIView()
         tableView.register(cell: ExpenseCell.self)
         tableView.register(view: HeaderView.self)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        expenses = UserDefaults.standard.expenses
+            .sorted { $0.sortingDate() < $1.sortingDate() }
+        tableView.reloadData()
     }
 
     override func viewSafeAreaInsetsDidChange() {
@@ -43,7 +38,7 @@ class ExpenseViewController: UITableViewController {
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

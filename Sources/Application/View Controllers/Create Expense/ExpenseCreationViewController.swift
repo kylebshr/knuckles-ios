@@ -61,8 +61,7 @@ class ExpenseCreationViewController: UIViewController {
 
     private func enterDay(_ day: Int) {
         let expense = Expense(emoji: "🐮", name: name, amount: amount, dayDueAt: day)
-        print(expense)
-        self.day = day
+        UserDefaults.standard.expenses.append(expense)
         close()
     }
 }

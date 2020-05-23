@@ -9,26 +9,23 @@ import UIKit
 
 private let calendar = Calendar(identifier: .gregorian)
 
-struct Expense: Equatable {
+struct Expense: Codable, Equatable {
 
     var name: String
 
-    var emoji: Character
+    var emoji: String
 
     var amount: Decimal
-
-    var tintColor: UIColor
 
     var dayDueAt: Int
 
     var createdAt: Date
 
     init(emoji: Character, name: String, amount: Decimal, dayDueAt: Int) {
-        self.emoji = emoji
+        self.emoji = "\(emoji)"
         self.name = name
         self.amount = amount
         self.dayDueAt = dayDueAt
-        self.tintColor = [UIColor.systemBlue, .systemGreen, .systemRed, .systemYellow, .systemPurple, .systemPink, .systemTeal].randomElement()!
         self.createdAt = calendar.startOfDay(for: Date())
     }
 
