@@ -70,8 +70,9 @@ class ExpenseViewController: UITableViewController {
 
     @objc private func presentCreateExpense() {
         let viewController = ExpenseAmountViewController()
-        viewController.modalPresentationStyle = .fullScreen
-        present(viewController, animated: true, completion: nil)
+        let navigationController = SlideNavigationController(rootViewController: viewController)
+        navigationController.modalPresentationStyle = .fullScreen
+        present(navigationController, animated: true, completion: nil)
     }
 }
 

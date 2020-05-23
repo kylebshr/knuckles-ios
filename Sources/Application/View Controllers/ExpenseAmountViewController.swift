@@ -15,10 +15,10 @@ class ExpenseAmountViewController: FlowViewController, KeyPadDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationView.closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
         navigationView.text = "How much is it?"
 
         button.text = "Next"
+        button.addTarget(self, action: #selector(showNext), for: .touchUpInside)
 
         amountLabel.setHuggingAndCompression(to: .required)
         amountLabel.adjustsFontSizeToFitWidth = true
@@ -56,7 +56,8 @@ class ExpenseAmountViewController: FlowViewController, KeyPadDelegate {
         amountLabel.text = text
     }
 
-    @objc private func close() {
-        dismiss(animated: true, completion: nil)
+    @objc private func showNext() {
+        let viewController = DueDateViewController()
+        show(viewController, sender: self)
     }
 }
