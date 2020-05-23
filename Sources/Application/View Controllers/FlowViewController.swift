@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FlowViewController: UIViewController {
+class FlowViewController: ViewController {
 
     let navigationView = NavigationView()
 
