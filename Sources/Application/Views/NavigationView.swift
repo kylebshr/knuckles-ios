@@ -13,21 +13,12 @@ class NavigationView: UIView {
         didSet { label.text = text }
     }
 
-    let closeButton = UIButton(type: .system)
-
     private let label = UILabel(font: .rubik(ofSize: 32, weight: .bold))
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         layoutMargins = .init(top: 30, left: 20, bottom: 15, right: 20)
-
-        addSubview(closeButton)
-        closeButton.tintColor = .label
-        closeButton.pinEdges([.right, .top], to: layoutMarginsGuide, insets: .init(vertical: 8, horizontal: 0))
-        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
-        closeButton.setImage(UIImage(systemName: "xmark", withConfiguration: config), for: .normal)
-
         addSubview(label)
         label.setHuggingAndCompression(to: .required)
         label.numberOfLines = 0

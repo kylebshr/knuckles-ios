@@ -7,25 +7,25 @@
 
 import UIKit
 
-protocol KeyPadDelegate: AnyObject {
-    func keyPad(_ keyPad: KeyPad, didUpdateText text: String)
+protocol KeyPadViewDelegate: AnyObject {
+    func keyPadView(_ keyPadView: KeyPadView, didUpdateText text: String)
 }
 
-protocol KeyPadFormatter {
+protocol KeyPadViewFormatter {
     var text: String { get }
 
     func appendCharacter(character: Character)
     func removeCharacter()
 }
 
-class KeyPad: UIView {
+class KeyPadView: UIView {
 
-    weak var delegate: KeyPadDelegate?
+    weak var delegate: KeyPadViewDelegate?
 
     private let mainStackView = UIStackView()
-    private let formatter: KeyPadFormatter
+    private let formatter: KeyPadViewFormatter
 
-    init(formatter: KeyPadFormatter) {
+    init(formatter: KeyPadViewFormatter) {
         self.formatter = formatter
 
         super.init(frame: .zero)
@@ -79,12 +79,12 @@ class KeyPad: UIView {
 
     @objc private func tappedButton(sender: KeyPadButton) {
         formatter.appendCharacter(character: sender.character)
-        delegate?.keyPad(self, didUpdateText: formatter.text)
+        delegate?.keyPadView(self, didUpdateText: formatter.text)
     }
 
     @objc private func tappedDelete(sender: DeleteButton) {
         formatter.removeCharacter()
-        delegate?.keyPad(self, didUpdateText: formatter.text)
+        delegate?.keyPadView(self, didUpdateText: formatter.text)
     }
 }
 

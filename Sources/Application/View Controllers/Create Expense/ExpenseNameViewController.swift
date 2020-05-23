@@ -9,6 +9,8 @@ import UIKit
 
 class ExpenseNameViewController: FlowViewController {
 
+    var didEnterName: ((String) -> Void)?
+
     private let textField = TextField()
     private let nextButton = FullWidthButton()
 
@@ -26,10 +28,23 @@ class ExpenseNameViewController: FlowViewController {
         view.addSubview(nextButton)
         nextButton.text = "Next"
         nextButton.pinEdges([.left, .right, .bottom], to: keyboardLayoutGuide)
+
+        nextButton.onTap = { [weak self] in
+            guard let text = self?.textField.text?.trimmingCharacters(in: .whitespaces), !text.isEmpty else {
+                return
+            }
+
+            self?.didEnterName?(text)
+        }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         textField.becomeFirstResponder()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        view.endEditing(true)
     }
 }

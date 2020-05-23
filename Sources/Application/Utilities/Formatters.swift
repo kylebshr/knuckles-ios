@@ -15,6 +15,12 @@ extension NumberFormatter {
         formatter.locale = Locale.current
         return formatter
     }()
+
+    static let ordinal: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .ordinal
+        return formatter
+    }()
 }
 
 extension DateFormatter {

@@ -7,7 +7,9 @@
 
 import UIKit
 
-class ExpenseAmountViewController: FlowViewController, KeyPadDelegate {
+class ExpenseAmountViewController: FlowViewController, KeyPadViewDelegate {
+
+    var didEnterAmount: ((Decimal) -> Void)?
 
     private let button = FullWidthButton()
     private let amountLabel = UILabel(font: .monospacedRubik(ofSize: 64, weight: .bold), alignment: .center)
@@ -18,7 +20,7 @@ class ExpenseAmountViewController: FlowViewController, KeyPadDelegate {
         navigationView.text = "How much is it?"
 
         button.text = "Next"
-        button.addTarget(self, action: #selector(showNext), for: .touchUpInside)
+        button.onTap = { [weak self] in self?.didTapNext() }
 
         amountLabel.setHuggingAndCompression(to: .required)
         amountLabel.adjustsFontSizeToFitWidth = true
@@ -29,7 +31,7 @@ class ExpenseAmountViewController: FlowViewController, KeyPadDelegate {
         let middleView = UIView()
         let bottomView = UIView()
 
-        let keyPad = KeyPad(formatter: KeyPadCurrencyFormatter())
+        let keyPad = KeyPadView(formatter: KeyPadCurrencyFormatter())
         keyPad.delegate = self
 
         let perMonthLabel = UILabel(font: .rubik(ofSize: 18, weight: .regular), color: .secondaryLabel, alignment: .center)
@@ -52,12 +54,21 @@ class ExpenseAmountViewController: FlowViewController, KeyPadDelegate {
         bottomView.heightAnchor.pin(to: topView.heightAnchor, multiplier: 0.7)
     }
 
-    func keyPad(_ keyPad: KeyPad, didUpdateText text: String) {
+    func keyPadView(_ keyPad: KeyPadView, didUpdateText text: String) {
         amountLabel.text = text
     }
 
-    @objc private func showNext() {
-        let viewController = DueDateViewController()
-        show(viewController, sender: self)
+    private func didTapNext() {
+        guard var amountText = amountLabel.text else {
+            return
+        }
+
+        amountText.removeFirst()
+
+        guard let amount = Decimal(string: amountText) else {
+            return
+        }
+
+        didEnterAmount?(amount)
     }
 }

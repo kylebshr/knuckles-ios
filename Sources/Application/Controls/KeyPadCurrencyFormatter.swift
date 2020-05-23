@@ -7,7 +7,7 @@
 
 import Foundation
 
-class KeyPadCurrencyFormatter: KeyPadFormatter {
+class KeyPadCurrencyFormatter: KeyPadViewFormatter {
 
     private(set) var text: String = "$0"
 

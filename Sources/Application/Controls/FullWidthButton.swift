@@ -9,6 +9,8 @@ import UIKit
 
 class FullWidthButton: Control {
 
+    var onTap: (() -> Void)?
+
     var text: String = "" {
         didSet { label.text = text }
     }
@@ -27,5 +29,9 @@ class FullWidthButton: Control {
     override func updateState() {
         backgroundColor = isEnabled ? .systemBlue : UIColor.systemBlue.withAlphaComponent(0.3)
         label.alpha = isHighlighted ? 0.3 : 1
+    }
+
+    override func touchUpInside() {
+        onTap?()
     }
 }
