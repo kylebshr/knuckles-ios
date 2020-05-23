@@ -20,7 +20,7 @@ class ExpenseNameViewController: FlowViewController {
         navigationView.text = "Name this expense"
 
         view.addSubview(textField)
-        textField.centerYAnchor.pin(to: keyboardLayoutGuide.centerYAnchor)
+        textField.centerYAnchor.pin(to: keyboardLayoutGuide.centerYAnchor, constant: 15)
         textField.pinEdges([.left, .right], to: view)
         textField.placeholder = "Try Rent, Phone Bill, Spotify"
         textField.font = .rubik(ofSize: 20, weight: .medium)

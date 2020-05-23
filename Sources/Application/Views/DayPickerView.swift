@@ -9,16 +9,15 @@ import UIKit
 
 class DayPickerView: UIView {
     private var buttons: [DayButton] = []
+    private let stackView = UIStackView()
 
     var didTapDay: ((Int) -> Void)?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.distribution = .fill
-        stackView.spacing = 32
         addSubview(stackView)
         stackView.pinEdges(to: self)
 
@@ -37,6 +36,11 @@ class DayPickerView: UIView {
         }
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        stackView.spacing = window!.frame.height / 28
+    }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -50,7 +54,7 @@ class DayPickerView: UIView {
 
 private class DayButton: Control {
 
-    private let label = UILabel(font: .rubik(ofSize: 18, weight: .medium), alignment: .center)
+    private let label = UILabel(font: .rubik(ofSize: 17, weight: .medium), alignment: .center)
 
     let day: Int
 

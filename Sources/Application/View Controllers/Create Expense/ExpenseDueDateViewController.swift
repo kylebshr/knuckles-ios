@@ -17,7 +17,7 @@ class ExpenseDueDateViewController: FlowViewController {
 
     private let dayPickerView = DayPickerView()
     private let nextButton = FullWidthButton()
-    private let dayLabel = UILabel(font: .rubik(ofSize: 72, weight: .bold), alignment: .center)
+    private let dayLabel = UILabel(font: .rubik(ofSize: 64, weight: .bold), alignment: .center)
     private let perMonthLabel = UILabel(font: .rubik(ofSize: 18, weight: .regular), color: .secondaryLabel, alignment: .center)
 
     override func viewDidLoad() {

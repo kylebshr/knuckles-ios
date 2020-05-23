@@ -65,7 +65,7 @@ class ExpenseAmountViewController: FlowViewController, KeyPadViewDelegate {
 
         amountText.removeFirst()
 
-        guard let amount = Decimal(string: amountText) else {
+        guard let amount = Decimal(string: amountText), amount != 0 else {
             return
         }
 
