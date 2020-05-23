@@ -100,6 +100,7 @@ private class ExpenseCell: UITableViewCell {
         titleStack.spacing = 2
 
         let subStack = UIStackView(arrangedSubviews: [nextAmountLabel, cadenceLabel, UIView(), readyLabel])
+        subStack.distribution = .fill
         subStack.spacing = 6
 
         let verticalStack = UIStackView(arrangedSubviews: [titleStack, subStack])
@@ -190,6 +191,7 @@ private class AmountLabel: UIView {
         layer.masksToBounds = true
 
         addSubview(label)
+        label.setHuggingAndCompression(to: .required)
         label.pinEdges(to: self, insets: .init(vertical: 2, horizontal: 6))
         label.textColor = .white
         label.font = .rubik(ofSize: 13, weight: .medium)
@@ -213,5 +215,6 @@ private class AmountLabel: UIView {
 
     func display(amount: Decimal) {
         label.text = (amount > 0 ? "+" : "") + NumberFormatter.currency.string(from: amount as NSNumber)!
+        invalidateIntrinsicContentSize()
     }
 }
