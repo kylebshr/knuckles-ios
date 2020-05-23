@@ -77,6 +77,6 @@ private class DayButton: Control {
 
     override func updateState() {
         label.textColor = isSelected ? .white : .label
-        backgroundColor = isSelected ? .systemBlue : .clear
+        backgroundColor = isSelected ? .customBlue : .clear
     }
 }

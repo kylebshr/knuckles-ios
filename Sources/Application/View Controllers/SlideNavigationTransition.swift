@@ -9,7 +9,7 @@ import UIKit
 
 class SlideNavigationController: UINavigationController, UINavigationControllerDelegate {
 
-    private let gesture = UIScreenEdgePanGestureRecognizer()
+    private let gesture = UIPanGestureRecognizer()
 
     private var interaction: UIPercentDrivenInteractiveTransition?
 
@@ -19,7 +19,6 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
         setNavigationBarHidden(true, animated: false)
         delegate = self
 
-        gesture.edges = .left
         gesture.addTarget(self, action: #selector(pan))
         view.addGestureRecognizer(gesture)
     }

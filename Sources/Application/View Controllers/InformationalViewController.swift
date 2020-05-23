@@ -44,7 +44,7 @@ class InformationalViewController: UIViewController {
         paragraphStyle.minimumLineHeight = 36 * 1.3
         paragraphStyle.maximumLineHeight = 36 * 1.3
 
-        attributedString.addAttribute(.foregroundColor, value: UIColor(displayP3Red: 0.325, green: 0.596, blue: 1, alpha: 1),
+        attributedString.addAttribute(.foregroundColor, value: UIColor.customBlue,
                                       range: (string as NSString).range(of: "change the world"))
         attributedString.addAttribute(.paragraphStyle, value: paragraphStyle,
                                       range: NSRange(location: 0, length: attributedString.length))

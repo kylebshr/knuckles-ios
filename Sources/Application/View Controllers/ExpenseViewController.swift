@@ -26,15 +26,13 @@ class ExpenseViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        expenses = UserDefaults.standard.expenses
-            .sorted { $0.sortingDate() < $1.sortingDate() }
-        tableView.reloadData()
+        reload()
     }
 
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
-        tableView.contentOffset.y = view.safeAreaInsets.top
         tableView.contentInset.top = -view.safeAreaInsets.top
+        tableView.contentOffset.y = view.safeAreaInsets.top
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -63,10 +61,27 @@ class ExpenseViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: false)
     }
 
+    override func tableView(_ tableView: UITableView,
+                            trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+    {
+        let action = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, _ in
+            UserDefaults.standard.expenses.remove(at: indexPath.row)
+            self?.reload()
+        }
+
+        return UISwipeActionsConfiguration(actions: [action])
+    }
+
     @objc private func presentCreateExpense() {
         let viewController = ExpenseCreationViewController()
         viewController.modalPresentationStyle = .fullScreen
         present(viewController, animated: true, completion: nil)
+    }
+
+    private func reload() {
+        expenses = UserDefaults.standard.expenses
+            .sorted { $0.sortingDate() < $1.sortingDate() }
+        tableView.reloadData()
     }
 }
 
@@ -123,7 +138,7 @@ private class ExpenseCell: UITableViewCell {
         amountLabel.text = NumberFormatter.currency.string(from: amountSaved as NSNumber)
         cadenceLabel.text = "payday"
         nextAmountLabel.display(amount: expense.nextAmountSaved(using: period))
-        nextAmountLabel.tintColor = .systemBlue
+        nextAmountLabel.tintColor = .customBlue
 
         let nextDueDate = expense.nextDueDate()
         let dueDateString = DateFormatter.readyByFormatter.string(from: nextDueDate)
@@ -133,7 +148,7 @@ private class ExpenseCell: UITableViewCell {
             cadenceLabel.text = "today"
             readyLabel.text = "on \(dueDateString)"
             nextAmountLabel.display(amount: -expense.amount)
-            nextAmountLabel.tintColor = .systemPink
+            nextAmountLabel.tintColor = .customPink
         } else if expense.isFunded(using: period) {
             readyLabel.text = "Ready for \(dueDateString)"
         } else {

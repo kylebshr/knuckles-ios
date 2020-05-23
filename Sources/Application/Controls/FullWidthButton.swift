@@ -27,7 +27,7 @@ class FullWidthButton: Control {
     }
 
     override func updateState() {
-        backgroundColor = isEnabled ? .systemBlue : UIColor.systemBlue.withAlphaComponent(0.3)
+        backgroundColor = isEnabled ? .customBlue : UIColor.customBlue.withAlphaComponent(0.3)
         label.alpha = isHighlighted ? 0.3 : 1
     }
 
