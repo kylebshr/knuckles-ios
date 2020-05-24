@@ -12,7 +12,7 @@ class ExpenseCreationViewController: UIViewController {
     private lazy var nameViewController = ExpenseNameViewController()
     private lazy var amountViewController = ExpenseAmountViewController()
     private lazy var dateViewController = ExpenseDueDateViewController()
-    private lazy var navigationContainer = SlideNavigationController(rootViewController: nameViewController)
+    private lazy var navigationContainer = PagingNavigationController(rootViewController: nameViewController)
 
     private var name: String!
     private var amount: Decimal!

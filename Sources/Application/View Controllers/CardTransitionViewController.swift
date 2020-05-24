@@ -62,4 +62,12 @@ class CardTransitionViewController: UIViewController {
             view.pinEdges(to: self.secondaryContainerView)
         }
     }
+
+    func showMainViewController() {
+        scrollView.setContentOffset(.zero, animated: true)
+    }
+
+    func showSecondaryViewController() {
+        scrollView.setContentOffset(CGPoint(x: secondaryContainerView.frame.origin.x, y: 0), animated: true)
+    }
 }

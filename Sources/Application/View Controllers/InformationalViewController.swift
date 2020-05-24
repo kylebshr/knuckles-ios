@@ -9,8 +9,6 @@ import UIKit
 
 class InformationalViewController: UIViewController {
 
-    private let balanceLabel = UILabel(font: .rubik(ofSize: 32, weight: .medium))
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -55,16 +53,5 @@ class InformationalViewController: UIViewController {
         let middleView = UIView()
         stackView.addArrangedSubview(middleView)
         middleView.heightAnchor.pin(to: topView.heightAnchor, multiplier: 0.6)
-
-        balanceLabel.text = NumberFormatter.currency.string(from: 1337.69)
-
-        let availableLabel = UILabel(font: .rubik(ofSize: 14, weight: .regular), color: .secondaryLabel)
-        availableLabel.text = "cash available"
-
-        let labelStack = UIStackView(arrangedSubviews: [balanceLabel, availableLabel])
-        labelStack.spacing = 4
-        labelStack.axis = .vertical
-
-        stackView.addArrangedSubview(labelStack)
     }
 }

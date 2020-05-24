@@ -7,10 +7,9 @@
 
 import UIKit
 
-class SlideNavigationController: UINavigationController, UINavigationControllerDelegate {
+class PagingNavigationController: UINavigationController, UINavigationControllerDelegate {
 
     private let gesture = UIPanGestureRecognizer()
-
     private var interaction: UIPercentDrivenInteractiveTransition?
 
     override init(rootViewController: UIViewController) {
@@ -32,6 +31,10 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
 
         switch sender.state {
         case .began:
+
+            guard sender.velocity(in: view).x > 0 else {
+                return sender.state = .cancelled
+            }
 
             interaction = UIPercentDrivenInteractiveTransition()
             popViewController(animated: true)
@@ -71,12 +74,12 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
                               from fromVC: UIViewController,
                               to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning?
     {
-        SlideAnimationTransition(operation: operation)
+        PagingControllerAnimation(operation: operation)
     }
 
 }
 
-class SlideAnimationTransition: NSObject, UIViewControllerAnimatedTransitioning {
+class PagingControllerAnimation: NSObject, UIViewControllerAnimatedTransitioning {
 
     private let operation: UINavigationController.Operation
     private var animator: UIViewPropertyAnimator?
@@ -91,7 +94,7 @@ class SlideAnimationTransition: NSObject, UIViewControllerAnimatedTransitioning 
     }
 
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return 0.35
+        animator?.duration ?? 0
     }
 
     func interruptibleAnimator(using transitionContext: UIViewControllerContextTransitioning) -> UIViewImplicitlyAnimating {
