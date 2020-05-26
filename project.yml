@@ -18,6 +18,11 @@ targets:
       testTargets: [KnucklesTests]
     sources:
       - path: Sources
+    entitlements:
+      path: knuckles.entitlements
+      properties:
+        com.apple.developer.applesignin:
+          - Default
     settings:
       VERSIONING_SYSTEM: Apple Generic
       CURRENT_PROJECT_VERSION: 1
