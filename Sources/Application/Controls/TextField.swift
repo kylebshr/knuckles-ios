@@ -22,9 +22,6 @@ class TextField: UITextField {
         didSet { updatePlaceholder(with: placeholder) }
     }
 
-    private let borderLayer = CAShapeLayer()
-    private let maskLayer = CAShapeLayer()
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         adjustsFontForContentSizeCategory = true

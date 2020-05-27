@@ -3,7 +3,6 @@ import UIKit
 
 struct SignUpRequest: Codable {
     var name: String
-    var username: String
 }
 
 struct LoginController {

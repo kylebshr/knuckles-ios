@@ -23,7 +23,9 @@ class RootViewController: ViewController {
             if let user = defaults.loggedInUser {
                 self?.set(viewController: MainViewController(user: user))
             } else {
-                self?.set(viewController: LoginViewController(completion: nil))
+                let viewController = SignUpViewController(identity: Data(), name: nil, completion: nil)
+                let navigationController = PagingNavigationController(rootViewController: viewController)
+                self?.set(viewController: navigationController)
             }
         }
     }

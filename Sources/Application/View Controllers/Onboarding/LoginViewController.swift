@@ -71,7 +71,7 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
 
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         guard let authorization = authorization.credential as? ASAuthorizationAppleIDCredential,
-            let identity = authorization.identityToken, let name = authorization.fullName else
+            let identity = authorization.identityToken else
         {
             fatalError()
         }
@@ -86,9 +86,9 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                 self.set(isLoading: false)
                 self.placeholder(title: "Something went wrong", message: String(describing: error))
             case .noAccountFound:
-                let nameFormatter = PersonNameComponentsFormatter()
-                let nameString = nameFormatter.string(from: name)
-                let viewController = SignUpViewController(identity: identity, fullName: nameString, completion: self.completion)
+                let viewController = SignUpViewController(identity: identity,
+                                                          name: authorization.fullName,
+                                                          completion: self.completion)
                 self.show(viewController, sender: self)
             case .success:
                 self.dismiss(animated: true, completion: nil)

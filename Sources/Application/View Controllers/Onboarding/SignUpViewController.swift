@@ -3,19 +3,18 @@ import UIKit
 
 class SignUpViewController: ViewController {
 
-    private let continueButton = Button(title: "→")
-    private let circleView = UIView()
+    private let activityIndicator = UIActivityIndicatorView(style: .medium)
     private let textField = TextField()
 
     private let identity: Data
-    private let fullName: String
+    private let name: PersonNameComponents?
     private let completion: ((Bool) -> Void)?
 
     override var firstResponder: UIResponder? { textField }
 
-    init(identity: Data, fullName: String, completion: ((Bool) -> Void)?) {
+    init(identity: Data, name: PersonNameComponents?, completion: ((Bool) -> Void)?) {
         self.identity = identity
-        self.fullName = fullName
+        self.name = name
         self.completion = completion
         super.init()
     }
@@ -23,71 +22,37 @@ class SignUpViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.clipsToBounds = true
+        view.layoutMargins.left = 30
+        view.layoutMargins.right = 30
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(self.cancel))
-        navigationItem.hidesBackButton = true
+        let formatter = PersonNameComponentsFormatter()
+        formatter.style = .short
+        textField.text = name.flatMap(formatter.string)
 
-        let circleBottomGuide = UILayoutGuide()
-        view.addLayoutGuide(circleBottomGuide)
-        circleBottomGuide.bottomAnchor.pin(to: view.bottomAnchor)
-        circleBottomGuide.heightAnchor.pin(to: view.heightAnchor, multiplier: 0.365)
-
-        view.addSubview(circleView)
-
-        circleView.backgroundColor = .customBlue
-        circleView.heightAnchor.pin(to: circleView.widthAnchor)
-        circleView.centerXAnchor.pin(to: view.centerXAnchor, constant: -60 - UIScreen.main.bounds.width)
-        circleView.widthAnchor.pin(to: view.widthAnchor, multiplier: 2.15)
-        circleView.bottomAnchor.pin(to: circleBottomGuide.topAnchor)
-
-        textField.placeholder = "Username"
-        textField.font = .systemFont(ofSize: 24, weight: .black)
-        textField.insets = UIEdgeInsets(vertical: 24, horizontal: 12 * 2)
+        textField.placeholder = "First name only is 👌"
+        textField.insets = .zero
+        textField.font = .systemFont(ofSize: 18, weight: .regular)
         textField.enablesReturnKeyAutomatically = true
-        textField.autocapitalizationType = .none
-        textField.autocorrectionType = .no
+        textField.autocapitalizationType = .words
         textField.returnKeyType = .go
         textField.delegate = self
 
-        let topSpace = UIView()
-        let bottomSpace = UIView()
+        textField.addSubview(activityIndicator)
+        activityIndicator.trailingAnchor.pin(to: textField.trailingAnchor)
+        activityIndicator.centerYAnchor.pin(to: textField.centerYAnchor)
 
-        let stackedViews = [topSpace, bottomSpace]
-        let stack = UIStackView(arrangedSubviews: stackedViews)
-        stack.axis = .vertical
+        let label = UILabel(font: .rubik(ofSize: 24, weight: .medium))
+        label.text = "What’s your name?"
 
-        let textFieldContainer = UIView()
-        textFieldContainer.backgroundColor = .secondarySystemBackground
-        textFieldContainer.addSubview(textField)
-        textField.pinEdges(to: textFieldContainer.safeAreaLayoutGuide)
+        let stackView = UIStackView(arrangedSubviews: [label, textField])
+        stackView.axis = .vertical
+        stackView.spacing = 30
+        stackView.alignment = .fill
+        stackView.distribution = .fill
 
-        view.addSubview(stack)
-        view.addSubview(textFieldContainer)
-        view.addSubview(continueButton)
-
-        stack.pinEdges([.left, .top, .right], to: view.safeAreaLayoutGuide, insets: .init(vertical: 0, horizontal: 44))
-        topSpace.heightAnchor.pin(to: bottomSpace.heightAnchor, multiplier: 0.6)
-        textFieldContainer.pinEdges([.left, .bottom, .right], to: keyboardLayoutGuide)
-        textFieldContainer.topAnchor.pin(to: stack.bottomAnchor)
-
-        continueButton.addTarget(self, action: #selector(continueTapped), for: .touchUpInside)
-        continueButton.pinEdges([.top, .bottom, .right], to: textField, insets: .init(vertical: 8, horizontal: 12 * 2))
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        circleView.layer.cornerRadius = circleView.bounds.midY
-    }
-
-    @objc private func cancel() {
-        let sheet = UIAlertController(title: "Are you sure?", message: "You’re almost done!", preferredStyle: .actionSheet)
-        sheet.addAction(UIAlertAction(title: "Cancel sign up", style: .destructive, handler: { _ in
-            self.completion?(false)
-            self.dismissAnimated()
-        }))
-        sheet.addAction(UIAlertAction(title: "Nevermind", style: .cancel, handler: nil))
-        present(sheet, animated: true)
+        view.addSubview(stackView)
+        stackView.pinEdges([.left, .right], to: view.layoutMarginsGuide)
+        stackView.bottomAnchor.pin(to: keyboardLayoutGuide.bottomAnchor, constant: -40)
     }
 
     @objc private func continueTapped() {
@@ -95,14 +60,15 @@ class SignUpViewController: ViewController {
             return
         }
 
-        signUp(username: text)
+        signUp(name: text)
         textField.resignFirstResponder()
     }
 
-    private func signUp(username: String) {
+    private func signUp(name: String) {
         set(isLoading: true)
 
-        LoginController.shared.signUp(identity: identity, meta: SignUpRequest(name: fullName, username: username)) { [weak self] result in
+        let request = SignUpRequest(name: name)
+        LoginController.shared.signUp(identity: identity, meta: request) { [weak self] result in
             guard let self = self else {
                 return
             }
@@ -121,7 +87,7 @@ class SignUpViewController: ViewController {
     }
 
     private func set(isLoading: Bool) {
-        continueButton.isLoading = isLoading
+        isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
         textField.isUserInteractionEnabled = !isLoading
     }
 }
