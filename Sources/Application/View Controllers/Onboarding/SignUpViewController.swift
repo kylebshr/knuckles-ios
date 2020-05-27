@@ -9,11 +9,11 @@ class SignUpViewController: ViewController {
 
     private let identity: Data
     private let fullName: String
-    private let completion: (Bool) -> Void
+    private let completion: ((Bool) -> Void)?
 
     override var firstResponder: UIResponder? { textField }
 
-    init(identity: Data, fullName: String, completion: @escaping (Bool) -> Void) {
+    init(identity: Data, fullName: String, completion: ((Bool) -> Void)?) {
         self.identity = identity
         self.fullName = fullName
         self.completion = completion
@@ -83,7 +83,7 @@ class SignUpViewController: ViewController {
     @objc private func cancel() {
         let sheet = UIAlertController(title: "Are you sure?", message: "You’re almost done!", preferredStyle: .actionSheet)
         sheet.addAction(UIAlertAction(title: "Cancel sign up", style: .destructive, handler: { _ in
-            self.completion(false)
+            self.completion?(false)
             self.dismissAnimated()
         }))
         sheet.addAction(UIAlertAction(title: "Nevermind", style: .cancel, handler: nil))
@@ -115,7 +115,7 @@ class SignUpViewController: ViewController {
                 fatalError()
             case .success:
                 self.dismiss(animated: true, completion: nil)
-                self.completion(true)
+                self.completion?(true)
             }
         }
     }

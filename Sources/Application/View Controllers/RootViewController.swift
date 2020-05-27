@@ -7,13 +7,46 @@
 //
 
 import UIKit
+import Foundation
 
 class RootViewController: ViewController {
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
 
-        LoginController.shared.launchLogin { completed in
+    private var current: UIViewController?
+    private var observation: NSKeyValueObservation?
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        UserDefaults.standard.logout()
+
+        observation = UserDefaults.standard.observe(\.authenticationToken, options: [.initial, .new]) { [weak self] defaults, _ in
+            if let user = defaults.loggedInUser {
+                self?.set(viewController: MainViewController(user: user))
+            } else {
+                self?.set(viewController: LoginViewController(completion: nil))
+            }
         }
+    }
+
+    private func set(viewController: UIViewController) {
+        guard current != nil else {
+            add(viewController)
+            current = viewController
+            return
+        }
+
+        viewController.view.alpha = 0
+        add(viewController)
+
+        let animator = UIViewPropertyAnimator {
+            viewController.view.alpha = 1
+        }
+
+        animator.addCompletion { _ in
+            self.current?.remove()
+            self.current = viewController
+        }
+
+        animator.startAnimation()
     }
 }

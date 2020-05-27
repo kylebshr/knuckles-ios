@@ -20,6 +20,10 @@ class MainViewController: ViewController {
         secondaryViewController: expenseViewController
     )
 
+    init(user: User) {
+        super.init()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 

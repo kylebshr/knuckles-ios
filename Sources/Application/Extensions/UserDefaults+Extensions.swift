@@ -37,7 +37,7 @@ extension UserDefaults {
         set { set(codable: newValue, forKey: #function) }
     }
 
-    @objc private(set) var authenticationToken: String? {
+    @objc dynamic private(set) var authenticationToken: String? {
         get { string(forKey: "authtoken") }
         set { set(newValue, forKey: "authtoken") }
     }

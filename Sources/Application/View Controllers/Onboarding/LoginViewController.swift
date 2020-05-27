@@ -3,14 +3,10 @@ import UIKit
 
 class LoginViewController: ViewController {
 
-    private let circleView = UIView()
-    private let appleButton = Button(title: " Sign in with Apple")
-    private let disclosureLabel = UILabel()
-    private lazy var stackView = UIStackView(arrangedSubviews: [appleButton, disclosureLabel])
+    private let appleButton = Button(title: "Sign in with Apple")
+    private let completion: ((Bool) -> Void)?
 
-    private let completion: (Bool) -> Void
-
-    init(completion: @escaping (Bool) -> Void) {
+    init(completion: ((Bool) -> Void)?) {
         self.completion = completion
         super.init()
     }
@@ -18,38 +14,37 @@ class LoginViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let cancel = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(self.cancel))
-        navigationItem.rightBarButtonItem = cancel
+        view.layoutMargins.bottom = 20
 
-        let circleBottomGuide = UILayoutGuide()
-        view.addLayoutGuide(circleBottomGuide)
-        circleBottomGuide.bottomAnchor.pin(to: view.bottomAnchor)
-        circleBottomGuide.heightAnchor.pin(to: view.heightAnchor, multiplier: 0.365)
+        let titleLabel = UILabel(font: .rubik(ofSize: 24, weight: .medium))
+        titleLabel.text = "Welcome to Balance"
+        titleLabel.numberOfLines = 0
 
-        view.addSubview(circleView)
+        let descriptionLabel = UILabel(font: .rubik(ofSize: 16, weight: .regular), color: .secondaryLabel)
+        descriptionLabel.text = "Sign in with Apple to start monitoring your budget."
+        descriptionLabel.numberOfLines = 0
 
-        circleView.backgroundColor = .customBlue
-        circleView.heightAnchor.pin(to: circleView.widthAnchor)
-        circleView.centerXAnchor.pin(to: view.centerXAnchor, constant: -60)
-        circleView.widthAnchor.pin(to: view.widthAnchor, multiplier: 2.15)
-        circleView.bottomAnchor.pin(to: circleBottomGuide.topAnchor)
+        let disclaimerLabel = UILabel(font: .rubik(ofSize: 14, weight: .regular), color: .secondaryLabel, alignment: .center)
+        disclaimerLabel.text = "By signing up you agree to\nour Terms of Services"
+        disclaimerLabel.numberOfLines = 0
 
         appleButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
 
-        disclosureLabel.text = "By signing up you agree to our\nTerms of Service"
-        disclosureLabel.numberOfLines = 0
-        disclosureLabel.textAlignment = .center
-        disclosureLabel.textColor = .secondaryLabel
+        let stackView = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel, appleButton, disclaimerLabel])
+        stackView.alignment = .center
+        stackView.distribution = .fill
+        stackView.axis = .vertical
+        stackView.spacing = 30
+
+        stackView.setCustomSpacing(90, after: descriptionLabel)
 
         view.addSubview(stackView)
-        stackView.axis = .vertical
-        stackView.pinEdges([.left, .right], to: view.safeAreaLayoutGuide)
-        stackView.bottomAnchor.pin(to: view.safeAreaLayoutGuide.bottomAnchor)
-    }
+        stackView.pinEdges([.left, .right, .bottom], to: view.layoutMarginsGuide)
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        circleView.layer.cornerRadius = circleView.bounds.midY
+        appleButton.widthAnchor.pin(to: view.widthAnchor, constant: -40)
+        titleLabel.widthAnchor.pin(to: view.widthAnchor, constant: -60)
+        descriptionLabel.widthAnchor.pin(to: view.widthAnchor, constant: -60)
+        disclaimerLabel.widthAnchor.pin(to: view.widthAnchor, constant: -60)
     }
 
     @objc private func signIn() {
@@ -62,26 +57,16 @@ class LoginViewController: ViewController {
         controller.performRequests()
     }
 
-    @objc private func cancel() {
-        dismiss(animated: true) {
-            self.completion(false)
-        }
-    }
-
     private func set(isLoading: Bool) {
         appleButton.isLoading = isLoading
         appleButton.isEnabled = !isLoading
-    }
-
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        .lightContent
     }
 }
 
 extension LoginViewController: ASAuthorizationControllerDelegate {
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         set(isLoading: false)
-        completion(false)
+        completion?(false)
     }
 
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
@@ -107,7 +92,7 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                 self.show(viewController, sender: self)
             case .success:
                 self.dismiss(animated: true, completion: nil)
-                self.completion(true)
+                self.completion?(true)
             }
         }
     }

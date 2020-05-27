@@ -24,6 +24,13 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Rubik-Black.ttf</string>
+		<string>Rubik-Bold.ttf</string>
+		<string>Rubik-Medium.ttf</string>
+		<string>Rubik-Regular.ttf</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -62,12 +69,10 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>UIAppFonts</key>
-	<array>
-		<string>Rubik-Black.ttf</string>
-		<string>Rubik-Bold.ttf</string>
-		<string>Rubik-Medium.ttf</string>
-		<string>Rubik-Regular.ttf</string>
-	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
 </dict>
 </plist>

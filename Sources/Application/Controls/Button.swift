@@ -3,12 +3,12 @@ import UIKit
 class Button: Control {
 
     private let activityIndicator = UIActivityIndicatorView(style: .medium)
-    private let dimmingView = UIView()
     private let content: UIView
 
     convenience init(title: String) {
-        let label = UILabel(font: .systemFont(ofSize: 21, weight: .semibold), color: .label)
-        label.textAlignment = .center
+        let label = UILabel(font: .rubik(ofSize: 18, weight: .medium),
+                            color: .inverseText,
+                            alignment: .center)
         label.text = title
         self.init(content: label)
     }
@@ -18,13 +18,10 @@ class Button: Control {
 
         super.init(frame: .zero)
 
+        layer.cornerRadius = 8
+        layer.cornerCurve = .continuous
         clipsToBounds = true
-        backgroundColor = .customBlue
-
-        addSubview(dimmingView)
-        dimmingView.alpha = 0
-        dimmingView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-        dimmingView.pinEdges(to: self)
+        backgroundColor = .inverseBackground
 
         addSubview(content)
         content.pinEdges(to: self)
@@ -38,16 +35,15 @@ class Button: Control {
         activityIndicator.pinCenter(to: self)
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        layer.cornerRadius = bounds.midY
-    }
-
     override func updateState() {
         isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
-        dimmingView.alpha = self.isHighlighted ? 1 : 0
-        activityIndicator.alpha = self.isLoading ? 1 : 0
-        content.alpha = self.isLoading ? 0 : 1
-        alpha = self.isEnabled ? 1 : 0.5
+        alpha = isEnabled ? 1 : 0.5
+        activityIndicator.alpha = isLoading ? 1 : 0
+
+        if isLoading {
+            content.alpha = 0
+        } else {
+            content.alpha = isHighlighted ? 0.3 : 1
+        }
     }
 }
