@@ -32,6 +32,7 @@ class Button: Control {
 
         addSubview(activityIndicator)
         activityIndicator.hidesWhenStopped = true
+        activityIndicator.tintColor = .customLabel
         activityIndicator.pinCenter(to: self)
     }
 
