@@ -7,21 +7,38 @@
 
 import UIKit
 
-class ExpenseViewController: UITableViewController {
+class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewDelegate {
+
+    private let navigationView = NavigationView()
+    private let tableView = UITableView()
 
     private let payPeriod = PayPeriod.firstAndFifteenth(adjustForWeekends: true)
     private var expenses: [Expense] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "Expenses"
 
-        tableView.layoutMargins.left = 20
-        tableView.layoutMargins.right = 20
-        tableView.showsVerticalScrollIndicator = false
+        view.addSubview(tableView)
+        view.addSubview(navigationView)
+
+        navigationView.pinEdges([.left, .top, .right], to: view)
+        tableView.pinEdges([.left, .right, .bottom], to: view)
+        tableView.topAnchor.pin(to: navigationView.bottomAnchor)
+
+        navigationView.text = "Expenses"
+        navigationView.action = .init(symbolName: "plus") { [weak self] in
+            self?.presentCreateExpense()
+        }
+
+        tableView.layoutMargins.left = 30
+        tableView.layoutMargins.right = 30
+        tableView.showsVerticalScrollIndicator = true
         tableView.tableFooterView = UIView()
+        tableView.dataSource = self
+        tableView.delegate = self
         tableView.register(cell: ExpenseCell.self)
-        tableView.register(view: HeaderView.self)
+
+        navigationView.observe(scrollView: tableView)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -29,40 +46,27 @@ class ExpenseViewController: UITableViewController {
         reload()
     }
 
-    override func viewSafeAreaInsetsDidChange() {
-        super.viewSafeAreaInsetsDidChange()
-        tableView.contentInset.top = -view.safeAreaInsets.top
-        tableView.contentOffset.y = view.safeAreaInsets.top
-    }
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         expenses.count
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeue(for: indexPath) as ExpenseCell
         let expense = expenses[indexPath.row]
         cell.display(expense: expense, in: payPeriod)
         return cell
     }
 
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = tableView.dequeue() as HeaderView
-        header.label.text = section == 0 ? "Expenses" : "Goals"
-        header.addButton.addTarget(self, action: #selector(presentCreateExpense), for: .touchUpInside)
-        return header
-    }
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
     }
 
-    override func tableView(_ tableView: UITableView,
-                            trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+    func tableView(_ tableView: UITableView,
+                   trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
     {
         let action = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, _ in
             UserDefaults.standard.expenses.remove(at: indexPath.row)
@@ -72,7 +76,7 @@ class ExpenseViewController: UITableViewController {
         return UISwipeActionsConfiguration(actions: [action])
     }
 
-    @objc private func presentCreateExpense() {
+    private func presentCreateExpense() {
         let viewController = ExpenseCreationViewController()
         viewController.modalPresentationStyle = .fullScreen
         present(viewController, animated: true, completion: nil)
@@ -154,40 +158,6 @@ private class ExpenseCell: UITableViewCell {
         } else {
             readyLabel.text = "Ready by \(dueDateString)"
         }
-    }
-}
-
-private class HeaderView: UITableViewHeaderFooterView {
-
-    let label = UILabel()
-    let addButton = UIButton(type: .system)
-
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
-
-        preservesSuperviewLayoutMargins = true
-
-        contentView.layoutMargins.bottom = 15
-        contentView.layoutMargins.top = 74
-        contentView.backgroundColor = .customBackground
-
-        contentView.addSubview(label)
-        label.text = "Expenses"
-        label.font = .rubik(ofSize: 32, weight: .bold)
-        label.pinEdges([.left, .right, .top], to: contentView.layoutMarginsGuide)
-        label.bottomAnchor.pin(to: contentView.layoutMarginsGuide.bottomAnchor, priority: .defaultHigh)
-
-        contentView.addSubview(addButton)
-        addButton.tintColor = .customLabel
-        let config = UIImage.SymbolConfiguration(pointSize: 24)
-        addButton.setImage(UIImage(systemName: "plus.circle", withConfiguration: config), for: .normal)
-
-        addButton.trailingAnchor.pin(to: contentView.layoutMarginsGuide.trailingAnchor)
-        addButton.centerYAnchor.pin(to: label.centerYAnchor)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
 

@@ -17,8 +17,6 @@ class RootViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        UserDefaults.standard.logout()
-
         observation = UserDefaults.standard.observe(\.authenticationToken, options: [.initial, .new]) { [weak self] defaults, _ in
             if let user = defaults.loggedInUser {
                 self?.set(viewController: MainViewController(user: user))
