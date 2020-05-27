@@ -21,7 +21,7 @@ class Button: Control {
         layer.cornerRadius = 8
         layer.cornerCurve = .continuous
         clipsToBounds = true
-        backgroundColor = .inverseBackground
+        backgroundColor = .customLabel
 
         addSubview(content)
         content.pinEdges(to: self)
@@ -37,13 +37,12 @@ class Button: Control {
 
     override func updateState() {
         isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
-        alpha = isEnabled ? 1 : 0.5
         activityIndicator.alpha = isLoading ? 1 : 0
 
         if isLoading {
             content.alpha = 0
         } else {
-            content.alpha = isHighlighted ? 0.3 : 1
+            content.alpha = (isHighlighted || !isEnabled) ? 0.3 : 1
         }
     }
 }

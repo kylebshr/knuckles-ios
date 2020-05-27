@@ -13,7 +13,7 @@ class MainViewController: ViewController {
     private let balanceButton = BalanceButton()
 
     private let expenseViewController = ExpenseViewController()
-    private let informationalViewController = InformationalViewController()
+    private let informationalViewController: InformationalViewController
 
     private lazy var cardViewController = CardTransitionViewController(
         mainViewController: informationalViewController,
@@ -21,6 +21,7 @@ class MainViewController: ViewController {
     )
 
     init(user: User) {
+        self.informationalViewController = InformationalViewController(user: user)
         super.init()
     }
 

@@ -22,7 +22,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .customBackground
 
         view.addLayoutGuide(keyboardLayoutGuide)
         keyboardLayoutGuide.pinEdges([.left, .right, .top], to: view)
@@ -36,8 +36,8 @@ class ViewController: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        firstResponder?.becomeFirstResponder()
         super.viewWillAppear(animated)
+        firstResponder?.becomeFirstResponder()
     }
 
     override func viewWillLayoutSubviews() {

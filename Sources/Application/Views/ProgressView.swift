@@ -22,7 +22,7 @@ class ProgressView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        tintColor = .label
+        tintColor = .customLabel
 
         backgroundColor = .systemFill
         clipsToBounds = true

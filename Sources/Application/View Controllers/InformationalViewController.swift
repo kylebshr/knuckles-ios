@@ -7,12 +7,19 @@
 
 import UIKit
 
-class InformationalViewController: UIViewController {
+class InformationalViewController: ViewController {
+
+    private let helloLabel = UILabel(font: .rubik(ofSize: 18, weight: .regular))
+
+    init(user: User) {
+        super.init()
+        helloLabel.text = "Hello, \(user.name) 🎉"
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .customBackground
         view.layoutMargins = UIEdgeInsets(all: 36)
 
         let stackView = UIStackView()
@@ -28,8 +35,6 @@ class InformationalViewController: UIViewController {
         let topView = UIView()
         stackView.addArrangedSubview(topView)
 
-        let helloLabel = UILabel(font: .rubik(ofSize: 18, weight: .regular))
-        helloLabel.text = "Hello Jason 🎉"
         stackView.addArrangedSubview(helloLabel)
 
         let label = UILabel()

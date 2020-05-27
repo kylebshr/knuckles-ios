@@ -100,7 +100,7 @@ private class DeleteButton: Control {
         addSubview(imageView)
         imageView.pinEdges(to: self, insets: .init(vertical: 4, horizontal: 0))
         imageView.contentMode = .center
-        imageView.tintColor = .label
+        imageView.tintColor = .customLabel
         imageView.image = image
     }
 

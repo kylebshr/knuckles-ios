@@ -169,7 +169,7 @@ private class HeaderView: UITableViewHeaderFooterView {
 
         contentView.layoutMargins.bottom = 15
         contentView.layoutMargins.top = 74
-        contentView.backgroundColor = .systemBackground
+        contentView.backgroundColor = .customBackground
 
         contentView.addSubview(label)
         label.text = "Expenses"
@@ -178,7 +178,7 @@ private class HeaderView: UITableViewHeaderFooterView {
         label.bottomAnchor.pin(to: contentView.layoutMarginsGuide.bottomAnchor, priority: .defaultHigh)
 
         contentView.addSubview(addButton)
-        addButton.tintColor = .label
+        addButton.tintColor = .customLabel
         let config = UIImage.SymbolConfiguration(pointSize: 24)
         addButton.setImage(UIImage(systemName: "plus.circle", withConfiguration: config), for: .normal)
 

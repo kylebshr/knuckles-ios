@@ -45,13 +45,18 @@ class LoginViewController: ViewController {
         titleLabel.widthAnchor.pin(to: view.widthAnchor, constant: -60)
         descriptionLabel.widthAnchor.pin(to: view.widthAnchor, constant: -60)
         disclaimerLabel.widthAnchor.pin(to: view.widthAnchor, constant: -60)
+
+        let shapeView = ShapeView()
+        view.addSubview(shapeView)
+        shapeView.pinEdges([.left, .right, .top], to: view)
+        shapeView.bottomAnchor.pin(to: stackView.topAnchor, constant: -30)
     }
 
     @objc private func signIn() {
         set(isLoading: true)
         let provider = ASAuthorizationAppleIDProvider()
         let request = provider.createRequest()
-        request.requestedScopes = [.email, .fullName]
+        request.requestedScopes = [.fullName]
         let controller = ASAuthorizationController(authorizationRequests: [request])
         controller.delegate = self
         controller.performRequests()
