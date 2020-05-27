@@ -1,0 +1,6 @@
+- Clean up ScrollViewShadowView
+	- Animate when changing scroll views?
+
+- Proper tabbing
+
+- Clean up nav/headers, including in create expense
