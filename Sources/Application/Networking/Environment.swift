@@ -12,7 +12,7 @@ enum Environment {
         case .production:
             return "https://knuckles-vapor.herokuapp.com"
         case .local:
-            return "http://localhost:8080"
+            return "https://41207765.ngrok.io"
         }
     }
 }
