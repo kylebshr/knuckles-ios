@@ -7,7 +7,9 @@
 
 import UIKit
 
-class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewDelegate {
+class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewDelegate, TabbedViewController {
+    var scrollView: UIScrollView? { tableView }
+    var tabItem: TabBarItem { .text("$1.3k") }
 
     private let navigationView = NavigationView()
     private let tableView = UITableView()

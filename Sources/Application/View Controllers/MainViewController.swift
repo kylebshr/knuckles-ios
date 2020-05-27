@@ -10,17 +10,20 @@ import UIKit
 
 class MainViewController: ViewController {
 
-    private let expenseViewController = ExpenseViewController()
+    private let tabBarViewController = TabBarController()
+    private let expenseViewController: ExpenseViewController
     private let informationalViewController: InformationalViewController
 
     init(user: User) {
-        self.informationalViewController = InformationalViewController(user: user)
+        informationalViewController = InformationalViewController(user: user)
+        expenseViewController = ExpenseViewController()
         super.init()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        add(expenseViewController)
+        add(tabBarViewController)
+        tabBarViewController.viewControllers = [expenseViewController]
     }
 }

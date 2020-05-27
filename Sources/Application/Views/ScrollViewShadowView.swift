@@ -32,9 +32,10 @@ class ScrollViewShadowView: UIView {
         observation?.invalidate()
     }
 
-    func observe(scrollView: UIScrollView) {
+    func observe(scrollView: UIScrollView?) {
+        layer.shadowOpacity = 0
         self.scrollView = scrollView
-        observation = scrollView.observe(\.contentOffset, options: [.new, .initial]) { [weak self] scrollView, _ in
+        observation = scrollView?.observe(\.contentOffset, options: [.new, .initial]) { [weak self] scrollView, _ in
             self?.update(using: scrollView)
         }
     }
@@ -49,7 +50,7 @@ class ScrollViewShadowView: UIView {
     private func update(using scrollView: UIScrollView) {
         let offset: CGFloat = 20
         let intersection = scrollView.contentFrame(in: self).intersection(self.bounds).height.clamped(0, offset)
-        let alpha = (intersection / offset) * 0.18
+        let alpha = (intersection / offset) * 0.15
         layer.shadowOpacity = Float(alpha)
     }
 }
