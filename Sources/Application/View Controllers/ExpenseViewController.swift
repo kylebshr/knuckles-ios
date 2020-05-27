@@ -9,7 +9,7 @@ import UIKit
 
 class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewDelegate, TabbedViewController {
     var scrollView: UIScrollView? { tableView }
-    var tabItem: TabBarItem { .text("$1.3k") }
+    var tabItem: TabBarItem { .symbol("minus") }
 
     private let navigationView = NavigationView()
     private let tableView = UITableView()

@@ -7,7 +7,9 @@
 
 import UIKit
 
-class InformationalViewController: ViewController {
+class InformationalViewController: ViewController, TabbedViewController {
+    var scrollView: UIScrollView? { nil }
+    var tabItem: TabBarItem { .text("$ 1.3k") }
 
     private let helloLabel = UILabel(font: .rubik(ofSize: 18, weight: .regular))
 

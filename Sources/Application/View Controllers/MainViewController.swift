@@ -24,6 +24,10 @@ class MainViewController: ViewController {
         super.viewDidLoad()
 
         add(tabBarViewController)
-        tabBarViewController.viewControllers = [expenseViewController]
+
+        tabBarViewController.viewControllers = [
+            informationalViewController,
+            expenseViewController,
+        ]
     }
 }
