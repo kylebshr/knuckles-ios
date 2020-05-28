@@ -12,12 +12,17 @@ enum TabBarItem {
     case text(String)
 }
 
-protocol TabbedViewController {
+protocol TabbedViewController: AnyObject {
     var scrollView: UIScrollView? { get }
     var tabItem: TabBarItem { get }
+    var delegate: TabbedViewControllerDelegate? { get set }
 }
 
-class TabBarController: ViewController {
+protocol TabbedViewControllerDelegate: AnyObject {
+    func updateTabs()
+}
+
+class TabBarController: ViewController, TabbedViewControllerDelegate {
     private let stackView = UIStackView()
     private let tabBarContainerView = ScrollViewShadowView()
 
@@ -48,6 +53,7 @@ class TabBarController: ViewController {
 
     private func updateViewControllers() {
         updateTabs()
+        viewControllers.forEach { $0.delegate = self }
 
         if viewControllers.isEmpty {
             children.first?.remove()
@@ -72,7 +78,7 @@ class TabBarController: ViewController {
         tabBarContainerView.observe(scrollView: viewControllers[index].scrollView)
     }
 
-    private func updateTabs() {
+    func updateTabs() {
         stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         for vc in viewControllers {
             let button = TabBarControl(item: vc.tabItem)

@@ -10,4 +10,5 @@ import UIKit
 class GoalsViewController: ViewController, TabbedViewController {
     var scrollView: UIScrollView? { nil }
     var tabItem: TabBarItem { .symbol("umbrella") }
+    weak var delegate: TabbedViewControllerDelegate?
 }

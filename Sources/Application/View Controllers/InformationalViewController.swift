@@ -7,9 +7,14 @@
 
 import UIKit
 
+struct Balance: Codable {
+    var amount: Decimal
+}
+
 class InformationalViewController: ViewController, TabbedViewController {
     var scrollView: UIScrollView? { nil }
-    var tabItem: TabBarItem { .text("$ 1.3k") }
+    var tabItem: TabBarItem = .text("$ 0")
+    weak var delegate: TabbedViewControllerDelegate?
 
     private let navigationView = NavigationView()
 
@@ -64,5 +69,16 @@ class InformationalViewController: ViewController, TabbedViewController {
         navigationView.action = .init(symbolName: "person", onTap: {
             UserDefaults.standard.logout()
         })
+
+        ResourceProvider.shared.fetchResource(at: "balance") { (result: Result<Balance, Error>) in
+            switch result {
+            case .success(let balance):
+                print(balance)
+                self.tabItem = .text("$ \(balance.amount.abbreviated())")
+                self.delegate?.updateTabs()
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }
