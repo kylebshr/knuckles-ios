@@ -61,7 +61,7 @@ class InformationalViewController: ViewController, TabbedViewController {
 
         view.addSubview(navigationView)
         navigationView.pinEdges([.left, .top, .right], to: view)
-        navigationView.action = .init(symbolName: "account", onTap: {
+        navigationView.action = .init(symbolName: "person", onTap: {
             UserDefaults.standard.logout()
         })
     }

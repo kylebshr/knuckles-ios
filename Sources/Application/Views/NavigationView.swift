@@ -50,7 +50,7 @@ class NavigationView: ScrollViewShadowView {
         actionButton.isHidden = action == nil
         if let action = action {
             let config = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
-            actionButton.setImage(UIImage(systemName: action.symbolName, withConfiguration: config), for: .normal)
+            actionButton.setImage(UIImage(systemName: action.symbolName, withConfiguration: config)!, for: .normal)
         }
     }
 
