@@ -54,6 +54,8 @@ class LinkPlaidViewController: ViewController {
 
     @objc private func linkPlaid() {
         let configuration = PLKConfiguration(key: Environment.plaidPublicKey, env: .sandbox, product: .transactions)
+        configuration.clientName = "Balance"
+
         let viewController = PLKPlaidLinkViewController(configuration: configuration, delegate: self)
         viewController.modalPresentationStyle = .fullScreen
         present(viewController, animated: true, completion: nil)
