@@ -9,7 +9,7 @@ import UIKit
 
 class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewDelegate, TabbedViewController {
     var scrollView: UIScrollView? { tableView }
-    var tabItem: TabBarItem { .symbol("minus") }
+    var tabItem: TabBarItem { .symbol("calendar") }
 
     private let navigationView = NavigationView()
     private let tableView = UITableView()

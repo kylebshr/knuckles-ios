@@ -89,31 +89,31 @@ class TabBarController: ViewController {
 
 private class TabBarControl: Control {
 
-    private var image = UIImageView()
-    private let label = UILabel(font: .rubik(ofSize: 18, weight: .bold), alignment: .center)
+    private let content: UIView
 
     init(item: TabBarItem) {
         switch item {
         case .symbol(let name):
-            let config = UIImage.SymbolConfiguration(pointSize: 18, weight: .bold)
-            image.contentMode = .center
-            image.image = UIImage(systemName: name, withConfiguration: config)!
+            let imageView = UIImageView()
+            let config = UIImage.SymbolConfiguration(pointSize: 22, weight: .regular)
+            imageView.contentMode = .center
+            imageView.tintColor = .customLabel
+            imageView.image = UIImage(systemName: name, withConfiguration: config)!
+            content = imageView
         case .text(let text):
+            let label = UILabel(font: .rubik(ofSize: 18, weight: .bold), alignment: .center)
             label.text = text
+            content = label
         }
 
         super.init(frame: .zero)
-
-        for view in [label, image] {
-            addSubview(view)
-            view.pinEdges(to: self)
-        }
+        addSubview(content)
+        content.pinEdges(to: self)
     }
 
     override func updateState() {
         UIView.performWithoutAnimation {
-            image.tintColor = isSelected ? .customLabel : .secondaryLabel
-            label.textColor = isSelected ? .customLabel : .secondaryLabel
+            alpha = isSelected ? 1 : 0.5
         }
     }
 }

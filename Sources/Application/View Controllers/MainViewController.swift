@@ -28,6 +28,7 @@ class MainViewController: ViewController {
         tabBarViewController.viewControllers = [
             informationalViewController,
             expenseViewController,
+            GoalsViewController(),
         ]
     }
 }
