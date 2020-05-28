@@ -22,7 +22,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .customBackground
+        view.backgroundColor = .systemBackground
 
         view.addLayoutGuide(keyboardLayoutGuide)
         keyboardLayoutGuide.pinEdges([.left, .right, .top], to: view)
@@ -43,10 +43,6 @@ class ViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         didlayoutSubviews = true
-    }
-
-    @objc func dismissAnimated() {
-        dismiss(animated: true, completion: nil)
     }
 
     @objc private func keyboardWillChange(_ sender: Notification) {

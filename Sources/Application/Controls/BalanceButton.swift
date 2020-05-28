@@ -21,7 +21,7 @@ class BalanceButton: Control {
         super.init(frame: frame)
 
         layoutMargins = .init(all: 36)
-        backgroundColor = .customBackground
+        backgroundColor = .systemBackground
 
         display(balance: 0)
         descriptionLabel.text = "cash available"

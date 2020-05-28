@@ -10,8 +10,6 @@ class SignUpViewController: ViewController {
     private let name: PersonNameComponents?
     private let completion: ((Bool) -> Void)?
 
-    override var firstResponder: UIResponder? { textField }
-
     init(identity: Data, name: PersonNameComponents?, completion: ((Bool) -> Void)?) {
         self.identity = identity
         self.name = name
@@ -53,6 +51,11 @@ class SignUpViewController: ViewController {
         view.addSubview(stackView)
         stackView.pinEdges([.left, .right], to: view.layoutMarginsGuide)
         stackView.bottomAnchor.pin(to: keyboardLayoutGuide.bottomAnchor, constant: -40)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        textField.becomeFirstResponder()
     }
 
     @objc private func continueTapped() {

@@ -28,7 +28,7 @@ class NavigationView: ScrollViewShadowView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = .customBackground
+        backgroundColor = .systemBackground
         layoutMargins = .init(top: 30, left: 30, bottom: 20, right: 30)
 
         addSubview(label)
@@ -36,7 +36,7 @@ class NavigationView: ScrollViewShadowView {
         label.pinEdges([.left, .top, .bottom], to: layoutMarginsGuide)
 
         addSubview(actionButton)
-        actionButton.tintColor = .customLabel
+        actionButton.tintColor = .label
         actionButton.centerYAnchor.pin(to: label.centerYAnchor)
         actionButton.trailingAnchor.pin(to: layoutMarginsGuide.trailingAnchor)
         actionButton.addTarget(self, action: #selector(performAction), for: .primaryActionTriggered)

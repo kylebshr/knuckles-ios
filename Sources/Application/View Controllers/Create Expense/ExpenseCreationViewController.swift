@@ -32,7 +32,7 @@ class ExpenseCreationViewController: UIViewController {
     private func addCloseButton() {
         let closeButton = UIButton(type: .system)
         view.addSubview(closeButton)
-        closeButton.tintColor = .customLabel
+        closeButton.tintColor = .label
         closeButton.pinEdges([.right, .top], to: view.layoutMarginsGuide, insets: .init(vertical: 38, horizontal: 0))
         let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
         closeButton.setImage(UIImage(systemName: "xmark", withConfiguration: config), for: .normal)

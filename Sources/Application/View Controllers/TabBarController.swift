@@ -97,7 +97,7 @@ private class TabBarControl: Control {
             let imageView = UIImageView()
             let config = UIImage.SymbolConfiguration(pointSize: 22, weight: .regular)
             imageView.contentMode = .center
-            imageView.tintColor = .customLabel
+            imageView.tintColor = .label
             imageView.image = UIImage(systemName: name, withConfiguration: config)!
             content = imageView
         case .text(let text):

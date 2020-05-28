@@ -25,7 +25,7 @@ class ExpenseAmountViewController: FlowViewController, KeyPadViewDelegate {
         amountLabel.setHuggingAndCompression(to: .required)
         amountLabel.adjustsFontSizeToFitWidth = true
         amountLabel.text = "$0"
-        view.backgroundColor = .customBackground
+        view.backgroundColor = .systemBackground
 
         let topView = UIView()
         let middleView = UIView()

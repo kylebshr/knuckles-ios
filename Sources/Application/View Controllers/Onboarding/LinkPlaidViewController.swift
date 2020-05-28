@@ -91,6 +91,6 @@ extension LinkPlaidViewController: PLKPlaidLinkViewDelegate {
                             didExitWithError error: Error?,
                             metadata: [String: Any]?)
     {
-        print("Failed")
+        dismiss(animated: true, completion: nil)
     }
 }

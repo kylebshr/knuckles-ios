@@ -18,7 +18,7 @@ class ShapeView: UIView {
         addSubview(square)
         addSubview(circle)
 
-        circle.backgroundColor = .customLabel
+        circle.backgroundColor = .label
         square.layer.borderWidth = 3
 
         circle.centerYAnchor.pin(to: centerYAnchor)
@@ -47,7 +47,7 @@ class ShapeView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        square.layer.borderColor = UIColor.customLabel.cgColor
+        square.layer.borderColor = UIColor.label.cgColor
         circle.layer.cornerRadius = circle.bounds.midY
     }
 }

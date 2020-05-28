@@ -7,7 +7,7 @@ class Button: Control {
 
     convenience init(title: String) {
         let label = UILabel(font: .rubik(ofSize: 18, weight: .medium),
-                            color: .inverseText,
+                            color: .systemBackground,
                             alignment: .center)
         label.text = title
         self.init(content: label)
@@ -21,7 +21,7 @@ class Button: Control {
         layer.cornerRadius = 8
         layer.cornerCurve = .continuous
         clipsToBounds = true
-        backgroundColor = .customLabel
+        backgroundColor = .label
 
         addSubview(content)
         content.pinEdges(to: self)
@@ -32,7 +32,7 @@ class Button: Control {
 
         addSubview(activityIndicator)
         activityIndicator.hidesWhenStopped = true
-        activityIndicator.color = .inverseText
+        activityIndicator.color = .systemBackground
         activityIndicator.pinCenter(to: self)
     }
 
