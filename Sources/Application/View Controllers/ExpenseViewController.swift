@@ -72,7 +72,10 @@ class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewD
     {
         let action = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, _ in
             UserDefaults.standard.expenses.remove(at: indexPath.row)
-            self?.reload()
+            self?.tableView.beginUpdates()
+            self?.expenses.remove(at: indexPath.row)
+            self?.tableView.deleteRows(at: [indexPath], with: .automatic)
+            self?.tableView.endUpdates()
         }
 
         return UISwipeActionsConfiguration(actions: [action])
