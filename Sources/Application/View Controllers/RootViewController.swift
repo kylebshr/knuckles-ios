@@ -17,11 +17,20 @@ class RootViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        observation = UserDefaults.standard.observe(\.authenticationToken, options: [.initial, .new]) { [weak self] defaults, _ in
-            if let user = defaults.loggedInUser {
+        observation = UserDefaults.standard.observe(\.loggedInUser, options: [.initial, .new]) { [weak self] defaults, _ in
+            if let user = defaults.loggedInUser, user.plaidAccessToken != nil {
+                if self?.children.first is MainViewController { return }
                 self?.set(viewController: MainViewController(user: user))
             } else {
-                let viewController = LoginViewController(completion: nil)
+                if self?.children.first is PagingNavigationController { return }
+                let viewController: UIViewController
+
+                if let user = UserDefaults.standard.loggedInUser, user.plaidAccessToken == nil {
+                    viewController = LinkPlaidViewController(completion: nil)
+                } else {
+                    viewController = LoginViewController(completion: nil)
+                }
+
                 let navigationController = PagingNavigationController(rootViewController: viewController)
                 self?.set(viewController: navigationController)
             }

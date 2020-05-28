@@ -10,7 +10,7 @@ struct LoginController {
     static let shared = LoginController(environment: .current)
 
     enum LoginResult {
-        case success
+        case success(User)
         case noAccountFound
         case failed(Error?)
     }
@@ -58,7 +58,7 @@ struct LoginController {
                     completion(.failed(error))
                 } else if let data = data, let token = try? decoder.decode(UserToken.self, from: data) {
                     UserDefaults.standard.login(token: token)
-                    completion(.success)
+                    completion(.success(token.user))
                 } else {
                     completion(.failed(nil))
                 }
@@ -80,7 +80,7 @@ struct LoginController {
                     completion(.failed(error))
                 } else if let data = data, let token = try? decoder.decode(UserToken.self, from: data) {
                     UserDefaults.standard.login(token: token)
-                    completion(.success)
+                    completion(.success(token.user))
                 } else {
                     completion(.failed(nil))
                 }

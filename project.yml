@@ -18,6 +18,8 @@ targets:
       testTargets: [KnucklesTests]
     sources:
       - path: Sources
+    dependencies:
+      - carthage: LinkKit
     entitlements:
       path: knuckles.entitlements
       properties:

@@ -32,7 +32,7 @@ class Button: Control {
 
         addSubview(activityIndicator)
         activityIndicator.hidesWhenStopped = true
-        activityIndicator.tintColor = .customLabel
+        activityIndicator.color = .inverseText
         activityIndicator.pinCenter(to: self)
     }
 

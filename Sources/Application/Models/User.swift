@@ -7,6 +7,8 @@
 
 import Foundation
 
-struct User: Codable {
-    let name: String
+@objc class User: NSObject, Codable {
+    var name: String
+    var plaidAccessToken: String?
+    var plaidItemID: String?
 }

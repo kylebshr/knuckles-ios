@@ -37,12 +37,12 @@ extension UserDefaults {
         set { set(codable: newValue, forKey: #function) }
     }
 
-    @objc dynamic private(set) var authenticationToken: String? {
+    @objc private(set) var authenticationToken: String? {
         get { string(forKey: "authtoken") }
         set { set(newValue, forKey: "authtoken") }
     }
 
-    private(set) var loggedInUser: User? {
+    @objc private(set) var loggedInUser: User? {
         get { codable(forKey: "user") }
         set { set(codable: newValue, forKey: "user") }
     }
@@ -61,4 +61,7 @@ extension UserDefaults {
         authenticationToken = nil
     }
 
+    func updateUser(_ user: User) {
+        loggedInUser = user
+    }
 }

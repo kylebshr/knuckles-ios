@@ -95,9 +95,13 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                                                           name: authorization.fullName,
                                                           completion: self.completion)
                 self.show(viewController, sender: self)
-            case .success:
-                self.dismiss(animated: true, completion: nil)
-                self.completion?(true)
+            case .success(let user):
+                if user.plaidAccessToken == nil {
+                    let viewController = LinkPlaidViewController(completion: self.completion)
+                    self.show(viewController, sender: self)
+                } else {
+                    self.completion?(true)
+                }
             }
         }
     }
