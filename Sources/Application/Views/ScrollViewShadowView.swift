@@ -50,8 +50,10 @@ class ScrollViewShadowView: UIView {
     private func update(using scrollView: UIScrollView) {
         let offset: CGFloat = 20
         let intersection = scrollView.contentFrame(in: self).intersection(self.bounds).height.clamped(0, offset)
-        let alpha = (intersection / offset) * 0.15
-        layer.shadowOpacity = Float(alpha)
+        let percentScrolled = intersection / offset
+
+        layer.shadowOpacity = Float(percentScrolled * 0.15)
+        backgroundColor = UIColor.systemBackground.lerp(to: .elevatedBackground, amount: percentScrolled)
     }
 }
 

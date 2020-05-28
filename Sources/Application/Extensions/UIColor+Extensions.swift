@@ -24,7 +24,7 @@ extension UIColor {
 
 extension UIColor {
 
-    static let customBlack = UIColor(displayP3Red: 0.133, green: 0.133, blue: 0.133, alpha: 1)
+    static let customBlack = UIColor(displayP3Red: 0.083, green: 0.083, blue: 0.083, alpha: 1)
     static let customWhite = UIColor(displayP3Red: 0.989, green: 0.989, blue: 0.989, alpha: 1)
 
     static let customBlue = UIColor(displayP3Red: 0.325, green: 0.596, blue: 1.000, alpha: 1)
@@ -42,5 +42,33 @@ extension UIColor {
         case .light: return .customWhite
         default: return .customBlack
         }
+    }
+
+    static let elevatedBackground = UIColor { traits in
+        switch traits.userInterfaceStyle {
+        case .light: return .customWhite
+        default: return UIColor(displayP3Red: 0.123, green: 0.123, blue: 0.123, alpha: 1)
+        }
+    }
+
+    func lerp(to: UIColor, amount: CGFloat) -> UIColor {
+        let (r1, g1, b1, a1) = rgba
+        let (r2, g2, b2, a2) = to.rgba
+        return UIColor(displayP3Red: r1.lerp(to: r2, amount: amount),
+                       green: g1.lerp(to: g2, amount: amount),
+                       blue: b1.lerp(to: b2, amount: amount),
+                       alpha: a1.lerp(to: a2, amount: amount))
+    }
+}
+
+extension UIColor {
+    var rgba: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+
+        return (red, green, blue, alpha)
     }
 }

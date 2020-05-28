@@ -38,6 +38,7 @@ class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewD
         tableView.tableFooterView = UIView()
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.backgroundColor = .systemBackground
         tableView.register(cell: ExpenseCell.self)
 
         navigationView.observe(scrollView: tableView)
@@ -46,10 +47,6 @@ class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewD
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reload()
-    }
-
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -107,6 +104,7 @@ private class ExpenseCell: UITableViewCell {
 
         emojiView.setHuggingAndCompression(to: .required)
 
+        backgroundColor = .systemBackground
         preservesSuperviewLayoutMargins = true
 
         contentView.layoutMargins.top = 20
