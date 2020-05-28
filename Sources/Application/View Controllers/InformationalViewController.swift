@@ -11,11 +11,11 @@ class InformationalViewController: ViewController, TabbedViewController {
     var scrollView: UIScrollView? { nil }
     var tabItem: TabBarItem { .text("$ 1.3k") }
 
-    private let helloLabel = UILabel(font: .rubik(ofSize: 18, weight: .regular))
+    private let navigationView = NavigationView()
 
     init(user: User) {
         super.init()
-        helloLabel.text = "Hello, \(user.name) 🎉"
+        navigationView.text = "Hello, \(user.name)"
     }
 
     override func viewDidLoad() {
@@ -36,8 +36,6 @@ class InformationalViewController: ViewController, TabbedViewController {
 
         let topView = UIView()
         stackView.addArrangedSubview(topView)
-
-        stackView.addArrangedSubview(helloLabel)
 
         let label = UILabel()
         label.numberOfLines = 0
@@ -60,5 +58,11 @@ class InformationalViewController: ViewController, TabbedViewController {
         let middleView = UIView()
         stackView.addArrangedSubview(middleView)
         middleView.heightAnchor.pin(to: topView.heightAnchor, multiplier: 0.6)
+
+        view.addSubview(navigationView)
+        navigationView.pinEdges([.left, .top, .right], to: view)
+        navigationView.action = .init(symbolName: "account", onTap: {
+            UserDefaults.standard.logout()
+        })
     }
 }
