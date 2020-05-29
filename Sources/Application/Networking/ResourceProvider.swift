@@ -58,13 +58,7 @@ struct ResourceProvider {
                 let response = response as? HTTPURLResponse
                 DispatchQueue.main.async {
                     if response?.statusCode == 401 {
-                        LoginController.shared.launchLogin { success in
-                            if success {
-                                self.perform(request: request, completion: completion)
-                            } else {
-                                completion(data, response, error)
-                            }
-                        }
+                        UserDefaults.standard.logout()
                     } else {
                         completion(data, response, error)
                     }

@@ -4,12 +4,6 @@ import UIKit
 class LinkPlaidViewController: ViewController {
 
     private let linkButton = Button(title: "Link bank account")
-    private let completion: ((Bool) -> Void)?
-
-    init(completion: ((Bool) -> Void)?) {
-        self.completion = completion
-        super.init()
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,7 +75,6 @@ extension LinkPlaidViewController: PLKPlaidLinkViewDelegate {
             switch result {
             case .success(let user):
                 UserDefaults.standard.update(user: user)
-                self.completion?(true)
             case .failure(let error):
                 self.placeholder(title: "Error saving plaid token", message: error.localizedDescription)
             }

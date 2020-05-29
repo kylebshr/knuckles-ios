@@ -13,3 +13,9 @@ import Foundation
     var plaidItemID: String?
     var plaidAccountID: String?
 }
+
+extension User {
+    var hasCompletedPlaidLink: Bool {
+        return plaidAccountID != nil
+    }
+}

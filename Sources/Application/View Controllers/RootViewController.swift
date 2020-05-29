@@ -25,10 +25,10 @@ class RootViewController: ViewController {
                 if self?.children.first is PagingNavigationController { return }
                 let viewController: UIViewController
 
-                if let user = UserDefaults.standard.loggedInUser, user.plaidAccessToken == nil {
-                    viewController = LinkPlaidViewController(completion: nil)
+                if let user = UserDefaults.standard.loggedInUser, !user.hasCompletedPlaidLink {
+                    viewController = LinkPlaidViewController()
                 } else {
-                    viewController = LoginViewController(completion: nil)
+                    viewController = LoginViewController()
                 }
 
                 let navigationController = PagingNavigationController(rootViewController: viewController)
@@ -57,11 +57,5 @@ class RootViewController: ViewController {
         }
 
         animator.startAnimation()
-    }
-}
-
-extension User {
-    var hasCompletedPlaidLink: Bool {
-        return plaidAccountID != nil
     }
 }

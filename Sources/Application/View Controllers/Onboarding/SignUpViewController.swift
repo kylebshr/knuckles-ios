@@ -8,12 +8,10 @@ class SignUpViewController: ViewController {
 
     private let identity: Data
     private let name: PersonNameComponents?
-    private let completion: ((Bool) -> Void)?
 
-    init(identity: Data, name: PersonNameComponents?, completion: ((Bool) -> Void)?) {
+    init(identity: Data, name: PersonNameComponents?) {
         self.identity = identity
         self.name = name
-        self.completion = completion
         super.init()
     }
 
@@ -83,11 +81,9 @@ class SignUpViewController: ViewController {
             case .noAccountFound:
                 fatalError()
             case .success(let user):
-                if user.plaidAccessToken == nil {
-                    let viewController = LinkPlaidViewController(completion: self.completion)
+                if !user.hasCompletedPlaidLink {
+                    let viewController = LinkPlaidViewController()
                     self.show(viewController, sender: self)
-                } else {
-                    self.completion?(true)
                 }
             }
         }

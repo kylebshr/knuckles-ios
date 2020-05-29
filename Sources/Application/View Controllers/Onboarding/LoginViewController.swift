@@ -4,12 +4,6 @@ import UIKit
 class LoginViewController: ViewController {
 
     private let appleButton = Button(title: "Sign in with Apple")
-    private let completion: ((Bool) -> Void)?
-
-    init(completion: ((Bool) -> Void)?) {
-        self.completion = completion
-        super.init()
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,7 +65,6 @@ class LoginViewController: ViewController {
 extension LoginViewController: ASAuthorizationControllerDelegate {
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         set(isLoading: false)
-        completion?(false)
     }
 
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
@@ -91,16 +84,12 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                 self.set(isLoading: false)
                 self.placeholder(title: "Something went wrong", message: String(describing: error))
             case .noAccountFound:
-                let viewController = SignUpViewController(identity: identity,
-                                                          name: authorization.fullName,
-                                                          completion: self.completion)
+                let viewController = SignUpViewController(identity: identity, name: authorization.fullName)
                 self.show(viewController, sender: self)
             case .success(let user):
-                if user.plaidAccessToken == nil {
-                    let viewController = LinkPlaidViewController(completion: self.completion)
+                if !user.hasCompletedPlaidLink {
+                    let viewController = LinkPlaidViewController()
                     self.show(viewController, sender: self)
-                } else {
-                    self.completion?(true)
                 }
             }
         }

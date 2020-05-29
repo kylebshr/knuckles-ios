@@ -29,19 +29,6 @@ struct LoginController {
         self.environment = environment
     }
 
-    func launchLogin(completion: @escaping (Bool) -> Void) {
-        let viewController = LoginViewController(completion: completion)
-        let navigationController = PagingNavigationController(rootViewController: viewController)
-        navigationController.modalPresentationStyle = .fullScreen
-
-        var presenter = UIApplication.shared.windows.first?.rootViewController
-        while presenter?.presentedViewController != nil {
-            presenter = presenter?.presentedViewController
-        }
-
-        presenter?.present(navigationController, animated: true, completion: nil)
-    }
-
     func attemptLogin(identity: Data, completion: @escaping (LoginResult) -> Void) {
         let authorization = String(data: identity, encoding: .utf8)!
         var request = URLRequest(url: environment.baseURL.appendingPathComponent("login/apple"))
