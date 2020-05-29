@@ -1,6 +1,6 @@
 import Foundation
 
-struct PlaidAccount: Codable {
+struct PlaidAccountContent: Codable {
     enum CodingKeys: String, CodingKey {
         case accountID = "accountId"
         case balances, name, type, subtype

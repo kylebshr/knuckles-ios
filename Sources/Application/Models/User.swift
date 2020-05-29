@@ -11,11 +11,25 @@ import Foundation
     var name: String
     var plaidAccessToken: String?
     var plaidItemID: String?
-    var plaidAccountID: String?
+
+    var plaidAccounts: [PlaidAccount]?
+}
+
+@objc class PlaidAccount: NSObject, Codable {
+    var id: String
+
+    var name: String
+    var type: String
+    var subtype: String
+    var currentBalance: Decimal
+    var availableBalance: Decimal?
+    var currencyCode: String
+
+    var createdAt: Date?
 }
 
 extension User {
     var hasCompletedPlaidLink: Bool {
-        return plaidAccountID != nil
+        return plaidAccounts?.first != nil
     }
 }
