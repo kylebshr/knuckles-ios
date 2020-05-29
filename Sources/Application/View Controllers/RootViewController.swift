@@ -18,7 +18,7 @@ class RootViewController: ViewController {
         super.viewDidLoad()
 
         observation = UserDefaults.standard.observe(\.loggedInUser, options: [.initial, .new]) { [weak self] defaults, _ in
-            if let user = defaults.loggedInUser, user.plaidAccessToken != nil {
+            if let user = defaults.loggedInUser, user.hasCompletedPlaidLink {
                 if self?.children.first is MainViewController { return }
                 self?.set(viewController: MainViewController(user: user))
             } else {
@@ -57,5 +57,11 @@ class RootViewController: ViewController {
         }
 
         animator.startAnimation()
+    }
+}
+
+extension User {
+    var hasCompletedPlaidLink: Bool {
+        return plaidAccountID != nil
     }
 }

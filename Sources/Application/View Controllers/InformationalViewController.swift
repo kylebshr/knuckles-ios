@@ -69,16 +69,5 @@ class InformationalViewController: ViewController, TabbedViewController {
         navigationView.action = .init(symbolName: "person", onTap: {
             UserDefaults.standard.logout()
         })
-
-        ResourceProvider.shared.fetchResource(at: "balance") { (result: Result<Balance, Error>) in
-            switch result {
-            case .success(let balance):
-                print(balance)
-                self.tabItem = .text("$ \(balance.amount.abbreviated())")
-                self.delegate?.updateTabs()
-            case .failure(let error):
-                print(error)
-            }
-        }
     }
 }

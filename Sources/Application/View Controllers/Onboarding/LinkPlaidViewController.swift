@@ -74,15 +74,16 @@ extension LinkPlaidViewController: PLKPlaidLinkViewDelegate {
     {
         dismiss(animated: true, completion: nil)
         set(isLoading: true)
-        ResourceProvider.shared.createResource(publicToken, at: "link_plaid_token") { (result: Result<User, Error>) in
+        ResourceProvider.shared.createResource(publicToken, at: "link_plaid_token") { [weak self] (result: Result<User, Error>) in
+            guard let self = self else { return }
+            self.set(isLoading: false)
+
             switch result {
-            case .success(let user) where user.plaidAccessToken != nil:
+            case .success(let user):
                 UserDefaults.standard.update(user: user)
+                self.completion?(true)
             case .failure(let error):
-                print(error)
-                self.placeholder(message: "Error saving plaid token")
-            default:
-                self.placeholder(message: "Error saving plaid token")
+                self.placeholder(title: "Error saving plaid token", message: error.localizedDescription)
             }
         }
     }

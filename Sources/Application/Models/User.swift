@@ -11,4 +11,5 @@ import Foundation
     var name: String
     var plaidAccessToken: String?
     var plaidItemID: String?
+    var plaidAccountID: String?
 }
