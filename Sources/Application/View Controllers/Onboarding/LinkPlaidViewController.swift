@@ -48,7 +48,7 @@ class LinkPlaidViewController: ViewController {
 
     @objc private func linkPlaid() {
         let configuration = PLKConfiguration(key: Environment.plaidPublicKey, env: .sandbox, product: .transactions)
-        configuration.webhook = "https://e4a876736e09.ngrok.io/plaid_webhook"
+        configuration.webhook = "https://b16e6dcd04b9.ngrok.io/plaid_webhook"
 
         let viewController = PLKPlaidLinkViewController(configuration: configuration, delegate: self)
         viewController.modalPresentationStyle = .fullScreen

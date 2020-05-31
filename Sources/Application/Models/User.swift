@@ -11,8 +11,6 @@ import Foundation
     var name: String
     var plaidAccessToken: String?
     var plaidItemID: String?
-
-    var plaidAccounts: [PlaidAccount]?
 }
 
 @objc class PlaidAccount: NSObject, Codable {
@@ -30,6 +28,6 @@ import Foundation
 
 extension User {
     var hasCompletedPlaidLink: Bool {
-        return plaidAccounts?.first != nil
+        return plaidAccessToken != nil
     }
 }
