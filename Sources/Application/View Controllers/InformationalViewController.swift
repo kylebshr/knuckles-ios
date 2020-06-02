@@ -7,16 +7,13 @@
 
 import UIKit
 
-struct Balance: Codable {
-    var amount: Decimal
-}
-
 class InformationalViewController: ViewController, TabbedViewController {
     var scrollView: UIScrollView? { nil }
     var tabItem: TabBarItem = .text("$ 0")
     weak var delegate: TabbedViewControllerDelegate?
 
     private let navigationView = NavigationView()
+    private let balanceButton = BalanceButton()
 
     init(user: User) {
         super.init()
@@ -64,10 +61,28 @@ class InformationalViewController: ViewController, TabbedViewController {
         stackView.addArrangedSubview(middleView)
         middleView.heightAnchor.pin(to: topView.heightAnchor, multiplier: 0.6)
 
+        balanceButton.display(balance: 0)
+        stackView.addArrangedSubview(balanceButton)
+
         view.addSubview(navigationView)
         navigationView.pinEdges([.left, .top, .right], to: view)
         navigationView.action = .init(symbolName: "person", onTap: {
             UserDefaults.standard.logout()
         })
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        refresh()
+    }
+
+    @objc private func refresh() {
+        ResourceProvider.shared.fetchResource(at: "balance") { [weak self] (result: Res<Balance>) in
+            switch result {
+            case .success(let balance):
+                self?.balanceButton.display(balance: balance.amount)
+            default: break
+            }
+        }
     }
 }

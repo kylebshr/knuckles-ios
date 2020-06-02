@@ -11,6 +11,8 @@ private extension Environment {
     }
 }
 
+typealias Res<T> = Result<T, Error>
+
 /// Provides loading of a Codable type from a given URL.
 struct ResourceProvider {
 
