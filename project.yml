@@ -1,38 +1,74 @@
 name: knuckles
+
 options:
   bundleIdPrefix: com.kylebashour
+
 configFiles:
   Debug: Project-Debug.xcconfig
   Release: Project-Release.xcconfig
+
 targets:
+
   Knuckles:
+    type: application
+    platform: iOS
+
     configFiles:
-      Debug: Sources/knuckles-Debug.xcconfig
-      Release: Sources/knuckles-Release.xcconfig
+      Debug: xcconfig/Knuckles-Debug.xcconfig
+      Release: xcconfig/Knuckles-Release.xcconfig
+    
     preBuildScripts:
       - path: tools/swiftlint.sh
         name: Run swiftlint
-    type: application
-    platform: iOS
+    
     scheme:
       testTargets: [KnucklesTests]
+    
     sources:
-      - path: Sources
+      - path: Sources/Knuckles
+    
     dependencies:
+      - target: "TodayExtension"
       - carthage: LinkKit
+    
     entitlements:
       path: knuckles.entitlements
       properties:
         com.apple.developer.applesignin:
           - Default
+    
     settings:
+      INFOPLIST_FILE: Sources/Knuckles/Info.plist
       VERSIONING_SYSTEM: Apple Generic
       CURRENT_PROJECT_VERSION: 1
       TARGETED_DEVICE_FAMILY: 1
+  
   KnucklesTests:
     type: bundle.unit-test
     platform: iOS
+  
     sources:
       - path: Tests
+  
     dependencies:
       - target: Knuckles
+
+  TodayExtension:
+    type: app-extension
+    platform: iOS
+
+    dependencies:
+      - sdk: NotificationCenter.framework
+
+    configFiles:
+      Debug: xcconfig/TodayExtension-Debug.xcconfig
+      Release: xcconfig/TodayExtension-Release.xcconfig
+
+    sources:
+      - path: Sources/TodayExtension
+
+    settings:
+      INFOPLIST_FILE: Sources/TodayExtension/Info.plist
+      EMBEDDED_CONTENT_CONTAINS_SWIFT: true
+      PRODUCT_BUNDLE_IDENTIFIER: "com.kylebashour.Knuckles.TodayExtension"
+
