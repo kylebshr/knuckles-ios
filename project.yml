@@ -2,6 +2,8 @@ name: knuckles
 
 options:
   bundleIdPrefix: com.kylebashour
+  deploymentTarget: 
+    iOS: "13.1"
 
 configFiles:
   Debug: xcconfig/Project-Debug.xcconfig

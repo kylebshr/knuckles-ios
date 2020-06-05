@@ -70,7 +70,10 @@ extension LinkPlaidViewController: PLKPlaidLinkViewDelegate {
     {
         dismiss(animated: true, completion: nil)
         set(isLoading: true)
-        ResourceProvider.shared.createResource(publicToken, at: "link_plaid_token") { [weak self] (result: Result<User, Error>) in
+
+        let token = PlaidPublicToken(value: publicToken)
+
+        ResourceProvider.shared.createResource(token, at: "link_plaid_token") { [weak self] (result: Result<User, Error>) in
             guard let self = self else { return }
             self.set(isLoading: false)
 
