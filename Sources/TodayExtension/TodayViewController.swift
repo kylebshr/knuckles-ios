@@ -21,6 +21,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         super.viewDidLoad()
 
         label.text = "$100.00"
+        label.font = .boldSystemFont(ofSize: 32)
         view.addSubview(label)
 
         preferredContentSize.height = 200
