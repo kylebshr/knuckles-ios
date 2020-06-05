@@ -4,8 +4,8 @@ options:
   bundleIdPrefix: com.kylebashour
 
 configFiles:
-  Debug: Project-Debug.xcconfig
-  Release: Project-Release.xcconfig
+  Debug: xcconfig/Project-Debug.xcconfig
+  Release: xcconfig/Project-Release.xcconfig
 
 targets:
 
@@ -39,6 +39,7 @@ targets:
     
     settings:
       INFOPLIST_FILE: Sources/Knuckles/Info.plist
+      PRODUCT_BUNDLE_IDENTIFIER: "com.kylebashour.knuckles"
       VERSIONING_SYSTEM: Apple Generic
       CURRENT_PROJECT_VERSION: 1
       TARGETED_DEVICE_FAMILY: 1
@@ -70,5 +71,5 @@ targets:
     settings:
       INFOPLIST_FILE: Sources/TodayExtension/Info.plist
       EMBEDDED_CONTENT_CONTAINS_SWIFT: true
-      PRODUCT_BUNDLE_IDENTIFIER: "com.kylebashour.Knuckles.TodayExtension"
+      PRODUCT_BUNDLE_IDENTIFIER: "com.kylebashour.knuckles.TodayExtension"
 
