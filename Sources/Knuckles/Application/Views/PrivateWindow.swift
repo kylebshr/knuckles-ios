@@ -25,10 +25,14 @@ class PrivateWindow: UIWindow {
     }
 
     @objc private func showBlur() {
+        guard UserDefaults.standard.loggedInUser != nil else {
+            return
+        }
+
         addSubview(blur)
         blur.effect = nil
         UIViewPropertyAnimator {
-            self.blur.effect = UIBlurEffect(style: .systemThickMaterial)
+            self.blur.effect = UIBlurEffect(style: .systemMaterial)
         }.startAnimation()
     }
 

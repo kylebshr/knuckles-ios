@@ -10,7 +10,7 @@ import UIKit
 class InformationalViewController: ViewController, TabbedViewController {
     var scrollView: UIScrollView? { nil }
     var tabItem: TabBarItem = .text("$ 0")
-    weak var delegate: TabbedViewControllerDelegate?
+    weak var tabDelegate: TabbedViewControllerDelegate?
 
     private let navigationView = NavigationView()
     private let balanceButton = BalanceButton()
@@ -81,6 +81,8 @@ class InformationalViewController: ViewController, TabbedViewController {
             switch result {
             case .success(let balance):
                 self?.balanceButton.display(balance: balance.amount)
+                self?.tabItem = .text("$" + balance.amount.abbreviated())
+                self?.tabDelegate?.updateTabs()
             default: break
             }
         }

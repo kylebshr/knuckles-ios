@@ -15,7 +15,7 @@ enum TabBarItem {
 protocol TabbedViewController: AnyObject {
     var scrollView: UIScrollView? { get }
     var tabItem: TabBarItem { get }
-    var delegate: TabbedViewControllerDelegate? { get set }
+    var tabDelegate: TabbedViewControllerDelegate? { get set }
 }
 
 protocol TabbedViewControllerDelegate: AnyObject {
@@ -32,6 +32,12 @@ class TabBarController: ViewController, TabbedViewControllerDelegate {
         }
 
         return buttons
+    }
+
+    var selectedIndex: Int = 0 {
+        didSet {
+            self.select(index: selectedIndex)
+        }
     }
 
     override func viewDidLoad() {
@@ -53,22 +59,24 @@ class TabBarController: ViewController, TabbedViewControllerDelegate {
 
     private func updateViewControllers() {
         updateTabs()
-        viewControllers.forEach { $0.delegate = self }
+        viewControllers.forEach { $0.tabDelegate = self }
 
         if viewControllers.isEmpty {
             children.first?.remove()
         } else {
-            select(index: 0)
+            selectedIndex = min(viewControllers.count - 1, selectedIndex)
         }
     }
 
     private func select(index: Int) {
-        children.first?.remove()
+        if viewControllers[index] != children.first {
+            children.first?.remove()
 
-        add(viewControllers[index]) { view in
-            self.view.insertSubview(view, at: 0)
-            view.pinEdges([.left, .right, .top], to: self.view)
-            view.bottomAnchor.pin(to: self.tabBarContainerView.topAnchor)
+            add(viewControllers[index]) { view in
+                self.view.insertSubview(view, at: 0)
+                view.pinEdges([.left, .right, .top], to: self.view)
+                view.bottomAnchor.pin(to: self.tabBarContainerView.topAnchor)
+            }
         }
 
         for (i, view) in buttons.enumerated() {
@@ -80,16 +88,19 @@ class TabBarController: ViewController, TabbedViewControllerDelegate {
 
     func updateTabs() {
         stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+
         for vc in viewControllers {
             let button = TabBarControl(item: vc.tabItem)
             button.addTarget(self, action: #selector(selectTab), for: .touchUpInside)
             stackView.addArrangedSubview(button)
         }
+
+        select(index: selectedIndex)
     }
 
     @objc private func selectTab(sender: TabBarControl) {
         let index = buttons.firstIndex(of: sender)!
-        select(index: index)
+        selectedIndex = index
     }
 }
 
@@ -107,7 +118,7 @@ private class TabBarControl: Control {
             imageView.image = UIImage(systemName: name, withConfiguration: config)!
             content = imageView
         case .text(let text):
-            let label = UILabel(font: .rubik(ofSize: 18, weight: .bold), alignment: .center)
+            let label = UILabel(font: .rubik(ofSize: 20, weight: .bold), alignment: .center)
             label.text = text
             content = label
         }

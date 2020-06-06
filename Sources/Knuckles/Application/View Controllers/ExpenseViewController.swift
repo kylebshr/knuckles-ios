@@ -10,7 +10,7 @@ import UIKit
 class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewDelegate, TabbedViewController {
     var scrollView: UIScrollView? { tableView }
     var tabItem: TabBarItem { .symbol("calendar") }
-    weak var delegate: TabbedViewControllerDelegate?
+    weak var tabDelegate: TabbedViewControllerDelegate?
 
     private let navigationView = NavigationView()
     private let tableView = UITableView()
