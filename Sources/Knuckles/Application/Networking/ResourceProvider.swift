@@ -60,7 +60,7 @@ struct ResourceProvider {
                 let response = response as? HTTPURLResponse
                 DispatchQueue.main.async {
                     if response?.statusCode == 401 {
-                        UserDefaults.standard.logout()
+//                        UserDefaults.standard.logout()
                     } else {
                         completion(data, response, error)
                     }

@@ -94,11 +94,10 @@ class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewD
 
 private class ExpenseCell: UITableViewCell {
     private let nameLabel = UILabel(font: .rubik(ofSize: 18, weight: .medium))
-    private let amountLabel = UILabel(font: .rubik(ofSize: 18, weight: .medium))
-    private let nextAmountLabel = AmountLabel()
-    private let cadenceLabel = UILabel(font: .rubik(ofSize: 13, weight: .medium))
+    private let amountLabel = UILabel(font: .rubik(ofSize: 18, weight: .medium), alignment: .right)
+    private let nextAmountLabel = UILabel(font: .rubik(ofSize: 13, weight: .medium), color: .customBlue, alignment: .right)
     private let emojiView = UILabel(font: .rubik(ofSize: 24, weight: .regular))
-    private let readyLabel = UILabel(font: .rubik(ofSize: 13, weight: .medium), color: .secondaryLabel)
+    private let readyLabel = UILabel(font: .rubik(ofSize: 13, weight: .medium))
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -112,18 +111,20 @@ private class ExpenseCell: UITableViewCell {
         contentView.layoutMargins.right = 20
         contentView.layoutMargins.bottom = 20
 
-        let titleStack = UIStackView(arrangedSubviews: [nameLabel, UIView(), amountLabel])
+        let titleStack = UIStackView(arrangedSubviews: [nameLabel, amountLabel])
         titleStack.alignment = .firstBaseline
         titleStack.distribution = .fill
         titleStack.spacing = 2
 
-        let subStack = UIStackView(arrangedSubviews: [nextAmountLabel, cadenceLabel, UIView(), readyLabel])
+        let subStack = UIStackView(arrangedSubviews: [readyLabel, nextAmountLabel])
         subStack.distribution = .fill
-        subStack.spacing = 6
+        subStack.spacing = 2
 
         let verticalStack = UIStackView(arrangedSubviews: [titleStack, subStack])
         verticalStack.axis = .vertical
-        verticalStack.spacing = 5
+        verticalStack.alignment = .fill
+        verticalStack.distribution = .fill
+        verticalStack.spacing = 10
 
         let horizontalStack = UIStackView(arrangedSubviews: [emojiView, verticalStack])
         horizontalStack.alignment = .center
@@ -139,28 +140,24 @@ private class ExpenseCell: UITableViewCell {
     }
 
     func display(expense: Expense, in period: PayPeriod) {
-        let amountSaved = expense.amountSaved(using: period)
+         let amountSaved = expense.amountSaved(using: period)
 
         nameLabel.text = expense.name
         emojiView.text = "\(expense.emoji)"
-        amountLabel.text = NumberFormatter.currency.string(from: amountSaved as NSNumber)
-        cadenceLabel.text = "payday"
-        nextAmountLabel.display(amount: expense.nextAmountSaved(using: period))
-        nextAmountLabel.tintColor = .customBlue
+        amountLabel.text = NumberFormatter.currency.string(from: amountSaved as NSNumber)!
+        let nextAmountText = NumberFormatter.currency.string(from: expense.nextAmountSaved(using: period) as NSNumber)!
+        nextAmountLabel.text = "+ \(nextAmountText.droppingZeroes()) next"
 
-        let nextDueDate = expense.nextDueDate()
-        let dueDateString = DateFormatter.readyByFormatter.string(from: nextDueDate)
+        let dueDateString = DateFormatter.readyByFormatter.string(from: expense.nextDueDate())
 
         if expense.isDue() {
-            amountLabel.text = "Paid"
-            cadenceLabel.text = "today"
-            readyLabel.text = "on \(dueDateString)"
-            nextAmountLabel.display(amount: -expense.amount)
-            nextAmountLabel.tintColor = .customPink
+            let amount = NumberFormatter.currency.string(from: expense.amount as NSNumber)!
+            readyLabel.text = "\(amount.droppingZeroes()) paid today"
         } else if expense.isFunded(using: period) {
             readyLabel.text = "Ready for \(dueDateString)"
         } else {
-            readyLabel.text = "Ready by \(dueDateString)"
+            let amount = NumberFormatter.currency.string(from: expense.amount as NSNumber)!
+            readyLabel.text = "\(amount.droppingZeroes()) by \(dueDateString)"
         }
     }
 }

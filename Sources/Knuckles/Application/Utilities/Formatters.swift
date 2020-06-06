@@ -26,7 +26,7 @@ extension NumberFormatter {
 extension DateFormatter {
     static let readyByFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "MMM dd"
+        formatter.dateFormat = "MMM d"
         return formatter
     }()
 }

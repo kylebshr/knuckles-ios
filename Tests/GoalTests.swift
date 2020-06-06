@@ -14,24 +14,30 @@ class GoalTests: XCTestCase {
      */
 
     func testGoalDueOnPayDayWeeklyFunding() {
-        let goal = Goal(emoji: "🌯", name: "Fri May 1", amount: 100, dayDueAt: "05/01/2020")
+        let goal = Goal(emoji: "🌯", name: "Fri May 1", amount: 100, dayDueAt: "06/01/2020", createdAt: "04/01/2020")
         let payPeriod = PayPeriod.weekly(day: 6)
 
-        let dayBeforeDue: Date = "04/30/2020"
-        XCTAssertEqual(expense.amountSaved(using: payPeriod, on: dayBeforeDue), expense.amount,
+        let fundingAmount = Decimal(100) / 9.0
+
+        let dayBeforeDue: Date = "05/31/2020"
+        XCTAssertEqual(goal.amountSaved(using: payPeriod, on: dayBeforeDue), fundingAmount * 9,
                        "It should be fully funded the day before it's due")
 
-        let dayDue: Date = "05/01/2020"
-        XCTAssertEqual(expense.amountSaved(using: payPeriod, on: dayDue), 20,
-                       "It should be funded once the day it's due")
+        let dayDue: Date = "06/01/2020"
+        XCTAssertEqual(goal.amountSaved(using: payPeriod, on: dayDue), fundingAmount * 9,
+                       "It should be funded on the day it's due")
 
         let dayOfAnotherPayDay: Date = "05/15/2020"
-        XCTAssertEqual(expense.amountSaved(using: payPeriod, on: dayOfAnotherPayDay), 60,
+        XCTAssertEqual(goal.amountSaved(using: payPeriod, on: dayOfAnotherPayDay), fundingAmount * 7,
                        "It should be funded on pay day")
 
         let dayInbetweenPayDays: Date = "05/16/2020"
-        XCTAssertEqual(expense.amountSaved(using: payPeriod, on: dayInbetweenPayDays), 60,
+        XCTAssertEqual(goal.amountSaved(using: payPeriod, on: dayInbetweenPayDays), fundingAmount * 7,
                        "It should be funded the correct amount in between pay days")
+
+        let dayFarPastDueDay: Date = "08/01/2020"
+        XCTAssertEqual(goal.amountSaved(using: payPeriod, on: dayFarPastDueDay), fundingAmount * 9,
+                       "It should be stop being funded on after the due day")
     }
 
     func testExpenseDueOffPayDayWeeklyFunding() {

@@ -16,7 +16,7 @@ class ProgressView: UIView {
     private let fillView = UIView()
 
     override var intrinsicContentSize: CGSize {
-        CGSize(width: UIView.noIntrinsicMetric, height: 6)
+        CGSize(width: UIView.noIntrinsicMetric, height: 8)
     }
 
     override init(frame: CGRect) {

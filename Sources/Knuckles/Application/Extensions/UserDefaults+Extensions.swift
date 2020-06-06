@@ -37,6 +37,11 @@ extension UserDefaults {
         set { set(codable: newValue, forKey: #function) }
     }
 
+    var goals: [Goal] {
+        get { codable(forKey: #function) ?? [] }
+        set { set(codable: newValue, forKey: #function) }
+    }
+
     @objc private(set) var authenticationToken: String? {
         get { string(forKey: "authtoken") }
         set { set(newValue, forKey: "authtoken") }
