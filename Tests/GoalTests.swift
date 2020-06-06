@@ -1,7 +1,7 @@
 import XCTest
 @testable import Knuckles
 
-class ExpenseTests: XCTestCase {
+class GoalTests: XCTestCase {
 
     /*
 
@@ -13,8 +13,8 @@ class ExpenseTests: XCTestCase {
 
      */
 
-    func testExpenseDueOnPayDayWeeklyFunding() {
-        let expense = Expense(emoji: "🌯", name: "Fri May 1", amount: 100, dayDueAt: 1)
+    func testGoalDueOnPayDayWeeklyFunding() {
+        let goal = Goal(emoji: "🌯", name: "Fri May 1", amount: 100, dayDueAt: "05/01/2020")
         let payPeriod = PayPeriod.weekly(day: 6)
 
         let dayBeforeDue: Date = "04/30/2020"
