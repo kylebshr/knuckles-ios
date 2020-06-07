@@ -100,7 +100,12 @@ class TabBarController: ViewController, TabbedViewControllerDelegate {
 
     @objc private func selectTab(sender: TabBarControl) {
         let index = buttons.firstIndex(of: sender)!
-        selectedIndex = index
+
+        if selectedIndex == index, let navigation = children.first as? UINavigationController {
+            navigation.popToRootViewController(animated: true)
+        } else {
+            selectedIndex = index
+        }
     }
 }
 

@@ -11,12 +11,10 @@ import UIKit
 class MainViewController: ViewController {
 
     private let tabBarViewController = TabBarController()
-    private let expenseViewController: ExpenseViewController
     private let informationalViewController: InformationalViewController
 
     init(user: User) {
         informationalViewController = InformationalViewController(user: user)
-        expenseViewController = ExpenseViewController()
         super.init()
     }
 
@@ -25,10 +23,16 @@ class MainViewController: ViewController {
 
         add(tabBarViewController)
 
+        let goals = UINavigationController(rootViewController: GoalsViewController())
+        goals.setNavigationBarHidden(true, animated: false)
+
+        let expenses = UINavigationController(rootViewController: ExpenseViewController())
+        expenses.setNavigationBarHidden(true, animated: false)
+
         tabBarViewController.viewControllers = [
             informationalViewController,
-            expenseViewController,
-            GoalsViewController(),
+            expenses,
+            goals,
         ]
     }
 }

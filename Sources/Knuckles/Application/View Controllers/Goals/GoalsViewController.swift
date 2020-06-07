@@ -1,22 +1,22 @@
 //
-//  ExpenseViewController.swift
+//  GoalsViewController.swift
 //  Knuckles
 //
-//  Created by Kyle Bashour on 5/20/20.
+//  Created by Kyle Bashour on 5/27/20.
 //
 
 import UIKit
 
-class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewDelegate, TabbedViewController {
-    var scrollView: UIScrollView? { tableView }
-    var tabItem: TabBarItem { .symbol("calendar") }
+class GoalsViewController: ViewController, TabbedViewController, UITableViewDelegate, UITableViewDataSource {
+    var scrollView: UIScrollView? { nil }
+    var tabItem: TabBarItem { .symbol("umbrella") }
     weak var tabDelegate: TabbedViewControllerDelegate?
 
     private let navigationView = NavigationView()
     private let tableView = UITableView()
 
     private let payPeriod = PayPeriod.firstAndFifteenth(adjustForWeekends: true)
-    private var expenses: [Expense] = []
+    private var goals: [Goal] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +28,7 @@ class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewD
         tableView.pinEdges([.left, .right, .bottom], to: view)
         tableView.topAnchor.pin(to: navigationView.bottomAnchor)
 
-        navigationView.text = "Expenses"
+        navigationView.text = "Goals"
         navigationView.action = .init(symbolName: "plus") { [weak self] in
             self?.presentCreateExpense()
         }
@@ -40,7 +40,7 @@ class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewD
         tableView.dataSource = self
         tableView.delegate = self
         tableView.backgroundColor = .systemBackground
-        tableView.register(cell: ExpenseCell.self)
+        tableView.register(cell: GoalCell.self)
 
         navigationView.observe(scrollView: tableView)
     }
@@ -51,18 +51,19 @@ class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewD
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        expenses.count
+        goals.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeue(for: indexPath) as ExpenseCell
-        let expense = expenses[indexPath.row]
-        cell.display(expense: expense, in: payPeriod)
+        let cell = tableView.dequeue(for: indexPath) as GoalCell
+        let goal = goals[indexPath.row]
+        cell.display(goal: goal, in: payPeriod)
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: false)
+        let viewController = GoalDetailViewController()
+        show(viewController, sender: self)
     }
 
     func tableView(_ tableView: UITableView,
@@ -71,7 +72,7 @@ class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewD
         let action = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, _ in
             UserDefaults.standard.expenses.remove(at: indexPath.row)
             self?.tableView.beginUpdates()
-            self?.expenses.remove(at: indexPath.row)
+            self?.goals.remove(at: indexPath.row)
             self?.tableView.deleteRows(at: [indexPath], with: .automatic)
             self?.tableView.endUpdates()
         }
@@ -86,18 +87,19 @@ class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewD
     }
 
     private func reload() {
-        expenses = UserDefaults.standard.expenses
+        goals = UserDefaults.standard.goals
             .sorted { $0.sortingDate() < $1.sortingDate() }
         tableView.reloadData()
     }
 }
 
-private class ExpenseCell: UITableViewCell {
+private class GoalCell: UITableViewCell {
     private let nameLabel = UILabel(font: .rubik(ofSize: 18, weight: .medium))
     private let amountLabel = UILabel(font: .rubik(ofSize: 18, weight: .medium), alignment: .right)
     private let nextAmountLabel = UILabel(font: .rubik(ofSize: 13, weight: .medium), color: .customBlue, alignment: .right)
     private let emojiView = UILabel(font: .rubik(ofSize: 24, weight: .regular))
     private let readyLabel = UILabel(font: .rubik(ofSize: 13, weight: .medium))
+    private let progressView = ProgressView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -120,7 +122,7 @@ private class ExpenseCell: UITableViewCell {
         subStack.distribution = .fill
         subStack.spacing = 2
 
-        let verticalStack = UIStackView(arrangedSubviews: [titleStack, subStack])
+        let verticalStack = UIStackView(arrangedSubviews: [titleStack, progressView, subStack])
         verticalStack.axis = .vertical
         verticalStack.alignment = .fill
         verticalStack.distribution = .fill
@@ -139,63 +141,25 @@ private class ExpenseCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func display(expense: Expense, in period: PayPeriod) {
-         let amountSaved = expense.amountSaved(using: period)
+    func display(goal: Goal, in period: PayPeriod) {
+        let amountSaved = goal.amountSaved(using: period)
 
-        nameLabel.text = expense.name
-        emojiView.text = "\(expense.emoji)"
+        nameLabel.text = goal.name
+        emojiView.text = "\(goal.emoji)"
         amountLabel.text = NumberFormatter.currency.string(from: amountSaved as NSNumber)!
-        let nextAmountText = NumberFormatter.currency.string(from: expense.nextAmountSaved(using: period) as NSNumber)!
-        nextAmountLabel.text = "+ \(nextAmountText.droppingZeroes()) next"
 
-        let dueDateString = DateFormatter.readyByFormatter.string(from: expense.nextDueDate())
+        progressView.progress = CGFloat(truncating: (amountSaved / goal.amount) as NSNumber)
+        let dueDateString = DateFormatter.readyByFormatter.string(from: goal.dayDueAt)
 
-        if expense.isDue() {
-            let amount = NumberFormatter.currency.string(from: expense.amount as NSNumber)!
-            readyLabel.text = "\(amount.droppingZeroes()) paid today"
-        } else if expense.isFunded(using: period) {
-            readyLabel.text = "Ready for \(dueDateString)"
+        if goal.isFunded(using: period) {
+            readyLabel.text = "All set for \(dueDateString)"
+            nextAmountLabel.text = "Funded"
         } else {
-            let amount = NumberFormatter.currency.string(from: expense.amount as NSNumber)!
-            readyLabel.text = "\(amount.droppingZeroes()) by \(dueDateString)"
+            let nextAmountText = NumberFormatter.currency.string(from: goal.nextAmountSaved(using: period) as NSNumber)!
+            nextAmountLabel.text = "+ \(nextAmountText.droppingZeroes()) next"
+
+            let totalAmountText = NumberFormatter.currency.string(from: goal.amount as NSNumber)!
+            readyLabel.text = "\(totalAmountText.droppingZeroes()) by \(dueDateString)"
         }
-    }
-}
-
-private class AmountLabel: UIView {
-    private let label = UILabel()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-
-        layer.cornerRadius = 4
-        layer.masksToBounds = true
-
-        addSubview(label)
-        label.setHuggingAndCompression(to: .required)
-        label.pinEdges(to: self, insets: .init(vertical: 2, horizontal: 6))
-        label.textColor = .white
-        label.font = .rubik(ofSize: 13, weight: .medium)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override var intrinsicContentSize: CGSize {
-        var size = label.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-        size.width += 12
-        size.height += 8
-        return size
-    }
-
-    override func tintColorDidChange() {
-        super.tintColorDidChange()
-        backgroundColor = tintColor
-    }
-
-    func display(amount: Decimal) {
-        label.text = (amount > 0 ? "+" : "") + NumberFormatter.currency.string(from: amount as NSNumber)!
-        invalidateIntrinsicContentSize()
     }
 }
