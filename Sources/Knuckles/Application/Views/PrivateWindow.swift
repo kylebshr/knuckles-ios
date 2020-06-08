@@ -32,7 +32,7 @@ class PrivateWindow: UIWindow {
         addSubview(blur)
         blur.effect = nil
         UIViewPropertyAnimator {
-            self.blur.effect = UIBlurEffect(style: .systemMaterial)
+            self.blur.effect = UIBlurEffect(style: .regular)
         }.startAnimation()
     }
 
