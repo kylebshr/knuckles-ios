@@ -9,17 +9,30 @@ import UIKit
 
 class ShapeView: UIView {
 
+    private let squareBackground = UIView()
     private let square = UIView()
+
+    private let circleBackground = UIView()
     private let circle = UIView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        addSubview(squareBackground)
         addSubview(square)
+
+        addSubview(circleBackground)
         addSubview(circle)
 
-        circle.backgroundColor = .label
+        circle.layer.borderWidth = 3
+        circle.backgroundColor = .systemBackground
+        circleBackground.layer.borderWidth = 3
+        circleBackground.backgroundColor = .customBlue
+
         square.layer.borderWidth = 3
+        square.backgroundColor = .systemBackground
+        squareBackground.layer.borderWidth = 3
+        squareBackground.backgroundColor = .customPink
 
         circle.centerYAnchor.pin(to: centerYAnchor)
         circle.widthAnchor.pin(to: widthAnchor, multiplier: 0.8)
@@ -32,11 +45,11 @@ class ShapeView: UIView {
         square.centerXAnchor.pin(to: centerXAnchor, constant: 20)
 
         UIView.animate(withDuration: 3, delay: 0, options: [.curveEaseInOut, .repeat, .autoreverse], animations: {
-            self.circle.transform = .init(translationX: 0, y: 10)
+            self.circle.transform = .init(translationX: -3, y: 8)
         }, completion: nil)
 
         UIView.animate(withDuration: 2.5, delay: 0.5, options: [.curveEaseInOut, .repeat, .autoreverse], animations: {
-            self.square.transform = .init(translationX: 0, y: -5)
+            self.square.transform = .init(translationX: -3, y: -3)
         }, completion: nil)
     }
 
@@ -47,7 +60,14 @@ class ShapeView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        square.layer.borderColor = UIColor.label.cgColor
+        for view in [square, circle, circleBackground, squareBackground] {
+            view.layer.borderColor = UIColor.label.cgColor
+        }
+
         circle.layer.cornerRadius = circle.bounds.midY
+        circleBackground.layer.cornerRadius = circle.bounds.midY
+
+        circleBackground.frame = circle.frame.offsetBy(dx: 7, dy: 7)
+        squareBackground.frame = square.frame.offsetBy(dx: 7, dy: 7)
     }
 }

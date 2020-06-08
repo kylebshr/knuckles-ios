@@ -3,7 +3,7 @@ import UIKit
 
 class LoginViewController: ViewController {
 
-    private let appleButton = Button(title: "Sign in with Apple")
+    private let appleButton = RetroButton(text: "Sign in with Apple", color: .customBlue)
 
     override func viewDidLoad() {
         super.viewDidLoad()

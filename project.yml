@@ -28,9 +28,10 @@ targets:
     
     sources:
       - path: Sources/Knuckles
+      - path: Sources/Core
     
     dependencies:
-      - target: "TodayExtension"
+      - target: TodayExtension
       - carthage: LinkKit
     
     entitlements:
@@ -69,9 +70,10 @@ targets:
 
     sources:
       - path: Sources/TodayExtension
+      - path: Sources/Core
 
     settings:
       INFOPLIST_FILE: Sources/TodayExtension/Info.plist
-      EMBEDDED_CONTENT_CONTAINS_SWIFT: true
+      ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: true
       PRODUCT_BUNDLE_IDENTIFIER: "com.kylebashour.knuckles.TodayExtension"
 

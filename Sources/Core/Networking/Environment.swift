@@ -1,5 +1,4 @@
 import UIKit
-import LinkKit
 
 enum Environment {
 
@@ -16,15 +15,6 @@ enum Environment {
             return "https://knuckles-vapor.herokuapp.com"
         case .local:
             return "https://536686d16756.ngrok.io"
-        }
-    }
-
-    var plaidEnvironment: PLKEnvironment {
-        switch self {
-        case .production:
-            return .development
-        case .local:
-            return .sandbox
         }
     }
 }
