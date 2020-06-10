@@ -21,10 +21,9 @@ class TodayBalanceButton: Control {
         descriptionLabel.text = "cash available"
 
         labelStack.axis = .vertical
-        labelStack.spacing = 4
+        labelStack.spacing = 2
 
         containerStack.alignment = .center
-        containerStack.spacing = 8
 
         addSubview(containerStack)
         containerStack.pinEdges(to: self)
