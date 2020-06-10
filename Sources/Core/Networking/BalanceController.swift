@@ -6,7 +6,7 @@
 //
 
 import Combine
-import Foundation
+import UIKit
 
 class BalanceController {
 
@@ -14,14 +14,17 @@ class BalanceController {
 
     @Published var balance: Decimal = 0
 
-    private var goalsObserver: NSKeyValueObservation?
-    private var expensesObserver: NSKeyValueObservation?
-
     init() {
         update(balance: UserDefaults.shared.balance)
+        refresh(completion: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refresh), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
 
-    func refresh(completion: (() -> Void)? = nil) {
+    @objc private func refresh() {
+        refresh(completion: nil)
+    }
+
+    func refresh(completion: ((ErrorResult<Balance>) -> Void)? = nil) {
         ResourceProvider.shared.fetchResource(at: "balance") { [weak self] (result: ErrorResult<Balance>) in
             guard let self = self else { return }
 
@@ -33,7 +36,7 @@ class BalanceController {
                 break
             }
 
-            completion?()
+            completion?(result)
         }
     }
 

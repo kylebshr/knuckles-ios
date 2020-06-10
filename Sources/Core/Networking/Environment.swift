@@ -2,7 +2,7 @@ import UIKit
 
 enum Environment {
 
-    static var current: Environment = .production
+    static var current: Environment = .local
 
     static let plaidPublicKey = "4b1cc9012fa80c462090c6e8880240"
 
@@ -14,7 +14,7 @@ enum Environment {
         case .production:
             return "https://knuckles-vapor.herokuapp.com"
         case .local:
-            return "https://6c267cd48fa1.ngrok.io"
+            return "https://bdcea51e00b5.ngrok.io"
         }
     }
 }
