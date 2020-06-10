@@ -37,4 +37,19 @@ extension UIView {
         let outsetY = max(0, (minimumDimension - bounds.height) / 2)
         return bounds.insetBy(dx: -outsetX, dy: -outsetY).contains(point)
     }
+
+    func setFlashing(_ isFlashing: Bool) {
+        if isFlashing {
+            let animation = CABasicAnimation(keyPath: "opacity")
+            animation.duration = 0.6
+            animation.fromValue = 1
+            animation.toValue = 0.3
+            animation.autoreverses = true
+            animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+            animation.repeatCount = .infinity
+            layer.add(animation, forKey: #function)
+        } else {
+            layer.removeAnimation(forKey: #function)
+        }
+    }
 }

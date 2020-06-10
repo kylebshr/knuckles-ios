@@ -27,4 +27,9 @@ extension UIViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
+
+    func parent<T: UIViewController>(ofType: T.Type) -> T? {
+        return parent as? T ?? parent?.parent(ofType: ofType)
+    }
+
 }

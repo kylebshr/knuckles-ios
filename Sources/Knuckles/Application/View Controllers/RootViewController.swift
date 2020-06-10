@@ -17,7 +17,7 @@ class RootViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        observation = UserDefaults.standard.observe(\.loggedInUser, options: [.initial, .new]) { [weak self] defaults, _ in
+        observation = UserDefaults.shared.observe(\.loggedInUser, options: [.initial, .new]) { [weak self] defaults, _ in
             if let user = defaults.loggedInUser, user.hasCompletedPlaidLink {
                 if self?.children.first is MainViewController { return }
                 self?.set(viewController: MainViewController(user: user))
@@ -25,7 +25,7 @@ class RootViewController: ViewController {
                 if self?.children.first is PagingNavigationController { return }
                 let viewController: UIViewController
 
-                if let user = UserDefaults.standard.loggedInUser, !user.hasCompletedPlaidLink {
+                if let user = UserDefaults.shared.loggedInUser, !user.hasCompletedPlaidLink {
                     viewController = LinkPlaidViewController()
                 } else {
                     viewController = LoginViewController()

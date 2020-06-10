@@ -44,7 +44,7 @@ struct LoginController {
                 } else if let error = error {
                     completion(.failed(error))
                 } else if let data = data, let token = try? decoder.decode(UserToken.self, from: data) {
-                    UserDefaults.standard.login(token: token)
+                    UserDefaults.shared.login(token: token)
                     completion(.success(token.user))
                 } else {
                     completion(.failed(nil))
@@ -66,7 +66,7 @@ struct LoginController {
                 if let error = error {
                     completion(.failed(error))
                 } else if let data = data, let token = try? decoder.decode(UserToken.self, from: data) {
-                    UserDefaults.standard.login(token: token)
+                    UserDefaults.shared.login(token: token)
                     completion(.success(token.user))
                 } else {
                     completion(.failed(nil))

@@ -11,7 +11,7 @@ private extension Environment {
     }
 }
 
-typealias Res<T> = Result<T, Error>
+typealias ErrorResult<T> = Result<T, Error>
 
 /// Provides loading of a Codable type from a given URL.
 struct ResourceProvider {
@@ -45,7 +45,7 @@ struct ResourceProvider {
     }
 
     func authenticate(request: URLRequest, completion: @escaping (URLRequest) -> Void) {
-        guard let authenticationToken = UserDefaults.standard.authenticationToken else {
+        guard let authenticationToken = UserDefaults.shared.authenticationToken else {
             return completion(request)
         }
 
@@ -60,7 +60,9 @@ struct ResourceProvider {
                 let response = response as? HTTPURLResponse
                 DispatchQueue.main.async {
                     if response?.statusCode == 401 {
-//                        UserDefaults.standard.logout()
+                        print("Unauthorizard")
+                        completion(nil, nil, nil)
+//                        UserDefaults.shared.logout()
                     } else {
                         completion(data, response, error)
                     }

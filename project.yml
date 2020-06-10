@@ -39,6 +39,8 @@ targets:
       properties:
         com.apple.developer.applesignin:
           - Default
+        com.apple.security.application-groups:
+          - group.com.kylebashour.knuckles
     
     settings:
       INFOPLIST_FILE: Sources/Knuckles/Info.plist
@@ -63,6 +65,12 @@ targets:
 
     dependencies:
       - sdk: NotificationCenter.framework
+
+    entitlements:
+      path: TodayExtension.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.kylebashour.knuckles
 
     configFiles:
       Debug: xcconfig/TodayExtension-Debug.xcconfig

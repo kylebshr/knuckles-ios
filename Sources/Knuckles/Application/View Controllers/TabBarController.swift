@@ -15,14 +15,9 @@ enum TabBarItem {
 protocol TabbedViewController: AnyObject {
     var scrollView: UIScrollView? { get }
     var tabItem: TabBarItem { get }
-    var tabDelegate: TabbedViewControllerDelegate? { get set }
 }
 
-protocol TabbedViewControllerDelegate: AnyObject {
-    func updateTabs()
-}
-
-class TabBarController: ViewController, TabbedViewControllerDelegate {
+class TabBarController: ViewController {
     private let stackView = UIStackView()
     private let tabBarContainerView = ScrollViewShadowView()
 
@@ -59,7 +54,6 @@ class TabBarController: ViewController, TabbedViewControllerDelegate {
 
     private func updateViewControllers() {
         updateTabs()
-        viewControllers.forEach { $0.tabDelegate = self }
 
         if viewControllers.isEmpty {
             children.first?.remove()

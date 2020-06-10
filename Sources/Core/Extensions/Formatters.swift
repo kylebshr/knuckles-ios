@@ -13,6 +13,7 @@ extension NumberFormatter {
         formatter.usesGroupingSeparator = true
         formatter.numberStyle = .currency
         formatter.locale = Locale.current
+        formatter.negativePrefix = "-"
         return formatter
     }()
 

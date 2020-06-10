@@ -10,7 +10,6 @@ import UIKit
 class GoalsViewController: ViewController, TabbedViewController, UITableViewDelegate, UITableViewDataSource {
     var scrollView: UIScrollView? { nil }
     var tabItem: TabBarItem { .symbol("umbrella") }
-    weak var tabDelegate: TabbedViewControllerDelegate?
 
     private let navigationView = NavigationView()
     private let tableView = UITableView()
@@ -70,7 +69,7 @@ class GoalsViewController: ViewController, TabbedViewController, UITableViewDele
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
     {
         let action = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, _ in
-            UserDefaults.standard.expenses.remove(at: indexPath.row)
+            UserDefaults.shared.expenses.remove(at: indexPath.row)
             self?.tableView.beginUpdates()
             self?.goals.remove(at: indexPath.row)
             self?.tableView.deleteRows(at: [indexPath], with: .automatic)
@@ -87,7 +86,7 @@ class GoalsViewController: ViewController, TabbedViewController, UITableViewDele
     }
 
     private func reload() {
-        goals = UserDefaults.standard.goals
+        goals = UserDefaults.shared.goals
             .sorted { $0.sortingDate() < $1.sortingDate() }
         tableView.reloadData()
     }

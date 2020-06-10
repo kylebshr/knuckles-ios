@@ -5,15 +5,17 @@
 //  Created by Kyle Bashour on 5/21/20.
 //
 
+import Combine
 import UIKit
 
 class InformationalViewController: ViewController, TabbedViewController {
     var scrollView: UIScrollView? { nil }
     var tabItem: TabBarItem = .text("$ 0")
-    weak var tabDelegate: TabbedViewControllerDelegate?
 
     private let navigationView = NavigationView()
     private let balanceButton = BalanceButton()
+
+    private var observer: AnyCancellable?
 
     init(user: User) {
         super.init()
@@ -67,24 +69,15 @@ class InformationalViewController: ViewController, TabbedViewController {
         view.addSubview(navigationView)
         navigationView.pinEdges([.left, .top, .right], to: view)
         navigationView.action = .init(symbolName: "person", onTap: {
-            UserDefaults.standard.logout()
+            UserDefaults.shared.logout()
         })
+
+        observer = BalanceController.shared.$balance.sink(receiveValue: update)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        refresh()
-    }
-
-    @objc private func refresh() {
-        ResourceProvider.shared.fetchResource(at: "balance") { [weak self] (result: Res<Balance>) in
-            switch result {
-            case .success(let balance):
-                self?.balanceButton.display(balance: balance.amount)
-                self?.tabItem = .text("$" + balance.amount.abbreviated())
-                self?.tabDelegate?.updateTabs()
-            default: break
-            }
-        }
+    @objc private func update(amount: Decimal) {
+        balanceButton.display(balance: amount)
+        tabItem = .text("$" + amount.abbreviated())
+        parent(ofType: TabBarController.self)?.updateTabs()
     }
 }

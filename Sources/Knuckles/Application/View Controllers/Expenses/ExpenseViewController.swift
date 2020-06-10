@@ -10,7 +10,6 @@ import UIKit
 class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewDelegate, TabbedViewController {
     var scrollView: UIScrollView? { tableView }
     var tabItem: TabBarItem { .symbol("calendar") }
-    weak var tabDelegate: TabbedViewControllerDelegate?
 
     private let navigationView = NavigationView()
     private let tableView = UITableView()
@@ -70,7 +69,7 @@ class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewD
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
     {
         let action = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, _ in
-            UserDefaults.standard.expenses.remove(at: indexPath.row)
+            UserDefaults.shared.expenses.remove(at: indexPath.row)
             self?.tableView.beginUpdates()
             self?.expenses.remove(at: indexPath.row)
             self?.tableView.deleteRows(at: [indexPath], with: .automatic)
@@ -87,7 +86,7 @@ class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewD
     }
 
     private func reload() {
-        expenses = UserDefaults.standard.expenses
+        expenses = UserDefaults.shared.expenses
             .sorted { $0.sortingDate() < $1.sortingDate() }
         tableView.reloadData()
     }

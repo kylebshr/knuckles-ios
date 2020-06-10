@@ -25,7 +25,7 @@ class PrivateWindow: UIWindow {
     }
 
     @objc private func showBlur() {
-        guard UserDefaults.standard.loggedInUser != nil else {
+        guard UserDefaults.shared.loggedInUser != nil else {
             return
         }
 

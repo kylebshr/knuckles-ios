@@ -17,17 +17,4 @@ extension UINavigationController: TabbedViewController {
         guard let child = children.first as? TabbedViewController else { fatalError() }
         return child.tabItem
     }
-
-    var tabDelegate: TabbedViewControllerDelegate? {
-        get {
-            guard let child = children.first as? TabbedViewController else { fatalError() }
-            return child.tabDelegate
-        }
-
-        set {
-            guard let child = children.first as? TabbedViewController else { fatalError() }
-            child.tabDelegate = newValue
-        }
-    }
-
 }

@@ -5,13 +5,16 @@
 //  Created by Kyle Bashour on 6/4/20.
 //
 
+import Combine
 import UIKit
 import NotificationCenter
 
 @objc(TodayViewController)
 class TodayViewController: UIViewController, NCWidgetProviding {
 
-    private let label = UILabel()
+    private let amountLabel = UILabel(font: .boldSystemFont(ofSize: 30))
+
+    private var observer: AnyCancellable?
 
     override func loadView() {
         view = UIView()
@@ -20,28 +23,31 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        label.text = "$100.00"
-        label.font = .boldSystemFont(ofSize: 32)
-        view.addSubview(label)
+        let descriptionLabel = UILabel(font: .systemFont(ofSize: 15), color: .secondaryLabel)
+        descriptionLabel.text = "cash available"
+
+        let stackView = UIStackView(arrangedSubviews: [amountLabel, descriptionLabel])
+        stackView.axis = .vertical
+        stackView.spacing = 2
+
+        view.addSubview(stackView)
+        stackView.pinEdges([.left, .right], to: view.layoutMarginsGuide)
+        stackView.centerYAnchor.pin(to: view.centerYAnchor)
 
         preferredContentSize.height = 200
-    }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        label.frame = view.bounds.insetBy(dx: 20, dy: 20)
+        observer = BalanceController.shared.$balance.sink(receiveValue: update)
     }
 
     func widgetPerformUpdate(completionHandler: (@escaping (NCUpdateResult) -> Void)) {
-        // Perform any setup necessary in order to update the view.
-
-        // If an error is encountered, use NCUpdateResult.Failed
-        // If there's no update required, use NCUpdateResult.NoData
-        // If there's an update, use NCUpdateResult.NewData
-
-        print(#function)
-
-        completionHandler(NCUpdateResult.newData)
+        amountLabel.setFlashing(true)
+        BalanceController.shared.refresh { [weak self] in
+            self?.amountLabel.setFlashing(false)
+            completionHandler(.newData)
+        }
     }
 
+    private func update(amount: Decimal) {
+        amountLabel.text = NumberFormatter.currency.string(from: amount as NSNumber)
+    }
 }

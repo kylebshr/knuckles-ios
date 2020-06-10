@@ -79,7 +79,7 @@ extension LinkPlaidViewController: PLKPlaidLinkViewDelegate {
 
             switch result {
             case .success(let user):
-                UserDefaults.standard.update(user: user)
+                UserDefaults.shared.update(user: user)
             case .failure(let error):
                 self.placeholder(title: "Error saving plaid token", message: error.localizedDescription)
             }

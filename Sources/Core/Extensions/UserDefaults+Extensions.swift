@@ -12,6 +12,8 @@ extension UserDefaults {
     private static let encoder = JSONEncoder()
     private static let decoder = JSONDecoder()
 
+    static let shared = UserDefaults(suiteName: "group.com.kylebashour.knuckles")!
+
     func codable<T: Codable>(forKey key: String) -> T? {
         guard let data = data(forKey: key) else {
             return nil
@@ -39,6 +41,11 @@ extension UserDefaults {
 
     var goals: [Goal] {
         get { codable(forKey: #function) ?? [] }
+        set { set(codable: newValue, forKey: #function) }
+    }
+
+    var balance: Decimal {
+        get { codable(forKey: #function) ?? 0 }
         set { set(codable: newValue, forKey: #function) }
     }
 
