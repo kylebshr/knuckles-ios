@@ -14,6 +14,8 @@ class BalanceController {
 
     @Published var balance: Decimal = 0
 
+    private var lastUpdate = Date(timeIntervalSince1970: 0)
+
     init() {
         update(balance: UserDefaults.shared.balance)
         refresh(completion: nil)
@@ -24,7 +26,12 @@ class BalanceController {
         refresh(completion: nil)
     }
 
-    func refresh(completion: ((ErrorResult<Balance>) -> Void)? = nil) {
+    func refresh(completion: ((Bool) -> Void)? = nil) {
+        guard Date().timeIntervalSince(lastUpdate) > 60 else {
+            completion?(false)
+            return
+        }
+
         ResourceProvider.shared.fetchResource(at: "balance") { [weak self] (result: ErrorResult<Balance>) in
             guard let self = self else { return }
 
@@ -32,11 +39,11 @@ class BalanceController {
             case .success(let balance):
                 UserDefaults.shared.balance = balance.amount
                 self.update(balance: balance.amount)
+                self.lastUpdate = Date()
+                completion?(true)
             default:
-                break
+                completion?(false)
             }
-
-            completion?(result)
         }
     }
 

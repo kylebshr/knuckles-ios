@@ -37,9 +37,13 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     func widgetPerformUpdate(completionHandler: (@escaping (NCUpdateResult) -> Void)) {
         button.setLoading(true)
-        BalanceController.shared.refresh { [weak self] _ in
+        BalanceController.shared.refresh { [weak self] didUpdate in
             self?.button.setLoading(false)
-            completionHandler(.newData)
+            if didUpdate {
+                completionHandler(.noData)
+            } else {
+                completionHandler(.newData)
+            }
         }
     }
 
