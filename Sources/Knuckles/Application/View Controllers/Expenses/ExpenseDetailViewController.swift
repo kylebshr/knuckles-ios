@@ -66,6 +66,7 @@ class ExpenseDetailViewController: BarViewController {
         stackView.setCustomSpacing(20, after: moveButton)
 
         scrollView.addSubview(stackView)
+        stackView.pinEdges(to: scrollView)
         stackView.widthAnchor.pin(to: view.widthAnchor)
         nextAmountView.widthAnchor.pin(to: view.widthAnchor)
         dueButton.widthAnchor.pin(to: view.widthAnchor)
