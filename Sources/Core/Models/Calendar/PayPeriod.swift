@@ -36,9 +36,9 @@ enum PayPeriod {
     }
 
     func nextDate() -> Date {
-        let now = Date()
-        let twoMonths = calendar.date(byAdding: .month, value: 2, to: now)!
-        return from(date: now, to: twoMonths)[0]
+        let next = calendar.date(byAdding: .day, value: 1, to: Date())!
+        let twoMonths = calendar.date(byAdding: .month, value: 2, to: next)!
+        return from(date: next, to: twoMonths)[0]
     }
 
     private func weeklyPeriods(from: Date, to: Date, on: Int) -> [Date] {

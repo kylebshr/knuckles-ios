@@ -90,45 +90,28 @@ class ExpensesViewController: BarViewController, UITableViewDataSource, UITableV
 }
 
 private class ExpenseCell: UITableViewCell {
-    private let nameLabel = UILabel(font: .rubik(ofSize: 18, weight: .medium))
-    private let amountLabel = UILabel(font: .rubik(ofSize: 18, weight: .medium), alignment: .right)
-    private let nextAmountLabel = UILabel(font: .rubik(ofSize: 13, weight: .medium), color: .customBlue, alignment: .right)
+
     private let emojiView = UILabel(font: .rubik(ofSize: 24, weight: .regular))
-    private let readyLabel = UILabel(font: .rubik(ofSize: 13, weight: .medium))
-    private lazy var retroView = RetroView(content: emojiView)
+    private let nameLabel = UILabel(font: .rubik(ofSize: 16, weight: .medium))
+    private let statusLabel = UILabel(font: .rubik(ofSize: 16, weight: .medium))
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        emojiView.setHuggingAndCompression(to: .required)
+        statusLabel.setHuggingAndCompression(to: .required)
+        statusLabel.textAlignment = .right
+
+        emojiView.setHuggingAndCompression(to: .required, for: .vertical)
+        emojiView.widthAnchor.pin(to: emojiView.heightAnchor, multiplier: 1.1)
+        emojiView.textAlignment = .center
 
         backgroundColor = .systemBackground
-        preservesSuperviewLayoutMargins = true
+        contentView.layoutMargins = .init(vertical: 20, horizontal: 30)
 
-        contentView.layoutMargins.top = 16
-        contentView.layoutMargins.right = 30
-        contentView.layoutMargins.left = 22
-        contentView.layoutMargins.bottom = 16
-
-        let titleStack = UIStackView(arrangedSubviews: [nameLabel, amountLabel])
-        titleStack.alignment = .firstBaseline
-        titleStack.distribution = .fill
-        titleStack.spacing = 2
-
-        let subStack = UIStackView(arrangedSubviews: [readyLabel, nextAmountLabel])
-        subStack.distribution = .fill
-        subStack.spacing = 2
-
-        let verticalStack = UIStackView(arrangedSubviews: [titleStack, subStack])
-        verticalStack.axis = .vertical
-        verticalStack.alignment = .fill
-        verticalStack.distribution = .fill
-        verticalStack.spacing = 8
-
-        let horizontalStack = UIStackView(arrangedSubviews: [retroView, verticalStack])
+        let horizontalStack = UIStackView(arrangedSubviews: [emojiView, nameLabel, statusLabel])
         horizontalStack.alignment = .center
         horizontalStack.distribution = .fill
-        horizontalStack.spacing = 16
+        horizontalStack.spacing = 8
 
         contentView.addSubview(horizontalStack)
         horizontalStack.pinEdges(to: contentView.layoutMarginsGuide)
@@ -139,27 +122,17 @@ private class ExpenseCell: UITableViewCell {
     }
 
     func display(expense: Expense, in period: PayPeriod) {
-         let amountSaved = expense.amountSaved(using: period)
-
         nameLabel.text = expense.name
-        emojiView.text = "\(expense.emoji)"
-        amountLabel.text = amountSaved.currency()
-        let nextAmountText = expense.nextAmountSaved(using: period).currency()
-        nextAmountLabel.text = "+ \(nextAmountText.droppingZeroes()) next"
+        emojiView.text = expense.emoji
 
-        let dueDateString = DateFormatter.readyByFormatter.string(from: expense.nextDueDate())
+        let state = expense.fundingState(using: period)
+        statusLabel.text = state.text
 
-        if expense.isDue() {
-            let amount = expense.amount.currency()
-            readyLabel.text = "\(amount.droppingZeroes()) paid today"
-            retroView.background = .customPink
-        } else if expense.isFunded(using: period) {
-            readyLabel.text = "Ready for \(dueDateString)"
-            retroView.background = .customGreen
-        } else {
-            let amount = expense.amount.currency()
-            readyLabel.text = "\(amount.droppingZeroes()) by \(dueDateString)"
-            retroView.background = .customBlue
+        switch state {
+        case .funded:
+            statusLabel.textColor = .customBlue
+        case .paid, .onTrack:
+            statusLabel.textColor = .label
         }
     }
 }

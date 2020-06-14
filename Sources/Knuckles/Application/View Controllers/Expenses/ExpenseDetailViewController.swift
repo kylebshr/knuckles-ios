@@ -38,14 +38,14 @@ class ExpenseDetailViewController: BarViewController {
         emojiLabel.text = "📱"
 
         let amountLabel = UILabel(font: .rubik(ofSize: 48, weight: .medium), alignment: .center)
-        amountLabel.text = expense.amountSaved(using: .current).currency()
+        amountLabel.text = expense.fundingState(using: .current).amount
 
         let statusLabel = UILabel(font: .rubik(ofSize: 16, weight: .medium))
         statusLabel.text = expense.fundingState(using: .current).text
 
         let nextAmountView = NextAmountView(expense: expense)
 
-        let nextDate = PayPeriod.current.nextDate()
+        let nextDate = expense.nextDueDate()
         let dueButton = EditControl(symbolName: "arrow.2.circlepath", text: "Due on the \(nextDate.day())")
         let amountButton = EditControl(symbolName: "arrow.right", text: "\(expense.amount.currency()) each month")
 
