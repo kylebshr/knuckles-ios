@@ -12,16 +12,17 @@ class ScrollViewShadowView: UIView {
     private weak var scrollView: UIScrollView?
     private var observation: NSKeyValueObservation?
 
+    private let borderLayer = CALayer()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = .systemBackground
-
         layer.masksToBounds = false
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0
-        layer.shadowOffset = .zero
-        layer.shadowRadius = 6
+        layer.addSublayer(borderLayer)
+        borderLayer.opacity = 0
+        borderLayer.borderWidth = .pixel
+
+        backgroundColor = .systemBackground
     }
 
     required init?(coder: NSCoder) {
@@ -32,18 +33,22 @@ class ScrollViewShadowView: UIView {
         observation?.invalidate()
     }
 
-    func observe(scrollView: UIScrollView?) {
-        layer.shadowOpacity = 0
-        self.scrollView = scrollView
-        observation = scrollView?.observe(\.contentOffset, options: [.new, .initial]) { [weak self] scrollView, _ in
-            self?.update(using: scrollView)
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        borderLayer.borderColor = UIColor.separator.cgColor
+        borderLayer.frame = layer.bounds.inset(by: .init(vertical: .pixel * -2, horizontal: .pixel * -2))
+
+        if let scrollView = scrollView {
+            update(using: scrollView)
         }
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        if let scrollView = scrollView {
-            update(using: scrollView)
+    func observe(scrollView: UIScrollView?) {
+        borderLayer.opacity = 0
+        self.scrollView = scrollView
+        observation = scrollView?.observe(\.contentOffset, options: [.new, .initial]) { [weak self] scrollView, _ in
+            self?.update(using: scrollView)
         }
     }
 
@@ -52,7 +57,7 @@ class ScrollViewShadowView: UIView {
         let intersection = scrollView.contentFrame(in: self).intersection(self.bounds).height.clamped(0, offset)
         let percentScrolled = intersection / offset
 
-        layer.shadowOpacity = Float(percentScrolled * 0.15)
+        borderLayer.opacity = Float(percentScrolled)
         backgroundColor = UIColor.systemBackground.lerp(to: .elevatedBackground, amount: percentScrolled)
     }
 }

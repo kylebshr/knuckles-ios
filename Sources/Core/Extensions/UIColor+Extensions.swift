@@ -12,12 +12,12 @@ extension UIColor {
         for (original, replacement) in [
             (#selector(getter: UIColor.systemBackground), #selector(getter: UIColor.customBackground)),
             (#selector(getter: UIColor.label), #selector(getter: UIColor.customLabel)),
-        ] {
-            if let originalMethod = class_getClassMethod(UIColor.self, original),
-                let swizzledMethod = class_getClassMethod(UIColor.self, replacement)
-            {
-                method_exchangeImplementations(originalMethod, swizzledMethod)
-            }
+            ] {
+                if let originalMethod = class_getClassMethod(UIColor.self, original),
+                    let swizzledMethod = class_getClassMethod(UIColor.self, replacement)
+                {
+                    method_exchangeImplementations(originalMethod, swizzledMethod)
+                }
         }
     }()
 }
@@ -32,7 +32,9 @@ extension UIColor {
     static let customPink = UIColor(displayP3Red: 1.000, green: 0.376, blue: 0.486, alpha: 1)
     static let customGreen = UIColor(displayP3Red: 0.410, green: 0.887, blue: 0.515, alpha: 1)
 
-   @objc private static let customLabel = UIColor { traits in
+    static let shadow = UIColor(displayP3Red: 0.965, green: 0.965, blue: 0.965, alpha: 1)
+
+    @objc private static let customLabel = UIColor { traits in
         switch traits.userInterfaceStyle {
         case .light: return .customBlack
         default: return .customWhite
