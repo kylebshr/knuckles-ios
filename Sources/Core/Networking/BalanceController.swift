@@ -51,7 +51,7 @@ class BalanceController {
         let goals = UserDefaults.shared.goals
         let expenses = UserDefaults.shared.expenses
 
-        let period = PayPeriod.weekly(day: 1)
+        let period = PayPeriod.current
 
         let goalAmount = goals.reduce(0, { $0 + $1.amountSaved(using: period) })
         let expenseAmount = expenses.reduce(0, { $0 + $1.amountSaved(using: period) })

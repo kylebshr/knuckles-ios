@@ -67,3 +67,42 @@ struct Expense: Codable, Equatable {
         }
     }
 }
+
+extension Expense {
+
+    enum FundingState {
+        case paid(Decimal)
+        case funded(Decimal)
+        case onTrack(Decimal)
+
+        var text: String {
+            switch self {
+            case .paid:
+                return "Paid today"
+            case .funded:
+                return "Funded"
+            case .onTrack:
+                return "On track"
+            }
+        }
+
+        var amount: String {
+            switch self {
+            case .paid(let amount),
+                 .funded(let amount),
+                 .onTrack(let amount):
+                return amount.currency()
+            }
+        }
+    }
+
+    func fundingState(using period: PayPeriod, on date: Date = Date()) -> FundingState {
+        if isDue(on: date) {
+            return .paid(amount)
+        } else if isFunded(using: period) {
+            return .funded(amount)
+        } else {
+            return .onTrack(amountSaved(using: period, on: date))
+        }
+    }
+}

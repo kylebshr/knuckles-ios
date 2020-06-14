@@ -143,21 +143,21 @@ private class ExpenseCell: UITableViewCell {
 
         nameLabel.text = expense.name
         emojiView.text = "\(expense.emoji)"
-        amountLabel.text = NumberFormatter.currency.string(from: amountSaved as NSNumber)!
-        let nextAmountText = NumberFormatter.currency.string(from: expense.nextAmountSaved(using: period) as NSNumber)!
+        amountLabel.text = amountSaved.currency()
+        let nextAmountText = expense.nextAmountSaved(using: period).currency()
         nextAmountLabel.text = "+ \(nextAmountText.droppingZeroes()) next"
 
         let dueDateString = DateFormatter.readyByFormatter.string(from: expense.nextDueDate())
 
         if expense.isDue() {
-            let amount = NumberFormatter.currency.string(from: expense.amount as NSNumber)!
+            let amount = expense.amount.currency()
             readyLabel.text = "\(amount.droppingZeroes()) paid today"
             retroView.background = .customPink
         } else if expense.isFunded(using: period) {
             readyLabel.text = "Ready for \(dueDateString)"
             retroView.background = .customGreen
         } else {
-            let amount = NumberFormatter.currency.string(from: expense.amount as NSNumber)!
+            let amount = expense.amount.currency()
             readyLabel.text = "\(amount.droppingZeroes()) by \(dueDateString)"
             retroView.background = .customBlue
         }

@@ -145,7 +145,7 @@ private class GoalCell: UITableViewCell {
 
         nameLabel.text = goal.name
         emojiView.text = "\(goal.emoji)"
-        amountLabel.text = NumberFormatter.currency.string(from: amountSaved as NSNumber)!
+        amountLabel.text = amountSaved.currency()
 
         progressView.progress = CGFloat(truncating: (amountSaved / goal.amount) as NSNumber)
         let dueDateString = DateFormatter.readyByFormatter.string(from: goal.dayDueAt)
@@ -154,10 +154,10 @@ private class GoalCell: UITableViewCell {
             readyLabel.text = "All set for \(dueDateString)"
             nextAmountLabel.text = "Funded"
         } else {
-            let nextAmountText = NumberFormatter.currency.string(from: goal.nextAmountSaved(using: period) as NSNumber)!
+            let nextAmountText = goal.nextAmountSaved(using: period).currency()
             nextAmountLabel.text = "+ \(nextAmountText.droppingZeroes()) next"
 
-            let totalAmountText = NumberFormatter.currency.string(from: goal.amount as NSNumber)!
+            let totalAmountText = goal.amount.currency()
             readyLabel.text = "\(totalAmountText.droppingZeroes()) by \(dueDateString)"
         }
     }

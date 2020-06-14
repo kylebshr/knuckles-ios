@@ -36,7 +36,7 @@ class NavigationView: ScrollViewShadowView {
         super.init(frame: frame)
 
         backgroundColor = .systemBackground
-        layoutMargins = .init(top: 30, left: 30, bottom: 20, right: 30)
+        layoutMargins = .init(top: 20, left: 30, bottom: 20, right: 30)
 
         let stackView = UIStackView(arrangedSubviews: [leftButton, label, rightButton])
         stackView.distribution = .fill

@@ -8,7 +8,7 @@
 import Foundation
 
 extension NumberFormatter {
-    static let currency: NumberFormatter = {
+    fileprivate static let currency: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.usesGroupingSeparator = true
         formatter.numberStyle = .currency
@@ -30,6 +30,18 @@ extension DateFormatter {
         formatter.dateFormat = "MMM d"
         return formatter
     }()
+
+    fileprivate static let dayFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d"
+        return formatter
+    }()
+}
+
+extension Date {
+    func day() -> String {
+        return DateFormatter.dayFormatter.string(from: self)
+    }
 }
 
 extension Decimal {

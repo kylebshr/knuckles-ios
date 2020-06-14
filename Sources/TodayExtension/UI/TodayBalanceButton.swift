@@ -30,7 +30,7 @@ class TodayBalanceButton: Control {
     }
 
     func display(balance: Decimal) {
-        balanceLabel.text = NumberFormatter.currency.string(from: balance as NSNumber)
+        balanceLabel.text = balance.currency()
     }
 
     func setLoading(_ isLoading: Bool) {

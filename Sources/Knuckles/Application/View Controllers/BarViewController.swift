@@ -22,7 +22,7 @@ class BarViewController: ViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         let trueSafeAreaInset = view.safeAreaInsets.top - additionalSafeAreaInsets.top
-        customNavigationBar.layoutMargins.top = trueSafeAreaInset + 30
+        customNavigationBar.layoutMargins.top = trueSafeAreaInset + 20
 
         additionalSafeAreaInsets.top = customNavigationBar.frame.height - trueSafeAreaInset
         view.bringSubviewToFront(customNavigationBar)
