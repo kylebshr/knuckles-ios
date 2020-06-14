@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ExpenseDetailViewController: ViewController {
+class ExpenseDetailViewController: BarViewController {
 
     private let scrollView = UIScrollView()
 
@@ -22,7 +22,13 @@ class ExpenseDetailViewController: ViewController {
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
+
         view.backgroundColor = .systemBackground
+
+        customNavigationBar.observe(scrollView: scrollView)
+        customNavigationBar.text = expense.name
+        customNavigationBar.leftAction = back()
 
         scrollView.alwaysBounceVertical = true
         view.addSubview(scrollView)
@@ -57,7 +63,7 @@ class ExpenseDetailViewController: ViewController {
         stackView.setCustomSpacing(10, after: moveButton)
 
         scrollView.addSubview(stackView)
-        stackView.pinEdges(to: scrollView)
+        stackView.pinEdges(to: scrollView, insets: .init(vertical: 40, horizontal: 0))
         stackView.widthAnchor.pin(to: view.widthAnchor)
         dueButton.widthAnchor.pin(to: view.widthAnchor)
         amountButton.widthAnchor.pin(to: view.widthAnchor)

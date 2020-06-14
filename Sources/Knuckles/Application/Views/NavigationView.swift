@@ -7,6 +7,8 @@
 
 import UIKit
 
+private let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
+
 class NavigationView: ScrollViewShadowView {
 
     struct Action {
@@ -18,12 +20,17 @@ class NavigationView: ScrollViewShadowView {
         didSet { label.text = text }
     }
 
-    var action: Action? {
-        didSet { updateAction() }
+    var leftAction: Action? {
+        didSet { updateActions() }
+    }
+
+    var rightAction: Action? {
+        didSet { updateActions() }
     }
 
     private let label = UILabel(font: .rubik(ofSize: 24, weight: .medium))
-    private let actionButton = UIButton(type: .system)
+    private let leftButton = UIButton(type: .system)
+    private let rightButton = UIButton(type: .system)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,30 +38,50 @@ class NavigationView: ScrollViewShadowView {
         backgroundColor = .systemBackground
         layoutMargins = .init(top: 30, left: 30, bottom: 20, right: 30)
 
-        addSubview(label)
-        label.setHuggingAndCompression(to: .required)
-        label.pinEdges([.left, .top, .bottom], to: layoutMarginsGuide)
+        let stackView = UIStackView(arrangedSubviews: [leftButton, label, rightButton])
+        stackView.distribution = .fill
+        stackView.alignment = .center
+        stackView.spacing = 10
 
-        addSubview(actionButton)
-        actionButton.tintColor = .label
-        actionButton.centerYAnchor.pin(to: label.centerYAnchor)
-        actionButton.trailingAnchor.pin(to: layoutMarginsGuide.trailingAnchor)
-        actionButton.addTarget(self, action: #selector(performAction), for: .primaryActionTriggered)
+        label.setHuggingAndCompression(to: .required, for: .vertical)
+        leftButton.addTarget(self, action: #selector(performLeftAction), for: .touchUpInside)
+        rightButton.addTarget(self, action: #selector(performRightAction), for: .touchUpInside)
+
+        for button in [leftButton, rightButton] {
+            button.tintColor = .label
+            button.setHuggingAndCompression(to: .required)
+        }
+
+        addSubview(stackView)
+        stackView.pinEdges(to: layoutMarginsGuide)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func updateAction() {
-        actionButton.isHidden = action == nil
-        if let action = action {
-            let config = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
-            actionButton.setImage(UIImage(systemName: action.symbolName, withConfiguration: config)!, for: .normal)
+    private func updateActions() {
+        leftButton.isHidden = leftAction == nil
+        rightButton.alpha = rightAction == nil ? 0 : 1
+
+        label.textAlignment = leftAction == nil ? .left : .center
+
+        if let leftAction = leftAction {
+            let image = UIImage(systemName: leftAction.symbolName, withConfiguration: symbolConfig)!
+            leftButton.setImage(image, for: .normal)
+        }
+
+        if let rightAction = rightAction {
+            let image = UIImage(systemName: rightAction.symbolName, withConfiguration: symbolConfig)!
+            rightButton.setImage(image, for: .normal)
         }
     }
 
-    @objc private func performAction() {
-        action?.onTap()
+    @objc private func performLeftAction() {
+        leftAction?.onTap()
+    }
+
+    @objc private func performRightAction() {
+        rightAction?.onTap()
     }
 }

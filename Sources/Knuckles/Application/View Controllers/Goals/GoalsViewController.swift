@@ -28,7 +28,7 @@ class GoalsViewController: ViewController, TabbedViewController, UITableViewDele
         tableView.topAnchor.pin(to: navigationView.bottomAnchor)
 
         navigationView.text = "Goals"
-        navigationView.action = .init(symbolName: "plus") { [weak self] in
+        navigationView.rightAction = .init(symbolName: "plus") { [weak self] in
             self?.presentCreateExpense()
         }
 

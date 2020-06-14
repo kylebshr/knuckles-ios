@@ -7,11 +7,10 @@
 
 import UIKit
 
-class ExpensesViewController: ViewController, UITableViewDataSource, UITableViewDelegate, TabbedViewController {
+class ExpensesViewController: BarViewController, UITableViewDataSource, UITableViewDelegate, TabbedViewController {
     var scrollView: UIScrollView? { tableView }
     var tabItem: TabBarItem { .symbol("calendar") }
 
-    private let navigationView = NavigationView()
     private let tableView = UITableView()
 
     private let payPeriod = PayPeriod.firstAndFifteenth(adjustForWeekends: true)
@@ -21,14 +20,10 @@ class ExpensesViewController: ViewController, UITableViewDataSource, UITableView
         super.viewDidLoad()
 
         view.addSubview(tableView)
-        view.addSubview(navigationView)
+        tableView.pinEdges(to: view)
 
-        navigationView.pinEdges([.left, .top, .right], to: view)
-        tableView.pinEdges([.left, .right, .bottom], to: view)
-        tableView.topAnchor.pin(to: navigationView.bottomAnchor)
-
-        navigationView.text = "Expenses"
-        navigationView.action = .init(symbolName: "plus") { [weak self] in
+        customNavigationBar.text = "Expenses"
+        customNavigationBar.rightAction = .init(symbolName: "plus") { [weak self] in
             self?.presentCreateExpense()
         }
 
@@ -42,7 +37,7 @@ class ExpensesViewController: ViewController, UITableViewDataSource, UITableView
         tableView.backgroundColor = .systemBackground
         tableView.register(cell: ExpenseCell.self)
 
-        navigationView.observe(scrollView: tableView)
+        customNavigationBar.observe(scrollView: tableView)
     }
 
     override func viewWillAppear(_ animated: Bool) {
