@@ -23,10 +23,10 @@ class MainViewController: ViewController {
 
         add(tabBarViewController)
 
-        let goals = UINavigationController(rootViewController: GoalsViewController())
+        let goals = NavigationController(rootViewController: GoalsViewController())
         goals.setNavigationBarHidden(true, animated: false)
 
-        let expenses = UINavigationController(rootViewController: ExpensesViewController())
+        let expenses = NavigationController(rootViewController: ExpensesViewController())
         expenses.setNavigationBarHidden(true, animated: false)
 
         tabBarViewController.viewControllers = [

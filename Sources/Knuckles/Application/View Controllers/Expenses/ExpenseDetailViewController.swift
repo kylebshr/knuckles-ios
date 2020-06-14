@@ -26,7 +26,6 @@ class ExpenseDetailViewController: BarViewController {
         view.backgroundColor = .systemBackground
 
         scrollView.contentInset.top = 40
-        scrollView.alwaysBounceVertical = true
         view.addSubview(scrollView)
         scrollView.pinEdges(to: view)
 
