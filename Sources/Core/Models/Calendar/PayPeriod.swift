@@ -31,7 +31,7 @@ enum PayPeriod {
             return firstAndFifteenth(from: from, to: to, adjustForWeekends: adjustForWeekends)
         case .fifteenthAndLast(let adjustForWeekends):
             return fifteenthAndLast(from: from, to: to, adjustForWeekends: adjustForWeekends)
-        default: return []
+        default: fatalError()
         }
     }
 

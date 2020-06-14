@@ -26,7 +26,7 @@ class MainViewController: ViewController {
         let goals = UINavigationController(rootViewController: GoalsViewController())
         goals.setNavigationBarHidden(true, animated: false)
 
-        let expenses = UINavigationController(rootViewController: ExpenseViewController())
+        let expenses = UINavigationController(rootViewController: ExpensesViewController())
         expenses.setNavigationBarHidden(true, animated: false)
 
         tabBarViewController.viewControllers = [

@@ -6,10 +6,6 @@ class ViewController: UIViewController {
 
     let keyboardLayoutGuide = UILayoutGuide()
 
-    var firstResponder: UIResponder? {
-        nil
-    }
-
     init() {
         super.init(nibName: nil, bundle: nil)
     }
@@ -33,11 +29,6 @@ class ViewController: UIViewController {
                                                name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange),
                                                name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        firstResponder?.becomeFirstResponder()
     }
 
     override func viewWillLayoutSubviews() {

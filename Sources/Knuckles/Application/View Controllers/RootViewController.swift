@@ -9,7 +9,7 @@
 import UIKit
 import Foundation
 
-class RootViewController: ViewController {
+class RootViewController: UIViewController {
 
     private var current: UIViewController?
     private var observation: NSKeyValueObservation?

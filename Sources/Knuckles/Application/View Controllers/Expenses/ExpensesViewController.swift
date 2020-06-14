@@ -1,5 +1,5 @@
 //
-//  ExpenseViewController.swift
+//  ExpensesViewController.swift
 //  Knuckles
 //
 //  Created by Kyle Bashour on 5/20/20.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewDelegate, TabbedViewController {
+class ExpensesViewController: ViewController, UITableViewDataSource, UITableViewDelegate, TabbedViewController {
     var scrollView: UIScrollView? { tableView }
     var tabItem: TabBarItem { .symbol("calendar") }
 
@@ -62,7 +62,9 @@ class ExpenseViewController: ViewController, UITableViewDataSource, UITableViewD
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: false)
+        let expense = expenses[indexPath.row]
+        let detailViewController = ExpenseDetailViewController(expense: expense)
+        show(detailViewController, sender: self)
     }
 
     func tableView(_ tableView: UITableView,

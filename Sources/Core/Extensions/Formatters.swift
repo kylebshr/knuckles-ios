@@ -36,6 +36,10 @@ extension Decimal {
 
     private typealias Abbrevation = (threshold: Decimal, divisor: Decimal, suffix: String)
 
+    func currency() -> String {
+        return NumberFormatter.currency.string(from: self as NSNumber)!
+    }
+
     func abbreviated() -> String {
         let numFormatter = NumberFormatter()
 

@@ -17,7 +17,7 @@ protocol TabbedViewController: AnyObject {
     var tabItem: TabBarItem { get }
 }
 
-class TabBarController: ViewController {
+class TabBarController: UIViewController {
     private let stackView = UIStackView()
     private let tabBarContainerView = ScrollViewShadowView()
 
