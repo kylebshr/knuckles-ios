@@ -2,7 +2,7 @@ import UIKit
 
 enum Environment {
 
-    static var current: Environment = .production
+    static var current: Environment = .local
 
     static let plaidPublicKey = "4b1cc9012fa80c462090c6e8880240"
 
