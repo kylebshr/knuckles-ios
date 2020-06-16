@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ExpensesViewController: BarViewController, UITableViewDataSource, UITableViewDelegate, TabbedViewController {
+class ExpensesViewController: ViewController, UITableViewDataSource, UITableViewDelegate, TabbedViewController {
     var scrollView: UIScrollView? { tableView }
     var tabItem: TabBarItem { .symbol("calendar") }
 
@@ -22,10 +22,9 @@ class ExpensesViewController: BarViewController, UITableViewDataSource, UITableV
         view.addSubview(tableView)
         tableView.pinEdges(to: view)
 
-        customNavigationBar.text = "Expenses"
-        customNavigationBar.rightAction = .init(symbolName: "plus") { [weak self] in
-            self?.presentCreateExpense()
-        }
+        navigationItem.title = "Expenses"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .add, target: self, action: #selector(presentCreateExpense))
 
         tableView.separatorStyle = .none
         tableView.layoutMargins.left = 30
@@ -36,8 +35,6 @@ class ExpensesViewController: BarViewController, UITableViewDataSource, UITableV
         tableView.delegate = self
         tableView.backgroundColor = .systemBackground
         tableView.register(cell: ExpenseCell.self)
-
-        customNavigationBar.observe(scrollView: tableView)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -76,7 +73,7 @@ class ExpensesViewController: BarViewController, UITableViewDataSource, UITableV
         return UISwipeActionsConfiguration(actions: [action])
     }
 
-    private func presentCreateExpense() {
+    @objc private func presentCreateExpense() {
         let viewController = ExpenseCreationViewController()
         viewController.modalPresentationStyle = .fullScreen
         present(viewController, animated: true, completion: nil)

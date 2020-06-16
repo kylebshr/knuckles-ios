@@ -31,6 +31,10 @@ extension NavigationController: UINavigationControllerDelegate {
     func navigationController(_: UINavigationController, didShow: UIViewController, animated: Bool) {
         fullScreenPanGestureRecognizer.isEnabled = viewControllers.count > 1
     }
+
+    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+//        viewController.navigationItem.backBarButtonItem = .init(title: " ", style: .plain, target: nil, action: nil)
+    }
 }
 
 private extension String {

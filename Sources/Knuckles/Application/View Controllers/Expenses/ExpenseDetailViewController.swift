@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ExpenseDetailViewController: BarViewController {
+class ExpenseDetailViewController: ViewController {
 
     private let scrollView = UIScrollView()
 
@@ -24,14 +24,13 @@ class ExpenseDetailViewController: BarViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        navigationItem.title = expense.name
+        navigationItem.largeTitleDisplayMode = .never
 
+        scrollView.alwaysBounceVertical = true
         scrollView.contentInset.top = 40
         view.addSubview(scrollView)
         scrollView.pinEdges(to: view)
-
-        customNavigationBar.observe(scrollView: scrollView)
-        customNavigationBar.text = expense.name
-        customNavigationBar.leftAction = back()
 
         emojiView.background = .customPink
         emojiLabel.text = "📱"

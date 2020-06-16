@@ -24,10 +24,10 @@ class MainViewController: ViewController {
         add(tabBarViewController)
 
         let goals = NavigationController(rootViewController: GoalsViewController())
-        goals.setNavigationBarHidden(true, animated: false)
+        goals.navigationBar.prefersLargeTitles = true
 
         let expenses = NavigationController(rootViewController: ExpensesViewController())
-        expenses.setNavigationBarHidden(true, animated: false)
+        expenses.navigationBar.prefersLargeTitles = true
 
         tabBarViewController.viewControllers = [
             informationalViewController,
