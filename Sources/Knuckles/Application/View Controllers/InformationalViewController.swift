@@ -10,23 +10,18 @@ import UIKit
 
 class InformationalViewController: ViewController, TabbedViewController {
     var scrollView: UIScrollView? { nil }
-    var tabItem: TabBarItem = .text("$ 0")
+    var tabItem: TabBarItem = .text("$0")
 
-    private let navigationView = NavigationView()
-    private let balanceButton = BalanceButton()
+        private let balanceButton = BalanceButton()
 
     private var observer: AnyCancellable?
 
     init(user: User) {
         super.init()
-//        navigationView.text = "Hello, \(user.name)"
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        view.backgroundColor = .customBackground
-        view.layoutMargins = UIEdgeInsets(all: 36)
 
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -41,38 +36,20 @@ class InformationalViewController: ViewController, TabbedViewController {
         let topView = UIView()
         stackView.addArrangedSubview(topView)
 
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.font = .rubik(ofSize: 36, weight: .bold)
-
-        let string = "What if you could change the world with just your mind?"
-        let attributedString = NSMutableAttributedString(string: string)
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.minimumLineHeight = 36 * 1.3
-        paragraphStyle.maximumLineHeight = 36 * 1.3
-
-        attributedString.addAttribute(.foregroundColor, value: UIColor.customBlue,
-                                      range: (string as NSString).range(of: "change the world"))
-        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle,
-                                      range: NSRange(location: 0, length: attributedString.length))
-
-        label.attributedText = attributedString
-        stackView.addArrangedSubview(label)
+        balanceButton.display(balance: 0)
+        stackView.addArrangedSubview(balanceButton)
 
         let middleView = UIView()
         stackView.addArrangedSubview(middleView)
         middleView.heightAnchor.pin(to: topView.heightAnchor, multiplier: 0.6)
 
-        balanceButton.display(balance: 0)
-        stackView.addArrangedSubview(balanceButton)
-
-        view.addSubview(navigationView)
-        navigationView.pinEdges([.left, .top, .right], to: view)
-        navigationView.rightAction = .init(symbolName: "person", onTap: {
-            UserDefaults.shared.logout()
-        })
+        navigationItem.rightBarButtonItem = .init(image: UIImage(systemName: "person"), style: .done, target: self, action: #selector(logout))
 
         observer = BalanceController.shared.$balance.sink(receiveValue: update)
+    }
+
+    @objc private func logout() {
+        UserDefaults.shared.logout()
     }
 
     @objc private func update(amount: Decimal) {

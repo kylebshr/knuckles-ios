@@ -12,18 +12,20 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-//        let appearance = UINavigationBarAppearance()
-//        appearance.configureWithOpaqueBackground()
-//        appearance.largeTitleTextAttributes = [.font: UIFont.rubik(ofSize: 24, weight: .medium)]
-//        appearance.titleTextAttributes = [.font: UIFont.rubik(ofSize: 17, weight: .medium)]
-//        UINavigationBar.appearance().standardAppearance = appearance
+        let buttonAppearance = UIBarButtonItemAppearance(style: .plain)
+        buttonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.customSecondaryLabel]
 
-//        let scrollAppearance = appearance.copy()
-//        scrollAppearance.shadowColor = .clear
-//        UINavigationBar.appearance().scrollEdgeAppearance = scrollAppearance
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.customSecondaryLabel]
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.customSecondaryLabel]
+        appearance.buttonAppearance = buttonAppearance
+        appearance.backgroundColor = .customBackground
+        appearance.shadowColor = .clear
 
-//        let standardAppearance = UINavigationBarAppearance()
-//        standardAppearance.configureWithOpaqueBackground()
+        UINavigationBar.appearance().tintColor = .customSecondaryLabel
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
 
         return true
     }

@@ -24,7 +24,11 @@ class ExpensesViewController: ViewController, UITableViewDataSource, UITableView
 
         navigationItem.title = "Expenses"
         navigationItem.rightBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .add, target: self, action: #selector(presentCreateExpense))
+            image: UIImage(systemName: "plus"),
+            style: .done,
+            target: self,
+            action: #selector(presentCreateExpense)
+        )
 
         tableView.separatorStyle = .none
         tableView.layoutMargins.left = 30
