@@ -37,12 +37,12 @@ class RetroButton: Control {
         switch style {
         case .primary:
             retroView.foreground = color
-            retroView.background = .systemBackground
-            label.textColor = .systemBackground
+            retroView.background = .customBackground
+            label.textColor = .customBackground
         case .secondary:
-            retroView.foreground = .systemBackground
+            retroView.foreground = .customBackground
             retroView.background = color
-            label.textColor = .label
+            label.textColor = .customLabel
         }
 
         addSubview(retroView)

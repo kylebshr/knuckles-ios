@@ -33,7 +33,7 @@ class ExpensesViewController: ViewController, UITableViewDataSource, UITableView
         tableView.tableFooterView = UIView()
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = .systemBackground
+        tableView.backgroundColor = .customBackground
         tableView.register(cell: ExpenseCell.self)
     }
 
@@ -102,7 +102,7 @@ private class ExpenseCell: UITableViewCell {
         emojiView.widthAnchor.pin(to: emojiView.heightAnchor, multiplier: 1.1)
         emojiView.textAlignment = .center
 
-        backgroundColor = .systemBackground
+        backgroundColor = .customBackground
         contentView.layoutMargins = .init(vertical: 20, horizontal: 30)
 
         let horizontalStack = UIStackView(arrangedSubviews: [emojiView, nameLabel, statusLabel])
@@ -129,7 +129,7 @@ private class ExpenseCell: UITableViewCell {
         case .funded:
             statusLabel.textColor = .customBlue
         case .paid, .onTrack:
-            statusLabel.textColor = .label
+            statusLabel.textColor = .customLabel
         }
     }
 }

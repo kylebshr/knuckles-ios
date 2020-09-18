@@ -27,7 +27,7 @@ class SignUpViewController: ViewController {
 
         textField.placeholder = "First name only is 👌"
         textField.insets = .zero
-        textField.font = .systemFont(ofSize: 18, weight: .regular)
+        textField.font = .rubik(ofSize: 18, weight: .regular)
         textField.enablesReturnKeyAutomatically = true
         textField.autocapitalizationType = .words
         textField.returnKeyType = .go

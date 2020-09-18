@@ -25,12 +25,12 @@ class ShapeView: UIView {
         addSubview(circle)
 
         circle.layer.borderWidth = 3
-        circle.backgroundColor = .systemBackground
+        circle.backgroundColor = .customBackground
         circleBackground.layer.borderWidth = 3
         circleBackground.backgroundColor = .customBlue
 
         square.layer.borderWidth = 3
-        square.backgroundColor = .systemBackground
+        square.backgroundColor = .customBackground
         squareBackground.layer.borderWidth = 3
         squareBackground.backgroundColor = .customPink
 
@@ -61,7 +61,7 @@ class ShapeView: UIView {
         super.layoutSubviews()
 
         for view in [square, circle, circleBackground, squareBackground] {
-            view.layer.borderColor = UIColor.label.cgColor
+            view.layer.borderColor = UIColor.customLabel.cgColor
         }
 
         circle.layer.cornerRadius = circle.bounds.midY

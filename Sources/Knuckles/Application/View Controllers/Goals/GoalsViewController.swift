@@ -38,7 +38,7 @@ class GoalsViewController: ViewController, TabbedViewController, UITableViewDele
         tableView.tableFooterView = UIView()
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = .systemBackground
+        tableView.backgroundColor = .customBackground
         tableView.register(cell: GoalCell.self)
 
         navigationView.observe(scrollView: tableView)
@@ -105,7 +105,7 @@ private class GoalCell: UITableViewCell {
 
         emojiView.setHuggingAndCompression(to: .required)
 
-        backgroundColor = .systemBackground
+        backgroundColor = .customBackground
         preservesSuperviewLayoutMargins = true
 
         contentView.layoutMargins.top = 20

@@ -18,7 +18,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .systemBackground
+        view.layoutMargins.left = 32
+        view.layoutMargins.right = 32
+
+        view.backgroundColor = .customBackground
 
         view.addLayoutGuide(keyboardLayoutGuide)
         keyboardLayoutGuide.pinEdges([.left, .right, .top], to: view)

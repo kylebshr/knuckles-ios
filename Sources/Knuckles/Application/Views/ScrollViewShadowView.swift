@@ -22,7 +22,7 @@ class ScrollViewShadowView: UIView {
         borderLayer.opacity = 0
         borderLayer.borderWidth = .pixel
 
-        backgroundColor = .systemBackground
+        backgroundColor = .customBackground
     }
 
     required init?(coder: NSCoder) {
@@ -58,7 +58,7 @@ class ScrollViewShadowView: UIView {
         let percentScrolled = intersection / offset
 
         borderLayer.opacity = Float(percentScrolled)
-        backgroundColor = UIColor.systemBackground.lerp(to: .elevatedBackground, amount: percentScrolled)
+        backgroundColor = UIColor.customBackground.lerp(to: .elevatedBackground, amount: percentScrolled)
     }
 }
 

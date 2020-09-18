@@ -35,7 +35,7 @@ class NavigationView: ScrollViewShadowView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = .systemBackground
+        backgroundColor = .customBackground
         layoutMargins = .init(top: 20, left: 30, bottom: 20, right: 30)
 
         let stackView = UIStackView(arrangedSubviews: [leftButton, label, rightButton])
@@ -48,7 +48,7 @@ class NavigationView: ScrollViewShadowView {
         rightButton.addTarget(self, action: #selector(performRightAction), for: .touchUpInside)
 
         for button in [leftButton, rightButton] {
-            button.tintColor = .label
+            button.tintColor = .customLabel
             button.setHuggingAndCompression(to: .required)
         }
 

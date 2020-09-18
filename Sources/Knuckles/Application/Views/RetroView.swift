@@ -35,7 +35,7 @@ class RetroView: UIView {
         shadowView.layer.cornerRadius = 10
 
         addSubview(borderView)
-        borderView.backgroundColor = .systemBackground
+        borderView.backgroundColor = .customBackground
         borderView.layer.borderWidth = borderWidth
         borderView.layer.cornerRadius = 10
 
@@ -53,7 +53,7 @@ class RetroView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        shadowView.layer.borderColor = UIColor.label.cgColor
-        borderView.layer.borderColor = UIColor.label.cgColor
+        shadowView.layer.borderColor = UIColor.customLabel.cgColor
+        borderView.layer.borderColor = UIColor.customLabel.cgColor
     }
 }

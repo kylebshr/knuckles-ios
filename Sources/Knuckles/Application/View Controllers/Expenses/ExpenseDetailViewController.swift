@@ -23,7 +23,7 @@ class ExpenseDetailViewController: ViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .customBackground
         navigationItem.title = expense.name
         navigationItem.largeTitleDisplayMode = .never
 
@@ -123,7 +123,7 @@ private class EditControl: Control {
 
         let configuration = UIImage.SymbolConfiguration(pointSize: 18, weight: .semibold)
         icon.image = UIImage(systemName: symbolName, withConfiguration: configuration)
-        icon.tintColor = .label
+        icon.tintColor = .customLabel
 
         title.text = text
         edit.text = "Edit"
@@ -150,7 +150,7 @@ private class EditControl: Control {
 
 private class DeleteControl: Control {
 
-    private let label = UILabel(font: .systemFont(ofSize: 13, weight: .medium), color: .customRed, alignment: .center)
+    private let label = UILabel(font: .rubik(ofSize: 13, weight: .medium), color: .customRed, alignment: .center)
 
     override init(frame: CGRect) {
         super.init(frame: frame)

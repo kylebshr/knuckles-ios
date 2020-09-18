@@ -8,24 +8,11 @@
 import UIKit
 
 extension UIColor {
-    static let swizzleColors: Void = {
-        for (original, replacement) in [
-            (#selector(getter: UIColor.systemBackground), #selector(getter: UIColor.customBackground)),
-            (#selector(getter: UIColor.label), #selector(getter: UIColor.customLabel)),
-            ] {
-                if let originalMethod = class_getClassMethod(UIColor.self, original),
-                    let swizzledMethod = class_getClassMethod(UIColor.self, replacement)
-                {
-                    method_exchangeImplementations(originalMethod, swizzledMethod)
-                }
-        }
-    }()
-}
 
-extension UIColor {
+    static let customBlack = UIColor(displayP3Red: 0.051, green: 0.075, blue: 0.129, alpha: 1)
+    static let customWhite = UIColor(displayP3Red: 0.878, green: 0.976, blue: 0.953, alpha: 1)
 
-    static let customBlack = UIColor(displayP3Red: 0.083, green: 0.083, blue: 0.083, alpha: 1)
-    static let customWhite = UIColor(displayP3Red: 0.989, green: 0.989, blue: 0.989, alpha: 1)
+    static let brand = UIColor(displayP3Red: 0.153, green: 0.369, blue: 0.871, alpha: 1)
 
     static let customBlue = UIColor(displayP3Red: 0.325, green: 0.596, blue: 1.000, alpha: 1)
     static let customRed = UIColor(displayP3Red: 0.929, green: 0.333, blue: 0.333, alpha: 1)
@@ -34,14 +21,21 @@ extension UIColor {
 
     static let shadow = UIColor(displayP3Red: 0.965, green: 0.965, blue: 0.965, alpha: 1)
 
-    @objc private static let customLabel = UIColor { traits in
+    static let customLabel = UIColor { traits in
         switch traits.userInterfaceStyle {
         case .light: return .customBlack
         default: return .customWhite
         }
     }
 
-    @objc private static let customBackground = UIColor { traits in
+    static let customSecondaryLabel = UIColor { traits in
+        switch traits.userInterfaceStyle {
+        case .light: return UIColor(displayP3Red: 0.121, green: 0.164, blue: 0.262, alpha: 1)
+        default: return .secondaryLabel
+        }
+    }
+
+    static let customBackground = UIColor { traits in
         switch traits.userInterfaceStyle {
         case .light: return .customWhite
         default: return .customBlack

@@ -3,47 +3,53 @@ import UIKit
 
 class LoginViewController: ViewController {
 
-    private let appleButton = RetroButton(text: "Sign in with Apple", color: .customBlue)
+    private let appleButton = Button(title: "Sign in with Apple")
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.layoutMargins.bottom = 20
 
-        let titleLabel = UILabel(font: .rubik(ofSize: 24, weight: .medium))
-        titleLabel.text = "Welcome to Balance"
+        let icon = UIImageView(image: #imageLiteral(resourceName: "in-app-icon"))
+
+        let titleLabel = UILabel(font: .systemFont(ofSize: 38, weight: .bold))
+        let welcome = NSAttributedString(string: "Welcome to\n", attributes: [.foregroundColor: UIColor.customLabel])
+        let balance = NSAttributedString(string: "Balance", attributes: [.foregroundColor: UIColor.brand])
+        titleLabel.attributedText = welcome + balance
         titleLabel.numberOfLines = 0
 
-        let descriptionLabel = UILabel(font: .rubik(ofSize: 16, weight: .regular), color: .secondaryLabel)
-        descriptionLabel.text = "Sign in with Apple to start monitoring your budget."
+        let descriptionLabel = UILabel(font: .systemFont(ofSize: 17), color: .customSecondaryLabel)
+        descriptionLabel.text = "Keep track of expenses, meet your goals, see your balance."
         descriptionLabel.numberOfLines = 0
 
-        let disclaimerLabel = UILabel(font: .rubik(ofSize: 14, weight: .regular), color: .secondaryLabel, alignment: .center)
-        disclaimerLabel.text = "By signing up you agree to\nour Terms of Services"
+        let disclaimerLabel = UILabel(font: .systemFont(ofSize: 14), color: .customSecondaryLabel, alignment: .center)
+        disclaimerLabel.text = "By signing up you agree to our Terms of Service"
         disclaimerLabel.numberOfLines = 0
+
+        let disclaimerWrapper = UIView()
+        disclaimerWrapper.addSubview(disclaimerLabel)
+        disclaimerLabel.pinEdges([.top, .bottom], to: disclaimerWrapper)
+        disclaimerLabel.pinCenter(to: disclaimerWrapper)
 
         appleButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
 
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel, appleButton, disclaimerLabel])
-        stackView.alignment = .center
+        let topSpacer = UIView()
+        let bottomSpacer = UIView()
+
+        let stackView = UIStackView(arrangedSubviews: [topSpacer, icon, titleLabel, descriptionLabel, bottomSpacer, appleButton, disclaimerWrapper])
+        stackView.alignment = .leading
         stackView.distribution = .fill
         stackView.axis = .vertical
-        stackView.spacing = 30
-
-        stackView.setCustomSpacing(90, after: descriptionLabel)
+        stackView.spacing = 16
 
         view.addSubview(stackView)
-        stackView.pinEdges([.left, .right, .bottom], to: view.layoutMarginsGuide)
 
-        appleButton.widthAnchor.pin(to: view.widthAnchor, constant: -40)
-        titleLabel.widthAnchor.pin(to: view.widthAnchor, constant: -60)
-        descriptionLabel.widthAnchor.pin(to: view.widthAnchor, constant: -60)
-        disclaimerLabel.widthAnchor.pin(to: view.widthAnchor, constant: -60)
-
-        let shapeView = ShapeView()
-        view.addSubview(shapeView)
-        shapeView.pinEdges([.left, .right, .top], to: view)
-        shapeView.bottomAnchor.pin(to: stackView.topAnchor, constant: -30)
+        stackView.pinEdges(to: view.layoutMarginsGuide)
+        appleButton.widthAnchor.pin(to: stackView.widthAnchor)
+        disclaimerWrapper.widthAnchor.pin(to: stackView.widthAnchor)
+        disclaimerLabel.widthAnchor.pin(lessThan: stackView.widthAnchor, constant: -60)
+        disclaimerLabel.widthAnchor.pin(lessThan: 200)
+        topSpacer.heightAnchor.pin(to: bottomSpacer.heightAnchor)
     }
 
     @objc private func signIn() {
@@ -94,4 +100,11 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
             }
         }
     }
+}
+
+func + (left: NSAttributedString, right: NSAttributedString) -> NSAttributedString {
+    let result = NSMutableAttributedString()
+    result.append(left)
+    result.append(right)
+    return result
 }

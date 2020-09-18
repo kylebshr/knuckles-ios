@@ -19,7 +19,7 @@ class BalanceButton: Control {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = .systemBackground
+        backgroundColor = .customBackground
 
         display(balance: 0)
         descriptionLabel.text = "cash available"

@@ -25,7 +25,7 @@ class InformationalViewController: ViewController, TabbedViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .customBackground
         view.layoutMargins = UIEdgeInsets(all: 36)
 
         let stackView = UIStackView()
