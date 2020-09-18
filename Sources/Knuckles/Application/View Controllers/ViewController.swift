@@ -18,8 +18,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.layoutMargins.left = 32
-        view.layoutMargins.right = 32
+        view.layoutMargins.left = 24
+        view.layoutMargins.right = 24
 
         view.backgroundColor = .customBackground
 

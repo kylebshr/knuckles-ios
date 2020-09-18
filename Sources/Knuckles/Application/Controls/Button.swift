@@ -18,7 +18,7 @@ class Button: Control {
 
         super.init(frame: .zero)
 
-        layer.cornerRadius = 12
+        layer.cornerRadius = 16
         layer.cornerCurve = .continuous
         clipsToBounds = true
         backgroundColor = .brand
@@ -28,7 +28,7 @@ class Button: Control {
 
         widthAnchor.pin(greaterThan: heightAnchor)
         widthAnchor.pin(to: 0, priority: .fittingSizeLevel)
-        heightAnchor.pin(to: 56)
+        heightAnchor.pin(to: 60)
 
         addSubview(activityIndicator)
         activityIndicator.hidesWhenStopped = true
