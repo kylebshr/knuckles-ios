@@ -10,40 +10,44 @@ class LinkPlaidViewController: ViewController {
 
         view.layoutMargins.bottom = 20
 
-        let titleLabel = UILabel(font: .rubik(ofSize: 24, weight: .medium))
+        let icon = UIImageView(image: #imageLiteral(resourceName: "plaid-icon"))
+
+        let titleLabel = UILabel(font: .systemFont(ofSize: 38, weight: .bold))
         titleLabel.text = "Link your bank account"
         titleLabel.numberOfLines = 0
 
-        let descriptionLabel = UILabel(font: .rubik(ofSize: 16, weight: .regular), color: .secondaryLabel)
-        descriptionLabel.text = "Balance uses Plaid to connect your bank account and access [insert all the things here]."
+        let descriptionLabel = UILabel(font: .systemFont(ofSize: 17), color: .customSecondaryLabel)
+        descriptionLabel.text = "Balance uses Plaid to connect to your bank account and access [insert all the things here]."
         descriptionLabel.numberOfLines = 0
 
-        let disclaimerLabel = UILabel(font: .rubik(ofSize: 14, weight: .regular), color: .secondaryLabel, alignment: .center)
-        disclaimerLabel.text = "By signing up you agree to\nour Terms of Services"
+        let disclaimerLabel = UILabel(font: .systemFont(ofSize: 14), color: .customSecondaryLabel, alignment: .center)
+        disclaimerLabel.text = "By signing up you agree to our Terms of Service"
         disclaimerLabel.numberOfLines = 0
+
+        let disclaimerWrapper = UIView()
+        disclaimerWrapper.addSubview(disclaimerLabel)
+        disclaimerLabel.pinEdges([.top, .bottom], to: disclaimerWrapper)
+        disclaimerLabel.pinCenter(to: disclaimerWrapper)
 
         linkButton.addTarget(self, action: #selector(linkPlaid), for: .touchUpInside)
 
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel, linkButton, disclaimerLabel])
-        stackView.alignment = .center
+        let topSpacer = UIView()
+        let bottomSpacer = UIView()
+
+        let stackView = UIStackView(arrangedSubviews: [topSpacer, icon, titleLabel, descriptionLabel, bottomSpacer, linkButton, disclaimerWrapper])
+        stackView.alignment = .leading
         stackView.distribution = .fill
         stackView.axis = .vertical
-        stackView.spacing = 30
-
-        stackView.setCustomSpacing(90, after: descriptionLabel)
+        stackView.spacing = 16
 
         view.addSubview(stackView)
-        stackView.pinEdges([.left, .right, .bottom], to: view.layoutMarginsGuide)
 
-        linkButton.widthAnchor.pin(to: view.widthAnchor, constant: -40)
-        titleLabel.widthAnchor.pin(to: view.widthAnchor, constant: -60)
-        descriptionLabel.widthAnchor.pin(to: view.widthAnchor, constant: -60)
-        disclaimerLabel.widthAnchor.pin(to: view.widthAnchor, constant: -60)
-
-        let shapeView = ShapeView()
-        view.addSubview(shapeView)
-        shapeView.pinEdges([.left, .right, .top], to: view)
-        shapeView.bottomAnchor.pin(to: stackView.topAnchor, constant: -30)
+        stackView.pinEdges(to: view.layoutMarginsGuide)
+        linkButton.widthAnchor.pin(to: stackView.widthAnchor)
+        disclaimerWrapper.widthAnchor.pin(to: stackView.widthAnchor)
+        disclaimerLabel.widthAnchor.pin(lessThan: stackView.widthAnchor, constant: -60)
+        disclaimerLabel.widthAnchor.pin(lessThan: 200)
+        topSpacer.heightAnchor.pin(to: bottomSpacer.heightAnchor)
     }
 
     @objc private func linkPlaid() {

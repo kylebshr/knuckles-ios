@@ -8,7 +8,6 @@
 import Foundation
 
 @objc class User: NSObject, Codable {
-    var name: String
     var plaidAccessToken: String?
     var plaidItemID: String?
 }

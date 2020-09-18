@@ -13,7 +13,7 @@ class LoginViewController: ViewController {
         let icon = UIImageView(image: #imageLiteral(resourceName: "in-app-icon"))
 
         let titleLabel = UILabel(font: .systemFont(ofSize: 38, weight: .bold))
-        let welcome = NSAttributedString(string: "Welcome to\n", attributes: [.foregroundColor: UIColor.customLabel])
+        let welcome = NSAttributedString(string: "Welcome to\n")
         let balance = NSAttributedString(string: "Balance", attributes: [.foregroundColor: UIColor.brand])
         titleLabel.attributedText = welcome + balance
         titleLabel.numberOfLines = 0
@@ -90,14 +90,33 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                 self.set(isLoading: false)
                 self.placeholder(title: "Something went wrong", message: String(describing: error))
             case .noAccountFound:
-                let viewController = SignUpViewController(identity: identity, name: authorization.fullName)
-                self.show(viewController, sender: self)
+                self.signUp(identity: identity)
             case .success(let user):
-                if !user.hasCompletedPlaidLink {
-                    let viewController = LinkPlaidViewController()
-                    self.show(viewController, sender: self)
-                }
+                self.handleLogin(user: user)
             }
+        }
+    }
+
+    private func signUp(identity: Data) {
+        LoginController.shared.signUp(identity: identity) { [weak self] result in
+            guard let self = self else {
+                return
+            }
+
+            switch result {
+            case .failed(let error):
+                self.set(isLoading: false)
+                self.placeholder(title: "Something went wrong", message: String(describing: error))
+            case .success(let user):
+                self.handleLogin(user: user)
+            }
+        }
+    }
+
+    private func handleLogin(user: User) {
+        if !user.hasCompletedPlaidLink {
+            let viewController = LinkPlaidViewController()
+            self.show(viewController, sender: self)
         }
     }
 }

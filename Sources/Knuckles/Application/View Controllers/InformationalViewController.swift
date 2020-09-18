@@ -19,7 +19,7 @@ class InformationalViewController: ViewController, TabbedViewController {
 
     init(user: User) {
         super.init()
-        navigationView.text = "Hello, \(user.name)"
+//        navigationView.text = "Hello, \(user.name)"
     }
 
     override func viewDidLoad() {

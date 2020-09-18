@@ -18,16 +18,13 @@ class SignUpViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.layoutMargins.left = 30
-        view.layoutMargins.right = 30
-
         let formatter = PersonNameComponentsFormatter()
         formatter.style = .short
         textField.text = name.flatMap(formatter.string)
 
         textField.placeholder = "First name only is 👌"
         textField.insets = .zero
-        textField.font = .rubik(ofSize: 18, weight: .regular)
+        textField.font = .systemFont(ofSize: 20, weight: .regular)
         textField.enablesReturnKeyAutomatically = true
         textField.autocapitalizationType = .words
         textField.returnKeyType = .go
@@ -37,7 +34,7 @@ class SignUpViewController: ViewController {
         activityIndicator.trailingAnchor.pin(to: textField.trailingAnchor)
         activityIndicator.centerYAnchor.pin(to: textField.centerYAnchor)
 
-        let label = UILabel(font: .rubik(ofSize: 24, weight: .medium))
+        let label = UILabel(font: .systemFont(ofSize: 38, weight: .bold))
         label.text = "What’s your name?"
 
         let stackView = UIStackView(arrangedSubviews: [label, textField])
@@ -68,8 +65,7 @@ class SignUpViewController: ViewController {
     private func signUp(name: String) {
         set(isLoading: true)
 
-        let request = SignUpRequest(name: name)
-        LoginController.shared.signUp(identity: identity, meta: request) { [weak self] result in
+        LoginController.shared.signUp(identity: identity) { [weak self] result in
             guard let self = self else {
                 return
             }
@@ -78,8 +74,6 @@ class SignUpViewController: ViewController {
             case .failed:
                 self.set(isLoading: false)
                 self.placeholder(message: "Something went wrong")
-            case .noAccountFound:
-                fatalError()
             case .success(let user):
                 if !user.hasCompletedPlaidLink {
                     let viewController = LinkPlaidViewController()

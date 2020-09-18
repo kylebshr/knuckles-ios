@@ -16,7 +16,7 @@ struct LoginController {
     }
 
     enum SignUpResult {
-        case success(UserToken)
+        case success(User)
         case failed(Error?)
     }
 
@@ -43,9 +43,14 @@ struct LoginController {
                     completion(.noAccountFound)
                 } else if let error = error {
                     completion(.failed(error))
-                } else if let data = data, let token = try? decoder.decode(UserToken.self, from: data) {
-                    UserDefaults.shared.login(token: token)
-                    completion(.success(token.user))
+                } else if let data = data {
+                    do {
+                        let token = try decoder.decode(UserToken.self, from: data)
+                        UserDefaults.shared.login(token: token)
+                        completion(.success(token.user))
+                    } catch {
+                        completion(.failed(error))
+                    }
                 } else {
                     completion(.failed(nil))
                 }
@@ -53,10 +58,10 @@ struct LoginController {
         }.resume()
     }
 
-    func signUp(identity: Data, meta: SignUpRequest, completion: @escaping (LoginResult) -> Void) {
+    func signUp(identity: Data, completion: @escaping (SignUpResult) -> Void) {
         let authorization = String(data: identity, encoding: .utf8)!
         var request = URLRequest(url: environment.baseURL.appendingPathComponent("signup/apple"))
-        request.httpBody = try? encoder.encode(meta)
+//        request.httpBody = try? encoder.encode(meta)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(authorization)", forHTTPHeaderField: "Authorization")
@@ -65,9 +70,14 @@ struct LoginController {
             DispatchQueue.main.async {
                 if let error = error {
                     completion(.failed(error))
-                } else if let data = data, let token = try? decoder.decode(UserToken.self, from: data) {
-                    UserDefaults.shared.login(token: token)
-                    completion(.success(token.user))
+                } else if let data = data {
+                    do {
+                        let token = try decoder.decode(UserToken.self, from: data)
+                        UserDefaults.shared.login(token: token)
+                        completion(.success(token.user))
+                    } catch {
+                        completion(.failed(error))
+                    }
                 } else {
                     completion(.failed(nil))
                 }
