@@ -10,9 +10,9 @@ import UIKit
 extension UIColor {
 
     static let customBlack = UIColor(displayP3Red: 0.051, green: 0.075, blue: 0.129, alpha: 1)
-    static let customWhite = UIColor(displayP3Red: 0.843, green: 0.988, blue: 0.953, alpha: 1)
+    static let customWhite = UIColor(displayP3Red: 0.878, green: 0.976, blue: 0.953, alpha: 1)
 
-    static let brand = UIColor(displayP3Red: 0.153, green: 0.369, blue: 0.871, alpha: 1)
+    static let brand = UIColor(displayP3Red: 0.152, green: 0.368, blue: 0.871, alpha: 1)
 
     static let customBlue = UIColor(displayP3Red: 0.325, green: 0.596, blue: 1.000, alpha: 1)
     static let customRed = UIColor(displayP3Red: 0.929, green: 0.333, blue: 0.333, alpha: 1)

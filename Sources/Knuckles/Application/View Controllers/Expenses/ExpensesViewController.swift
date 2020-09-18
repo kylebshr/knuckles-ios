@@ -8,7 +8,6 @@
 import UIKit
 
 class ExpensesViewController: ViewController, UITableViewDataSource, UITableViewDelegate, TabbedViewController {
-    var scrollView: UIScrollView? { tableView }
     var tabItem: TabBarItem { .symbol("calendar") }
 
     private let tableView = UITableView()

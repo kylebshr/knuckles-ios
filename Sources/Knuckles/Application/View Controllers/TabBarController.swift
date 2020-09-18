@@ -13,13 +13,11 @@ enum TabBarItem {
 }
 
 protocol TabbedViewController: AnyObject {
-    var scrollView: UIScrollView? { get }
     var tabItem: TabBarItem { get }
 }
 
 class TabBarController: UIViewController {
     private let stackView = UIStackView()
-    private let tabBarContainerView = ScrollViewShadowView()
 
     private var buttons: [TabBarControl] {
         guard let buttons = stackView.arrangedSubviews as? [TabBarControl] else {
@@ -38,14 +36,11 @@ class TabBarController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tabBarContainerView.addSubview(stackView)
-        stackView.pinEdges(to: tabBarContainerView.safeAreaLayoutGuide)
+        view.addSubview(stackView)
         stackView.alignment = .fill
         stackView.distribution = .fillEqually
-
-        view.addSubview(tabBarContainerView)
-        tabBarContainerView.pinEdges([.left, .right, .bottom], to: view)
-        tabBarContainerView.topAnchor.pin(to: view.safeAreaLayoutGuide.bottomAnchor, constant: -80)
+        stackView.pinEdges([.left, .right, .bottom], to: view.safeAreaLayoutGuide)
+        stackView.topAnchor.pin(to: view.safeAreaLayoutGuide.bottomAnchor, constant: -80)
     }
 
     var viewControllers: [UIViewController & TabbedViewController] = [] {
@@ -69,15 +64,13 @@ class TabBarController: UIViewController {
             add(viewControllers[index]) { view in
                 self.view.insertSubview(view, at: 0)
                 view.pinEdges([.left, .right, .top], to: self.view)
-                view.bottomAnchor.pin(to: self.tabBarContainerView.topAnchor)
+                view.bottomAnchor.pin(to: self.stackView.topAnchor)
             }
         }
 
         for (i, view) in buttons.enumerated() {
             view.isSelected = i == index
         }
-
-        tabBarContainerView.observe(scrollView: viewControllers[index].scrollView)
     }
 
     func updateTabs() {
@@ -113,11 +106,11 @@ private class TabBarControl: Control {
             let imageView = UIImageView()
             let config = UIImage.SymbolConfiguration(pointSize: 22, weight: .regular)
             imageView.contentMode = .center
-            imageView.tintColor = .customLabel
+            imageView.tintColor = .customSecondaryLabel
             imageView.image = UIImage(systemName: name, withConfiguration: config)!
             content = imageView
         case .text(let text):
-            let label = UILabel(font: .rubik(ofSize: 20, weight: .bold), alignment: .center)
+            let label = UILabel(font: .systemFont(ofSize: 20, weight: .bold), color: .customSecondaryLabel, alignment: .center)
             label.text = text
             content = label
         }

@@ -8,10 +8,8 @@
 import UIKit
 
 class GoalsViewController: ViewController, TabbedViewController, UITableViewDelegate, UITableViewDataSource {
-    var scrollView: UIScrollView? { nil }
     var tabItem: TabBarItem { .symbol("umbrella") }
 
-    private let navigationView = NavigationView()
     private let tableView = UITableView()
 
     private let payPeriod = PayPeriod.firstAndFifteenth(adjustForWeekends: true)
@@ -21,27 +19,22 @@ class GoalsViewController: ViewController, TabbedViewController, UITableViewDele
         super.viewDidLoad()
 
         view.addSubview(tableView)
-        view.addSubview(navigationView)
+        tableView.pinEdges(to: view)
 
-        navigationView.pinEdges([.left, .top, .right], to: view)
-        tableView.pinEdges([.left, .right, .bottom], to: view)
-        tableView.topAnchor.pin(to: navigationView.bottomAnchor)
+        navigationItem.title = "Goals"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "plus"),
+            style: .done,
+            target: self,
+            action: #selector(presentCreateGoal)
+        )
 
-        navigationView.text = "Goals"
-        navigationView.rightAction = .init(symbolName: "plus") { [weak self] in
-            self?.presentCreateExpense()
-        }
-
-        tableView.layoutMargins.left = 30
-        tableView.layoutMargins.right = 30
         tableView.showsVerticalScrollIndicator = true
         tableView.tableFooterView = UIView()
         tableView.dataSource = self
         tableView.delegate = self
         tableView.backgroundColor = .customBackground
         tableView.register(cell: GoalCell.self)
-
-        navigationView.observe(scrollView: tableView)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -79,7 +72,7 @@ class GoalsViewController: ViewController, TabbedViewController, UITableViewDele
         return UISwipeActionsConfiguration(actions: [action])
     }
 
-    private func presentCreateExpense() {
+    @objc private func presentCreateGoal() {
         let viewController = ExpenseCreationViewController()
         viewController.modalPresentationStyle = .fullScreen
         present(viewController, animated: true, completion: nil)

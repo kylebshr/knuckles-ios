@@ -8,7 +8,7 @@
 import UIKit
 
 class BalanceButton: Control {
-    private let balanceLabel = UILabel(font: .systemFont(ofSize: 38), color: .brand)
+    private let balanceLabel = UILabel(font: .systemFont(ofSize: 32), color: .brand)
     private let descriptionLabel = UILabel(font: .systemFont(ofSize: 17, weight: .semibold), color: .customSecondaryLabel)
 
     private lazy var labelStack = UIStackView(arrangedSubviews: [descriptionLabel, balanceLabel])

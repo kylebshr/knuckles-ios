@@ -9,10 +9,9 @@ import Combine
 import UIKit
 
 class InformationalViewController: ViewController, TabbedViewController {
-    var scrollView: UIScrollView? { nil }
     var tabItem: TabBarItem = .text("$0")
 
-        private let balanceButton = BalanceButton()
+    private let balanceButton = BalanceButton()
 
     private var observer: AnyCancellable?
 
@@ -22,6 +21,12 @@ class InformationalViewController: ViewController, TabbedViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let container = UIView()
+        container.layer.cornerRadius = 20
+        container.layer.cornerCurve = .continuous
+        container.layer.borderColor = UIColor.customLabel.withAlphaComponent(0.5).cgColor
+        container.layer.borderWidth = .pixel
 
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -37,11 +42,15 @@ class InformationalViewController: ViewController, TabbedViewController {
         stackView.addArrangedSubview(topView)
 
         balanceButton.display(balance: 0)
-        stackView.addArrangedSubview(balanceButton)
+        container.addSubview(balanceButton)
+        balanceButton.pinEdges([.left, .right, .top], to: container, insets: .init(all: 18))
+        container.widthAnchor.pin(to: container.heightAnchor, multiplier: 1.6)
+
+        stackView.addArrangedSubview(container)
 
         let middleView = UIView()
         stackView.addArrangedSubview(middleView)
-        middleView.heightAnchor.pin(to: topView.heightAnchor, multiplier: 0.6)
+        middleView.heightAnchor.pin(to: topView.heightAnchor, multiplier: 2)
 
         navigationItem.rightBarButtonItem = .init(image: UIImage(systemName: "person"), style: .done, target: self, action: #selector(logout))
 

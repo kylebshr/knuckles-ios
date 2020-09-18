@@ -9,7 +9,7 @@ import UIKit
 
 private let symbolConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
 
-class NavigationView: ScrollViewShadowView {
+class NavigationView: UIView {
 
     struct Action {
         var symbolName: String
