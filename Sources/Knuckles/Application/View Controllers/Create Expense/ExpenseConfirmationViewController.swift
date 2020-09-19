@@ -1,44 +1,38 @@
 //
-//  EnterAmountViewController.swift
+//  ExpenseConfirmationViewController.swift
 //  Knuckles
 //
-//  Created by Kyle Bashour on 5/22/20.
+//  Created by Kyle Bashour on 9/18/20.
 //
 
 import UIKit
 
-class ExpenseAmountViewController: FlowViewController, KeyPadViewDelegate {
+class ExpenseConfirmationViewController: FlowViewController {
+    var didConfirm: (() -> Void)?
 
-    var didEnterAmount: ((Decimal) -> Void)?
+    private let button = Button(title: "Add to expenses")
 
-    private let button = Button(title: "Next")
-    private let amountLabel = UILabel(font: .systemFont(ofSize: 64, weight: .bold), alignment: .center)
+    init(expense: Expense) {
+        super.init()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = "How much is it?"
-
         button.addTarget(self, action: #selector(didTapNext), for: .touchUpInside)
 
-        amountLabel.setHuggingAndCompression(to: .required)
-        amountLabel.adjustsFontSizeToFitWidth = true
-        amountLabel.text = "$0"
         view.backgroundColor = .customBackground
 
         let topView = UIView()
         let middleView = UIView()
         let bottomView = UIView()
 
-        let keyPad = KeyPadView(formatter: KeyPadCurrencyFormatter())
-        keyPad.delegate = self
-
         let perMonthLabel = UILabel(font: .systemFont(ofSize: 18, weight: .medium), color: .customSecondaryLabel, alignment: .center)
         perMonthLabel.setHuggingAndCompression(to: .required)
-        perMonthLabel.text = "per month"
+        perMonthLabel.text = "[[ Confirmation UI ]]"
 
         let stackView = UIStackView(arrangedSubviews: [
-            topView, amountLabel, perMonthLabel, middleView, keyPad, bottomView,
+            topView, perMonthLabel, middleView, bottomView,
         ])
 
         view.addSubview(stackView)
@@ -56,21 +50,8 @@ class ExpenseAmountViewController: FlowViewController, KeyPadViewDelegate {
         button.pinEdges([.left, .right, .bottom], to: view.safeAreaLayoutGuide, insets: .init(all: 20))
     }
 
-    func keyPadView(_ keyPad: KeyPadView, didUpdateText text: String) {
-        amountLabel.text = text
-    }
-
     @objc private func didTapNext() {
-        guard var amountText = amountLabel.text else {
-            return
-        }
-
-        amountText.removeFirst()
-
-        guard let amount = Decimal(string: amountText), amount != 0 else {
-            return
-        }
-
-        didEnterAmount?(amount)
+        didConfirm?()
     }
+
 }

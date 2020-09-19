@@ -54,7 +54,7 @@ class DayPickerView: UIView {
 
 private class DayButton: Control {
 
-    private let label = UILabel(font: .rubik(ofSize: 17, weight: .medium), alignment: .center)
+    private let label = UILabel(font: .systemFont(ofSize: 17, weight: .semibold), alignment: .center)
 
     let day: Int
 
@@ -76,7 +76,7 @@ private class DayButton: Control {
     }
 
     override func updateState() {
-        label.textColor = isSelected ? .white : .customLabel
-        backgroundColor = isSelected ? .customBlue : .clear
+        label.textColor = isSelected ? .customWhite : .customLabel
+        backgroundColor = isSelected ? .brand : .clear
     }
 }

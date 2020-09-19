@@ -12,30 +12,22 @@ class ExpenseNameViewController: FlowViewController {
     var didEnterName: ((String) -> Void)?
 
     private let textField = TextField()
-    private let nextButton = FullWidthButton()
+    private let nextButton = Button(title: "Next")
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationView.text = "Name this expense"
+        navigationItem.title = "Name your expense"
 
         view.addSubview(textField)
-        textField.centerYAnchor.pin(to: keyboardLayoutGuide.centerYAnchor, constant: 15)
+        textField.centerYAnchor.pin(to: keyboardLayoutGuide.centerYAnchor)
         textField.pinEdges([.left, .right], to: view)
-        textField.placeholder = "Try Rent, Phone Bill, Spotify"
-        textField.font = .rubik(ofSize: 20, weight: .medium)
+        textField.placeholder = ["Rent", "Netflix", "Spotify", "Internet"].randomElement()!
+        textField.font = .systemFont(ofSize: 32, weight: .bold)
 
         view.addSubview(nextButton)
-        nextButton.text = "Next"
-        nextButton.pinEdges([.left, .right, .bottom], to: keyboardLayoutGuide)
-
-        nextButton.onTap = { [weak self] in
-            guard let text = self?.textField.text?.trimmingCharacters(in: .whitespaces), !text.isEmpty else {
-                return
-            }
-
-            self?.didEnterName?(text)
-        }
+        nextButton.pinEdges([.left, .right, .bottom], to: keyboardLayoutGuide, insets: .init(all: 20))
+        nextButton.addTarget(self, action: #selector(didTapNext), for: .touchUpInside)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -46,5 +38,13 @@ class ExpenseNameViewController: FlowViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         view.endEditing(true)
+    }
+
+    @objc private func didTapNext() {
+        guard let text = textField.text?.trimmingCharacters(in: .whitespaces), !text.isEmpty else {
+            return
+        }
+
+        didEnterName?(text)
     }
 }

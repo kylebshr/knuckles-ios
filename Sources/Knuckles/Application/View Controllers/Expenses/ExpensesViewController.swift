@@ -78,7 +78,6 @@ class ExpensesViewController: ViewController, UITableViewDataSource, UITableView
 
     @objc private func presentCreateExpense() {
         let viewController = ExpenseCreationViewController()
-        viewController.modalPresentationStyle = .fullScreen
         present(viewController, animated: true, completion: nil)
     }
 

@@ -39,6 +39,10 @@ class ViewController: UIViewController {
         didlayoutSubviews = true
     }
 
+    @objc func dismissAnimated() {
+        dismiss(animated: true, completion: nil)
+    }
+
     @objc private func keyboardWillChange(_ sender: Notification) {
         guard let userInfo = sender.userInfo,
             let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {

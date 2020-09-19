@@ -9,12 +9,10 @@ import UIKit
 
 class FlowViewController: ViewController {
 
-    let navigationView = NavigationView()
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.addSubview(navigationView)
-        navigationView.pinEdges([.left, .top, .right], to: view)
+        navigationItem.backButtonTitle = " "
+        navigationItem.rightBarButtonItem = .init(image: UIImage(systemName: "xmark")!, style: .done, target: self, action: #selector(dismissAnimated))
     }
 }

@@ -113,7 +113,7 @@ private class KeyPadButton: Control {
 
     let character: Character
 
-    private let label = UILabel(font: .rubik(ofSize: 24, weight: .medium))
+    private let label = UILabel(font: .systemFont(ofSize: 24, weight: .semibold))
 
     init(character: Character) {
         self.character = character

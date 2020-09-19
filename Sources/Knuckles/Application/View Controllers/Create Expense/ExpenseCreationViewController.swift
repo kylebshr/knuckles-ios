@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ExpenseCreationViewController: UIViewController {
+class ExpenseCreationViewController: ViewController {
 
     private lazy var nameViewController = ExpenseNameViewController()
     private lazy var amountViewController = ExpenseAmountViewController()
@@ -18,29 +18,25 @@ class ExpenseCreationViewController: UIViewController {
     private var amount: Decimal!
     private var day: Int!
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override init() {
+        super.init()
+
+        isModalInPresentation = true
+
+        navigationContainer.setNavigationBarHidden(false, animated: false)
 
         nameViewController.didEnterName = { [weak self] name in
             self?.enterName(name)
         }
 
         add(navigationContainer)
-        addCloseButton()
+
+        view.layoutIfNeeded()
     }
 
-    private func addCloseButton() {
-        let closeButton = UIButton(type: .system)
-        view.addSubview(closeButton)
-        closeButton.tintColor = .customLabel
-        closeButton.pinEdges([.right, .top], to: view.layoutMarginsGuide, insets: .init(vertical: 38, horizontal: 0))
-        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
-        closeButton.setImage(UIImage(systemName: "xmark", withConfiguration: config), for: .normal)
-        closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
-    }
-
-    @objc private func close() {
-        dismiss(animated: true, completion: nil)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        presentationController?.delegate = self
     }
 
     private func enterName(_ name: String) {
@@ -61,7 +57,29 @@ class ExpenseCreationViewController: UIViewController {
 
     private func enterDay(_ day: Int) {
         let expense = Expense(emoji: "🐮", name: name, amount: amount, dayDueAt: day)
+        let viewController = ExpenseConfirmationViewController(expense: expense)
+        navigationContainer.pushViewController(viewController, animated: true)
+        viewController.didConfirm = { [weak self] in
+            self?.confirm(expense: expense)
+        }
+    }
+
+    private func confirm(expense: Expense) {
         UserDefaults.shared.expenses.append(expense)
-        close()
+        dismissAnimated()
+    }
+}
+
+extension ExpenseCreationViewController: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        let sheet = UIAlertController(title: "Delete this expense?", message: nil, preferredStyle: .actionSheet)
+
+        sheet.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
+            self?.dismiss(animated: true, completion: nil)
+        }))
+
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+
+        present(sheet, animated: true, completion: nil)
     }
 }

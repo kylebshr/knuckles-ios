@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         let viewController = RootViewController()
 
-        window?.tintColor = .customLabel
+        window?.tintColor = .brand
         window?.rootViewController = viewController
         window?.makeKeyAndVisible()
     }

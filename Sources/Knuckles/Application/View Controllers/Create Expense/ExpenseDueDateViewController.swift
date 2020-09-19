@@ -16,19 +16,18 @@ class ExpenseDueDateViewController: FlowViewController {
     }
 
     private let dayPickerView = DayPickerView()
-    private let nextButton = FullWidthButton()
-    private let dayLabel = UILabel(font: .rubik(ofSize: 64, weight: .bold), alignment: .center)
-    private let perMonthLabel = UILabel(font: .rubik(ofSize: 18, weight: .regular), color: .secondaryLabel, alignment: .center)
+    private let nextButton = Button(title: "Next")
+    private let dayLabel = UILabel(font: .systemFont(ofSize: 64, weight: .bold), alignment: .center)
+    private let perMonthLabel = UILabel(font: .systemFont(ofSize: 18, weight: .medium), color: .customSecondaryLabel, alignment: .center)
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationView.text = "What day is it due?"
+        navigationItem.title = "What day is it due?"
 
         view.addSubview(nextButton)
-        nextButton.text = "Add to expenses"
-        nextButton.pinEdges([.left, .right, .bottom], to: view)
-        nextButton.onTap = { [weak self] in self?.didTapNext() }
+        nextButton.pinEdges([.left, .right, .bottom], to: view.safeAreaLayoutGuide, insets: .init(all: 20))
+        nextButton.addTarget(self, action: #selector(didTapNext), for: .touchUpInside)
 
         dayPickerView.didTapDay = { [weak self] in self?.day = $0 }
         dayLabel.text = "1st"
@@ -55,11 +54,11 @@ class ExpenseDueDateViewController: FlowViewController {
         bottomView.heightAnchor.pin(to: topView.heightAnchor, multiplier: 0.7)
 
         stackView.pinEdges([.left, .right], to: view.layoutMarginsGuide)
-        stackView.topAnchor.pin(to: navigationView.bottomAnchor)
+        stackView.topAnchor.pin(to: view.layoutMarginsGuide.topAnchor)
         stackView.bottomAnchor.pin(to: nextButton.topAnchor)
     }
 
-    private func didTapNext() {
+    @objc private func didTapNext() {
         guard let day = day else {
             return
         }
