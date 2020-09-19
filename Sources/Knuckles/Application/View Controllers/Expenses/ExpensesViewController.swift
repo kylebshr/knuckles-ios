@@ -138,7 +138,7 @@ private class ExpenseCell: UITableViewCell {
         topStack.spacing = 8
 
         let bottomStack = UIStackView(arrangedSubviews: [incomeControl, paymentControl])
-        bottomStack.alignment = .firstBaseline
+        bottomStack.alignment = .fill
         bottomStack.distribution = .equalSpacing
         bottomStack.spacing = 8
 

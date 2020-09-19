@@ -31,21 +31,16 @@ class RevenueControl: UIView {
         super.init(frame: .zero)
 
         icon.tintColor = .brand
-        icon.setHuggingAndCompression(to: .required)
 
         let stackView = UIStackView(arrangedSubviews: [amountLabel, icon, secondaryLabel])
         addSubview(stackView)
         stackView.pinEdges(to: self)
-        stackView.alignment = .firstBaseline
+        stackView.alignment = .center
         stackView.spacing = 2
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override var forFirstBaselineLayout: UIView {
-        amountLabel
     }
 
     func display(amount: Decimal, text: String) {
