@@ -9,7 +9,7 @@ import UIKit
 
 private let calendar = Calendar(identifier: .gregorian)
 
-struct Expense: Codable, Equatable {
+class Expense: NSObject, Codable {
 
     var name: String
 

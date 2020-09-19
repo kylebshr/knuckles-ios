@@ -7,24 +7,24 @@
 
 import UIKit
 
-class ExpensesViewController: ViewController, UITableViewDataSource, UITableViewDelegate, TabbedViewController {
-    var tabItem: TabBarItem { .symbol("calendar") }
-
+class ExpensesViewController: ViewController, UITableViewDataSource, UITableViewDelegate {
     private let tableView = UITableView()
 
     private let payPeriod = PayPeriod.firstAndFifteenth(adjustForWeekends: true)
+    private var observation: NSKeyValueObservation?
     private var expenses: [Expense] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        navigationController?.tabBarItem = UITabBarItem(title: "Expenses", image: UIImage(systemName: "calendar"), tag: 1)
 
         view.addSubview(tableView)
         tableView.pinEdges(to: view)
 
         navigationItem.title = "Expenses"
         navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "plus"),
-            style: .done,
+            barButtonSystemItem: .add,
             target: self,
             action: #selector(presentCreateExpense)
         )
@@ -35,6 +35,10 @@ class ExpensesViewController: ViewController, UITableViewDataSource, UITableView
         tableView.delegate = self
         tableView.backgroundColor = .customBackground
         tableView.register(cell: ExpenseCell.self)
+
+        observation = UserDefaults.shared.observe(\.expenses, options: .initial) { [weak self] _, _ in
+            self?.reload()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -95,11 +99,12 @@ class ExpensesViewController: ViewController, UITableViewDataSource, UITableView
     }
 
     private func delete(at indexPath: IndexPath) {
-        UserDefaults.shared.expenses.remove(at: indexPath.row)
         tableView.beginUpdates()
         expenses.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .automatic)
         tableView.endUpdates()
+
+        UserDefaults.shared.expenses.remove(at: indexPath.row)
     }
 
     private func reload() {
@@ -129,16 +134,17 @@ private class ExpenseCell: UITableViewCell {
 
         let topStack = UIStackView(arrangedSubviews: [nameLabel, statusLabel])
         topStack.alignment = .firstBaseline
-        topStack.distribution = .fill
+        topStack.distribution = .equalSpacing
         topStack.spacing = 8
 
-        let bottomStack = UIStackView(arrangedSubviews: [paymentControl, incomeControl])
+        let bottomStack = UIStackView(arrangedSubviews: [incomeControl, paymentControl])
         bottomStack.alignment = .firstBaseline
-        bottomStack.distribution = .fill
+        bottomStack.distribution = .equalSpacing
         bottomStack.spacing = 8
 
         let containerStack = UIStackView(arrangedSubviews: [topStack, bottomStack])
         containerStack.axis = .vertical
+        containerStack.distribution = .fill
         containerStack.alignment = .fill
         containerStack.spacing = 6
 
@@ -148,14 +154,6 @@ private class ExpenseCell: UITableViewCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        contentView.backgroundColor = highlighted ? UIColor.black.withAlphaComponent(0.1) : .clear
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        contentView.backgroundColor = selected ? UIColor.black.withAlphaComponent(0.1) : .clear
     }
 
     func display(expense: Expense, in period: PayPeriod) {
@@ -171,7 +169,7 @@ private class ExpenseCell: UITableViewCell {
             statusLabel.textColor = .customLabel
         }
 
-        paymentControl.display(amount: expense.amount, period: "month")
-        incomeControl.display(amount: expense.nextAmountSaved(), period: "payday")
+        paymentControl.display(amount: expense.amount, text: DateFormatter.readyByFormatter.string(from: expense.nextDueDate()))
+        incomeControl.display(amount: expense.nextAmountSaved(), text: "Payday")
     }
 }

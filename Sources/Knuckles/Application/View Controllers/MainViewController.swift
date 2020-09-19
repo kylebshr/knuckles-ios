@@ -10,7 +10,7 @@ import UIKit
 
 class MainViewController: ViewController {
 
-    private let tabBarViewController = TabBarController()
+    private let tabBarViewController = UITabBarController()
     private let informationalViewController: InformationalViewController
 
     init(user: User) {

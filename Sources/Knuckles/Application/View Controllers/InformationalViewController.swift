@@ -8,9 +8,7 @@
 import Combine
 import UIKit
 
-class InformationalViewController: ViewController, TabbedViewController {
-    var tabItem: TabBarItem = .text("$0")
-
+class InformationalViewController: ViewController {
     private let balanceButton = BalanceButton()
 
     private var observer: AnyCancellable?
@@ -21,6 +19,8 @@ class InformationalViewController: ViewController, TabbedViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        navigationController?.tabBarItem = UITabBarItem(title: "TODO", image: nil, tag: 0)
 
         let container = UIView()
         container.layer.cornerRadius = 20
@@ -63,7 +63,7 @@ class InformationalViewController: ViewController, TabbedViewController {
 
     @objc private func update(amount: Decimal) {
         balanceButton.display(balance: amount)
-        tabItem = .text("$" + amount.abbreviated())
-        parent(ofType: TabBarController.self)?.updateTabs()
+//        tabItem = .text("$" + amount.abbreviated())
+//        parent(ofType: TabBarController.self)?.updateTabs()
     }
 }

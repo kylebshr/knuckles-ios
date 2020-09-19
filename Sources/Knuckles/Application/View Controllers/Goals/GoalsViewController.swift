@@ -7,9 +7,7 @@
 
 import UIKit
 
-class GoalsViewController: ViewController, TabbedViewController, UITableViewDelegate, UITableViewDataSource {
-    var tabItem: TabBarItem { .symbol("umbrella") }
-
+class GoalsViewController: ViewController, UITableViewDelegate, UITableViewDataSource {
     private let tableView = UITableView()
 
     private let payPeriod = PayPeriod.firstAndFifteenth(adjustForWeekends: true)
@@ -17,6 +15,8 @@ class GoalsViewController: ViewController, TabbedViewController, UITableViewDele
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        navigationController?.tabBarItem = UITabBarItem(title: "Goals", image: UIImage(systemName: "umbrella"), tag: 2)
 
         view.addSubview(tableView)
         tableView.pinEdges(to: view)

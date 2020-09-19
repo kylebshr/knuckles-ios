@@ -15,7 +15,7 @@ extension UIColor {
     static let brand = UIColor(displayP3Red: 0.152, green: 0.368, blue: 0.871, alpha: 1)
 
     static let customBlue = UIColor(displayP3Red: 0.325, green: 0.596, blue: 1.000, alpha: 1)
-    static let customRed = UIColor(displayP3Red: 0.867, green: 0.451, blue: 0.451, alpha: 1)
+    static let customRed = UIColor(displayP3Red: 1, green: 0.376, blue: 0.486, alpha: 1)
     static let customPink = UIColor(displayP3Red: 1.000, green: 0.376, blue: 0.486, alpha: 1)
     static let customGreen = UIColor(displayP3Red: 0.410, green: 0.887, blue: 0.515, alpha: 1)
 
@@ -44,7 +44,7 @@ extension UIColor {
 
     static let customBackground = UIColor { traits in
         switch traits.userInterfaceStyle {
-        case .light: return .customWhite
+        case .light: return .systemBackground // .customWhite
         default: return .customBlack
         }
     }

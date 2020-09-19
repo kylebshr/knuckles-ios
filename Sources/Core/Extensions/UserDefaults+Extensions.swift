@@ -34,7 +34,7 @@ extension UserDefaults {
         set(data, forKey: key)
     }
 
-    var expenses: [Expense] {
+    @objc var expenses: [Expense] {
         get { codable(forKey: #function) ?? [] }
         set { set(codable: newValue, forKey: #function) }
     }

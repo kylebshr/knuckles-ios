@@ -11,9 +11,6 @@ class ExpenseDetailViewController: ViewController {
 
     private let scrollView = UIScrollView()
 
-    private let emojiLabel = UILabel(font: .systemFont(ofSize: 24))
-    private lazy var emojiView = RetroView(content: emojiLabel)
-
     private let expense: Expense
 
     init(expense: Expense) {
@@ -23,17 +20,12 @@ class ExpenseDetailViewController: ViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .customBackground
         navigationItem.title = expense.name
-        navigationItem.largeTitleDisplayMode = .never
 
         scrollView.alwaysBounceVertical = true
         scrollView.contentInset.top = 40
         view.addSubview(scrollView)
         scrollView.pinEdges(to: view)
-
-        emojiView.background = .customPink
-        emojiLabel.text = "📱"
 
         let amountLabel = UILabel(font: .rubik(ofSize: 48, weight: .medium), alignment: .center)
         amountLabel.text = expense.fundingState(using: .current).amount
@@ -51,13 +43,12 @@ class ExpenseDetailViewController: ViewController {
         let deleteButton = DeleteControl()
 
         let stackView = UIStackView(arrangedSubviews: [
-            emojiView, amountLabel, statusLabel, nextAmountView,
+            amountLabel, statusLabel, nextAmountView,
             dueButton, amountButton, moveButton, deleteButton,
         ])
 
         stackView.axis = .vertical
         stackView.alignment = .center
-        stackView.setCustomSpacing(20, after: emojiView)
         stackView.setCustomSpacing(5, after: amountLabel)
         stackView.setCustomSpacing(42, after: statusLabel)
         stackView.setCustomSpacing(26, after: amountButton)

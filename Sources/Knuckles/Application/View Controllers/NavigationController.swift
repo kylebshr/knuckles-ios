@@ -33,7 +33,7 @@ extension NavigationController: UINavigationControllerDelegate {
     }
 
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        viewController.navigationItem.backBarButtonItem = .init(title: " ", style: .plain, target: nil, action: nil)
+//        viewController.navigationItem.backBarButtonItem = .init(title: " ", style: .plain, target: nil, action: nil)
     }
 }
 

@@ -14,7 +14,6 @@ extension NumberFormatter {
         formatter.numberStyle = .currency
         formatter.locale = Locale.current
         formatter.negativePrefix = "-"
-        formatter.currencySymbol = ""
         return formatter
     }()
 

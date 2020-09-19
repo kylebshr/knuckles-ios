@@ -16,16 +16,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         buttonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.customSecondaryLabel]
 
         let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
+        appearance.configureWithDefaultBackground()
         appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.customSecondaryLabel]
         appearance.titleTextAttributes = [.foregroundColor: UIColor.customSecondaryLabel]
         appearance.buttonAppearance = buttonAppearance
-        appearance.backgroundColor = .customBackground
-        appearance.shadowColor = .clear
+//        appearance.backgroundColor = .customBackground
+//        appearance.shadowColor = .clear
 
         UINavigationBar.appearance().tintColor = .customSecondaryLabel
         UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+
+        let scrollAppearance = UINavigationBarAppearance()
+        scrollAppearance.configureWithTransparentBackground()
+        scrollAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.customSecondaryLabel]
+        scrollAppearance.titleTextAttributes = [.foregroundColor: UIColor.customSecondaryLabel]
+        scrollAppearance.buttonAppearance = buttonAppearance
+        UINavigationBar.appearance().scrollEdgeAppearance = scrollAppearance
 
         return true
     }
