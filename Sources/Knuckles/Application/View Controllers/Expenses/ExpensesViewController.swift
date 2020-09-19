@@ -62,12 +62,8 @@ class ExpensesViewController: ViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
     {
-        let action = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, _ in
-            UserDefaults.shared.expenses.remove(at: indexPath.row)
-            self?.tableView.beginUpdates()
-            self?.expenses.remove(at: indexPath.row)
-            self?.tableView.deleteRows(at: [indexPath], with: .automatic)
-            self?.tableView.endUpdates()
+        let action = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, confirm in
+            self?.presentDelete(for: indexPath, confirm: confirm)
         }
 
         action.backgroundColor = .customRed
@@ -77,6 +73,33 @@ class ExpensesViewController: ViewController, UITableViewDataSource, UITableView
     @objc private func presentCreateExpense() {
         let viewController = ExpenseCreationViewController()
         present(viewController, animated: true, completion: nil)
+    }
+
+    func presentDelete(for indexPath: IndexPath, confirm: @escaping (Bool) -> Void) {
+        let sheet = UIAlertController(
+            title: "Delete \(expenses[indexPath.row].name)?",
+            message: nil,
+            preferredStyle: .actionSheet
+        )
+
+        sheet.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
+            self?.delete(at: indexPath)
+            confirm(true)
+        }))
+
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
+            confirm(false)
+        }))
+
+        present(sheet, animated: true, completion: nil)
+    }
+
+    private func delete(at indexPath: IndexPath) {
+        UserDefaults.shared.expenses.remove(at: indexPath.row)
+        tableView.beginUpdates()
+        expenses.remove(at: indexPath.row)
+        tableView.deleteRows(at: [indexPath], with: .automatic)
+        tableView.endUpdates()
     }
 
     private func reload() {
