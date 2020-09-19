@@ -135,7 +135,7 @@ enum PayPeriod {
 }
 
 extension PayPeriod {
-    static let current = PayPeriod.weekly(day: 1)
+    static let current = PayPeriod.firstAndFifteenth(adjustForWeekends: true)
 }
 
 extension Date {

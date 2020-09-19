@@ -50,7 +50,12 @@ extension Decimal {
     private typealias Abbrevation = (threshold: Decimal, divisor: Decimal, suffix: String)
 
     func currency() -> String {
-        return NumberFormatter.currency.string(from: self as NSNumber)!
+        let string = NumberFormatter.currency.string(from: self as NSNumber)!
+        if string.suffix(3) == ".00" {
+            return String(string.dropLast(3))
+        } else {
+            return string
+        }
     }
 
     func abbreviated() -> String {

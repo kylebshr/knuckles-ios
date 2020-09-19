@@ -25,7 +25,7 @@ class ViewController: UIViewController {
 
         view.addLayoutGuide(keyboardLayoutGuide)
         keyboardLayoutGuide.pinEdges([.left, .right, .top], to: view)
-        keyboardLayoutGuide.bottomAnchor.pin(lessThan: view.bottomAnchor)
+        keyboardLayoutGuide.bottomAnchor.pin(lessThan: view.safeAreaLayoutGuide.bottomAnchor)
         keyboardLayoutGuideBottom = keyboardLayoutGuide.bottomAnchor.pin(to: view.bottomAnchor, priority: .defaultHigh)
 
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange),

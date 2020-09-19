@@ -33,7 +33,7 @@ struct Expense: Codable, Equatable {
         return amountSaved(using: period) == amount
     }
 
-    func nextAmountSaved(using period: PayPeriod, on date: Date = Date()) -> Decimal {
+    func nextAmountSaved(using period: PayPeriod = .current, on date: Date = Date()) -> Decimal {
         let payDays = period.from(date: previousDueDate(from: date), to: nextDueDate(from: date))
         return amount / Decimal(payDays.count)
     }

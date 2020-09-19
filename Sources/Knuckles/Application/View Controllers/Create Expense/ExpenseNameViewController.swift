@@ -24,6 +24,7 @@ class ExpenseNameViewController: FlowViewController {
         textField.pinEdges([.left, .right], to: view)
         textField.placeholder = ["Rent", "Netflix", "Spotify", "Internet"].randomElement()!
         textField.font = .systemFont(ofSize: 32, weight: .bold)
+        textField.textColor = .customLabel
 
         view.addSubview(nextButton)
         nextButton.pinEdges([.left, .right, .bottom], to: keyboardLayoutGuide, insets: .init(all: 20))

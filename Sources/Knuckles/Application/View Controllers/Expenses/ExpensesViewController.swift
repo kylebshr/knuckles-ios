@@ -29,9 +29,6 @@ class ExpensesViewController: ViewController, UITableViewDataSource, UITableView
             action: #selector(presentCreateExpense)
         )
 
-        tableView.separatorStyle = .none
-        tableView.layoutMargins.left = 30
-        tableView.layoutMargins.right = 30
         tableView.showsVerticalScrollIndicator = true
         tableView.tableFooterView = UIView()
         tableView.dataSource = self
@@ -73,6 +70,7 @@ class ExpensesViewController: ViewController, UITableViewDataSource, UITableView
             self?.tableView.endUpdates()
         }
 
+        action.backgroundColor = .customRed
         return UISwipeActionsConfiguration(actions: [action])
     }
 
@@ -90,9 +88,11 @@ class ExpensesViewController: ViewController, UITableViewDataSource, UITableView
 
 private class ExpenseCell: UITableViewCell {
 
-    private let emojiView = UILabel(font: .rubik(ofSize: 24, weight: .regular))
-    private let nameLabel = UILabel(font: .rubik(ofSize: 16, weight: .medium))
-    private let statusLabel = UILabel(font: .rubik(ofSize: 16, weight: .medium))
+    private let nameLabel = UILabel(font: .systemFont(ofSize: 20, weight: .medium))
+    private let statusLabel = UILabel(font: .systemFont(ofSize: 17, weight: .medium))
+
+    private let paymentControl = RevenueControl(direction: .payment)
+    private let incomeControl = RevenueControl(direction: .income)
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -100,38 +100,55 @@ private class ExpenseCell: UITableViewCell {
         statusLabel.setHuggingAndCompression(to: .required)
         statusLabel.textAlignment = .right
 
-        emojiView.setHuggingAndCompression(to: .required, for: .vertical)
-        emojiView.widthAnchor.pin(to: emojiView.heightAnchor, multiplier: 1.1)
-        emojiView.textAlignment = .center
-
+        contentView.layoutMargins.top = 16
+        contentView.layoutMargins.bottom = 16
         backgroundColor = .customBackground
-        contentView.layoutMargins = .init(vertical: 20, horizontal: 30)
 
-        let horizontalStack = UIStackView(arrangedSubviews: [emojiView, nameLabel, statusLabel])
-        horizontalStack.alignment = .center
-        horizontalStack.distribution = .fill
-        horizontalStack.spacing = 8
+        let topStack = UIStackView(arrangedSubviews: [nameLabel, statusLabel])
+        topStack.alignment = .firstBaseline
+        topStack.distribution = .fill
+        topStack.spacing = 8
 
-        contentView.addSubview(horizontalStack)
-        horizontalStack.pinEdges(to: contentView.layoutMarginsGuide)
+        let bottomStack = UIStackView(arrangedSubviews: [paymentControl, incomeControl])
+        bottomStack.alignment = .firstBaseline
+        bottomStack.distribution = .fill
+        bottomStack.spacing = 8
+
+        let containerStack = UIStackView(arrangedSubviews: [topStack, bottomStack])
+        containerStack.axis = .vertical
+        containerStack.alignment = .fill
+        containerStack.spacing = 6
+
+        contentView.addSubview(containerStack)
+        containerStack.pinEdges(to: contentView.layoutMarginsGuide)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        contentView.backgroundColor = highlighted ? UIColor.black.withAlphaComponent(0.1) : .clear
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        contentView.backgroundColor = selected ? UIColor.black.withAlphaComponent(0.1) : .clear
+    }
+
     func display(expense: Expense, in period: PayPeriod) {
         nameLabel.text = expense.name
-        emojiView.text = expense.emoji
 
         let state = expense.fundingState(using: period)
         statusLabel.text = state.text
 
         switch state {
         case .funded:
-            statusLabel.textColor = .customBlue
+            statusLabel.textColor = .brand
         case .paid, .onTrack:
             statusLabel.textColor = .customLabel
         }
+
+        paymentControl.display(amount: expense.amount, period: "month")
+        incomeControl.display(amount: expense.nextAmountSaved(), period: "payday")
     }
 }
