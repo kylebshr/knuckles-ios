@@ -29,8 +29,8 @@ class BalanceController {
 
         NotificationCenter.default.addObserver(self, selector: #selector(refresh), name: UIApplication.didBecomeActiveNotification, object: nil)
 
-        expensesObservation = UserDefaults.shared.observe(\.expenses, changeHandler: { [weak self] defaults, _ in
-            self?.update(account: defaults.account)
+        expensesObservation = UserDefaults.shared.observe(\.expenses, changeHandler: { [weak self] _, _ in
+            self?.update(account: UserDefaults.shared.account)
         })
     }
 
