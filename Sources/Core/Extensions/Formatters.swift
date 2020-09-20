@@ -62,9 +62,9 @@ extension Decimal {
 
         let abbreviations: [Abbrevation] = [
             (0, 1, ""),
-            (1000.0, 1000.0, "K"),
-            (100_000.0, 1_000_000.0, "M"),
-            (100_000_000.0, 1_000_000_000.0, "B"),
+            (1000.0, 1000.0, "k"),
+            (100_000.0, 1_000_000.0, "m"),
+            (100_000_000.0, 1_000_000_000.0, "b"),
         ]
         let startValue = abs(self)
         let abbreviation: Abbrevation = {

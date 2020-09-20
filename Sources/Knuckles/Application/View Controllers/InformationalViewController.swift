@@ -18,7 +18,7 @@ class InformationalViewController: ViewController {
 
     init(user: User) {
         super.init()
-        tabBarItem = UITabBarItem(title: "Goals", image: UIImage(systemName: "umbrella"), tag: 0)
+        tabBarItem = UITabBarItem(title: "Goals", image: nil, tag: 0)
     }
 
     override func viewDidLoad() {
@@ -46,9 +46,27 @@ class InformationalViewController: ViewController {
     }
 
     private func update(amount: BalanceController.BalanceState) {
+        tabBarItem = UITabBarItem(amount: amount.balance)
         balanceView.display(balance: amount.balance)
         accountView.display(balance: amount.account)
         expensesView.display(balance: amount.expenses)
         goalsView.display(balance: amount.goals)
     }
+}
+
+private extension UITabBarItem {
+
+    private static let label = UILabel(font: .systemFont(ofSize: 20, weight: .bold))
+
+    convenience init(amount: Decimal) {
+        Self.label.text = "$\(amount.abbreviated())"
+        Self.label.sizeToFit()
+
+        let image = UIGraphicsImageRenderer(bounds: Self.label.bounds).image { context in
+            Self.label.layer.render(in: context.cgContext)
+        }
+
+        self.init(title: "", image: image, tag: 0)
+    }
+
 }
