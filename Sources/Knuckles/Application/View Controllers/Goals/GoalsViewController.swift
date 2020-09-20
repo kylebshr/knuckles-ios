@@ -25,12 +25,12 @@ class GoalsViewController: ViewController, UITableViewDelegate, UITableViewDataS
         tableView.pinEdges(to: view)
 
         navigationItem.title = "Goals"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "plus"),
-            style: .done,
-            target: self,
-            action: #selector(presentCreateGoal)
-        )
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(
+//            image: UIImage(systemName: "plus"),
+//            style: .done,
+//            target: self,
+//            action: #selector(presentCreateGoal)
+//        )
 
         tableView.showsVerticalScrollIndicator = true
         tableView.tableFooterView = UIView()
@@ -38,6 +38,9 @@ class GoalsViewController: ViewController, UITableViewDelegate, UITableViewDataS
         tableView.delegate = self
         tableView.backgroundColor = .customBackground
         tableView.register(cell: GoalCell.self)
+
+        tableView.separatorStyle = .none
+        tableView.register(cell: PlaceholderCell.self)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -46,14 +49,16 @@ class GoalsViewController: ViewController, UITableViewDelegate, UITableViewDataS
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        goals.count
+        1 // goals.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeue(for: indexPath) as GoalCell
-        let goal = goals[indexPath.row]
-        cell.display(goal: goal, in: payPeriod)
-        return cell
+//        let cell = tableView.dequeue(for: indexPath) as GoalCell
+//        let goal = goals[indexPath.row]
+//        cell.display(goal: goal, in: payPeriod)
+//        return cell
+
+        tableView.dequeue(for: indexPath) as PlaceholderCell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -85,6 +90,21 @@ class GoalsViewController: ViewController, UITableViewDelegate, UITableViewDataS
         goals = UserDefaults.shared.goals
             .sorted { $0.sortingDate() < $1.sortingDate() }
         tableView.reloadData()
+    }
+}
+
+private class PlaceholderCell: UITableViewCell {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        let label = UILabel(font: .systemFont(ofSize: 17, weight: .bold), color: .customTertiaryLabel, alignment: .center)
+        label.text = "Coming soon"
+        contentView.addSubview(label)
+        label.pinEdges(to: contentView.layoutMarginsGuide, insets: .init(vertical: 80, horizontal: 0))
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 

@@ -24,7 +24,7 @@ class InformationalViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let stackView = UIStackView(arrangedSubviews: [accountView, expensesView, goalsView])
+        let stackView = UIStackView(arrangedSubviews: [accountView, expensesView])
         stackView.axis = .vertical
         stackView.spacing = 16
         stackView.distribution = .fill
