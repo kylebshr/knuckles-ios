@@ -13,10 +13,13 @@ class GoalsViewController: ViewController, UITableViewDelegate, UITableViewDataS
     private let payPeriod = PayPeriod.firstAndFifteenth(adjustForWeekends: true)
     private var goals: [Goal] = []
 
+    override init() {
+        super.init()
+        tabBarItem = UITabBarItem(title: "Goals", image: UIImage(systemName: "checkmark.square"), tag: 2)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        navigationController?.tabBarItem = UITabBarItem(title: "Goals", image: UIImage(systemName: "umbrella"), tag: 2)
 
         view.addSubview(tableView)
         tableView.pinEdges(to: view)

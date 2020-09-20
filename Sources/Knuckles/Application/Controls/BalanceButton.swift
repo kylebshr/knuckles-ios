@@ -8,19 +8,36 @@
 import UIKit
 
 class BalanceButton: Control {
-    private let balanceLabel = UILabel(font: .systemFont(ofSize: 32), color: .brand)
-    private let descriptionLabel = UILabel(font: .systemFont(ofSize: 17, weight: .semibold), color: .customSecondaryLabel)
+    enum Style {
+        case balance
+        case account(name: String)
+    }
+
+    private let style: Style
+
+    private let balanceLabel: UILabel
+    private let descriptionLabel: UILabel
 
     private lazy var labelStack = UIStackView(arrangedSubviews: [descriptionLabel, balanceLabel])
     private lazy var containerStack = UIStackView(arrangedSubviews: [labelStack])
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(style: Style) {
+        self.style = style
 
-        backgroundColor = .customBackground
+        descriptionLabel = UILabel(font: .systemFont(ofSize: 17, weight: .semibold), color: .customSecondaryLabel)
+
+        switch style {
+        case .balance:
+            descriptionLabel.text = "Balance"
+            balanceLabel = UILabel(font: .systemFont(ofSize: 35, weight: .bold), color: .brand)
+        case .account(let name):
+            descriptionLabel.text = name
+            balanceLabel = UILabel(font: .systemFont(ofSize: 26, weight: .bold), color: .customTertiaryLabel)
+        }
+
+        super.init(frame: .zero)
 
         display(balance: 0)
-        descriptionLabel.text = "Balance"
 
         labelStack.axis = .vertical
 
@@ -32,6 +49,11 @@ class BalanceButton: Control {
     }
 
     func display(balance: Decimal) {
-        balanceLabel.text = balance.currency()
+        let text = balance.currency()
+        balanceLabel.text = text
+
+        if case .account = style, text.hasSuffix(".00") {
+            balanceLabel.text = String(text.dropLast(3))
+        }
     }
 }

@@ -47,8 +47,8 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         }
     }
 
-    private func update(amount: Decimal) {
-        button.display(balance: amount)
+    private func update(amount: BalanceController.BalanceState) {
+        button.display(balance: amount.balance)
     }
 
     @objc private func openApplication() {

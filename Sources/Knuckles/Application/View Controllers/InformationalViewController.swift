@@ -9,50 +9,34 @@ import Combine
 import UIKit
 
 class InformationalViewController: ViewController {
-    private let balanceButton = BalanceButton()
+    private let balanceView = BalanceButton(style: .balance)
+    private let accountView = BalanceButton(style: .account(name: "Account"))
+    private let expensesView = BalanceButton(style: .account(name: "Expenses"))
+    private let goalsView = BalanceButton(style: .account(name: "Goals"))
 
     private var observer: AnyCancellable?
 
     init(user: User) {
         super.init()
+        tabBarItem = UITabBarItem(title: "Goals", image: UIImage(systemName: "umbrella"), tag: 0)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationController?.tabBarItem = UITabBarItem(title: "TODO", image: nil, tag: 0)
-
-        let container = UIView()
-        container.layer.cornerRadius = 20
-        container.layer.cornerCurve = .continuous
-        container.layer.borderColor = UIColor.customLabel.withAlphaComponent(0.5).cgColor
-        container.layer.borderWidth = .pixel
-
-        let stackView = UIStackView()
+        let stackView = UIStackView(arrangedSubviews: [accountView, expensesView, goalsView])
         stackView.axis = .vertical
-        stackView.spacing = 4
+        stackView.spacing = 16
         stackView.distribution = .fill
-        stackView.alignment = .fill
-        stackView.spacing = 35
+        stackView.alignment = .leading
 
         view.addSubview(stackView)
-        stackView.pinEdges(to: view.layoutMarginsGuide)
+        stackView.pinEdges([.left, .right], to: view.layoutMarginsGuide)
+        stackView.pinCenter(to: view.layoutMarginsGuide)
 
-        let topView = UIView()
-        stackView.addArrangedSubview(topView)
-
-        balanceButton.display(balance: 0)
-        container.addSubview(balanceButton)
-        balanceButton.pinEdges([.left, .right, .top], to: container, insets: .init(all: 18))
-        container.widthAnchor.pin(to: container.heightAnchor, multiplier: 1.6)
-
-        stackView.addArrangedSubview(container)
-
-        let middleView = UIView()
-        stackView.addArrangedSubview(middleView)
-        middleView.heightAnchor.pin(to: topView.heightAnchor, multiplier: 2)
-
-        navigationItem.rightBarButtonItem = .init(image: UIImage(systemName: "person"), style: .done, target: self, action: #selector(logout))
+        navigationController?.navigationBar.layoutMargins = view.layoutMargins
+        navigationController!.navigationBar.addSubview(balanceView)
+        balanceView.pinEdges([.left, .bottom], to: navigationController!.navigationBar.layoutMarginsGuide)
 
         observer = BalanceController.shared.$balance.sink(receiveValue: update)
     }
@@ -61,9 +45,10 @@ class InformationalViewController: ViewController {
         UserDefaults.shared.logout()
     }
 
-    @objc private func update(amount: Decimal) {
-        balanceButton.display(balance: amount)
-//        tabItem = .text("$" + amount.abbreviated())
-//        parent(ofType: TabBarController.self)?.updateTabs()
+    private func update(amount: BalanceController.BalanceState) {
+        balanceView.display(balance: amount.balance)
+        accountView.display(balance: amount.account)
+        expensesView.display(balance: amount.expenses)
+        goalsView.display(balance: amount.goals)
     }
 }

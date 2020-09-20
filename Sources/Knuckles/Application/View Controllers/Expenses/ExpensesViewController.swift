@@ -14,17 +14,21 @@ class ExpensesViewController: ViewController, UITableViewDataSource, UITableView
     private var observation: NSKeyValueObservation?
     private var expenses: [Expense] = []
 
+    override init() {
+        super.init()
+        tabBarItem = UITabBarItem(title: "Expenses", image: UIImage(systemName: "calendar"), tag: 1)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        navigationController?.tabBarItem = UITabBarItem(title: "Expenses", image: UIImage(systemName: "calendar"), tag: 1)
 
         view.addSubview(tableView)
         tableView.pinEdges(to: view)
 
         navigationItem.title = "Expenses"
         navigationItem.rightBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .add,
+            image: UIImage(systemName: "plus"),
+            style: .done,
             target: self,
             action: #selector(presentCreateExpense)
         )
@@ -70,7 +74,6 @@ class ExpensesViewController: ViewController, UITableViewDataSource, UITableView
             self?.presentDelete(for: indexPath, confirm: confirm)
         }
 
-        action.backgroundColor = .customRed
         return UISwipeActionsConfiguration(actions: [action])
     }
 
@@ -164,9 +167,9 @@ private class ExpenseCell: UITableViewCell {
 
         switch state {
         case .funded:
-            statusLabel.textColor = .brand
-        case .paid, .onTrack:
             statusLabel.textColor = .customLabel
+        case .paid, .onTrack:
+            statusLabel.textColor = .customTertiaryLabel
         }
 
         paymentControl.display(amount: expense.amount, text: DateFormatter.readyByFormatter.string(from: expense.nextDueDate()))

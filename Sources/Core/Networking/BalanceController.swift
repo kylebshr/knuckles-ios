@@ -9,17 +9,29 @@ import Combine
 import UIKit
 
 class BalanceController {
+    struct BalanceState {
+        var balance: Decimal
+        var account: Decimal
+        var expenses: Decimal
+        var goals: Decimal
+    }
 
     static let shared = BalanceController()
 
-    @Published var balance: Decimal = 0
+    @Published var balance: BalanceState = BalanceState(balance: 0, account: 0, expenses: 0, goals: 0)
 
+    private var expensesObservation: NSKeyValueObservation?
     private var lastUpdate = Date(timeIntervalSince1970: 0)
 
     init() {
-        update(balance: UserDefaults.shared.balance)
+        update(account: UserDefaults.shared.account)
         refresh(completion: nil)
+
         NotificationCenter.default.addObserver(self, selector: #selector(refresh), name: UIApplication.didBecomeActiveNotification, object: nil)
+
+        expensesObservation = UserDefaults.shared.observe(\.expenses, changeHandler: { [weak self] defaults, _ in
+            self?.update(account: defaults.account)
+        })
     }
 
     @objc private func refresh() {
@@ -37,8 +49,8 @@ class BalanceController {
 
             switch result {
             case .success(let balance):
-                UserDefaults.shared.balance = balance.amount
-                self.update(balance: balance.amount)
+                UserDefaults.shared.account = balance.amount
+                self.update(account: balance.amount)
                 self.lastUpdate = Date()
                 completion?(true)
             default:
@@ -47,7 +59,7 @@ class BalanceController {
         }
     }
 
-    private func update(balance: Decimal) {
+    private func update(account: Decimal) {
         let goals = UserDefaults.shared.goals
         let expenses = UserDefaults.shared.expenses
 
@@ -56,6 +68,7 @@ class BalanceController {
         let goalAmount = goals.reduce(0, { $0 + $1.amountSaved(using: period) })
         let expenseAmount = expenses.reduce(0, { $0 + $1.amountSaved(using: period) })
 
-        self.balance = balance - goalAmount - expenseAmount
+        let balance = account - goalAmount - expenseAmount
+        self.balance = .init(balance: balance, account: account, expenses: expenseAmount, goals: goalAmount)
     }
 }

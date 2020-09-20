@@ -30,6 +30,7 @@ class MainViewController: ViewController {
         expenses.navigationBar.prefersLargeTitles = true
 
         let information = NavigationController(rootViewController: informationalViewController)
+        information.navigationBar.prefersLargeTitles = true
 
         tabBarViewController.viewControllers = [
             information,
