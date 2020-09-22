@@ -60,12 +60,12 @@ struct WidgetEntryView: View {
                         .fontWeight(.semibold)
                         .foregroundColor(Color(.customLabel))
                     Text(entry.balance.balance.currency())
-                        .font(.title)
+                        .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(Color(.brand))
                         .minimumScaleFactor(0.1)
                         .scaledToFit()
-                    Spacer(minLength: 12)
+                    Spacer()
                     Text("COMING UP")
                         .font(.caption)
                         .fontWeight(.semibold)
@@ -74,7 +74,7 @@ struct WidgetEntryView: View {
                         Color(.systemGroupedBackground)
                             .clipShape(ContainerRelativeShape())
                         HStack(alignment: .center) {
-                            VStack {
+                            VStack(alignment: .leading) {
                                 Text("Netflix")
                                     .font(.body)
                                     .fontWeight(.semibold)
@@ -85,8 +85,10 @@ struct WidgetEntryView: View {
                             Image(systemName: "arrow.up.right")
                                 .font(Font.system(size: 15, weight: .semibold))
                                 .foregroundColor(.red)
-                        }.padding(8)
-                    }.padding(-8)
+                        }
+                        .padding(8)
+                    }
+                    .padding(-8)
                 }
                 .padding()
             }
@@ -104,6 +106,7 @@ struct BalanceWidget: Widget {
         }
         .configurationDisplayName("Balance")
         .description("Show your balance (account value less expenses and goals).")
+        .supportedFamilies([.systemSmall])
     }
 }
 
@@ -111,6 +114,8 @@ struct Widget_Previews: PreviewProvider {
     static var previews: some View {
         let entry = SimpleEntry(date: Date(), configuration: ConfigurationIntent(), balance: BalanceState(balance: 473.19, account: 0, expenses: 0, goals: 0))
         WidgetEntryView(entry: entry)
+            .previewContext(WidgetPreviewContext(family: .systemSmall))
+        WidgetEntryView(entry: entry).redacted(reason: .placeholder)
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }
