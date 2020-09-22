@@ -7,14 +7,16 @@
 
 import Combine
 import UIKit
+import WidgetKit
 
-class BalanceController {
-    struct BalanceState {
-        var balance: Decimal
-        var account: Decimal
-        var expenses: Decimal
-        var goals: Decimal
-    }
+struct BalanceState {
+    var balance: Decimal
+    var account: Decimal
+    var expenses: Decimal
+    var goals: Decimal
+}
+
+class BalanceController: ObservableObject {
 
     static let shared = BalanceController()
 
@@ -44,14 +46,17 @@ class BalanceController {
             return
         }
 
+        self.lastUpdate = Date()
+
         ResourceProvider.shared.fetchResource(at: "balance") { [weak self] (result: ErrorResult<Balance>) in
             guard let self = self else { return }
+
+            print("Got balance")
 
             switch result {
             case .success(let balance):
                 UserDefaults.shared.account = balance.amount
                 self.update(account: balance.amount)
-                self.lastUpdate = Date()
                 completion?(true)
             default:
                 completion?(false)
@@ -70,5 +75,9 @@ class BalanceController {
 
         let balance = account - goalAmount - expenseAmount
         self.balance = .init(balance: balance, account: account, expenses: expenseAmount, goals: goalAmount)
+
+        if #available(iOS 14.0, *) {
+            WidgetCenter.shared.reloadAllTimelines()
+        }
     }
 }

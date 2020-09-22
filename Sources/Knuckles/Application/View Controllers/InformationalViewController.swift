@@ -24,6 +24,13 @@ class InformationalViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "person"),
+            style: .done,
+            target: self,
+            action: #selector(openSettings)
+        )
+
         let stackView = UIStackView(arrangedSubviews: [accountView, expensesView])
         stackView.axis = .vertical
         stackView.spacing = 16
@@ -35,17 +42,18 @@ class InformationalViewController: ViewController {
         stackView.pinCenter(to: view.layoutMarginsGuide)
 
         navigationController?.navigationBar.layoutMargins = view.layoutMargins
-        navigationController!.navigationBar.addSubview(balanceView)
+        navigationController?.navigationBar.addSubview(balanceView)
         balanceView.pinEdges([.left, .bottom], to: navigationController!.navigationBar.layoutMarginsGuide)
 
         observer = BalanceController.shared.$balance.sink(receiveValue: update)
     }
 
-    @objc private func logout() {
-        UserDefaults.shared.logout()
+    @objc private func openSettings() {
+        let viewController = NavigationController(rootViewController: SettingsViewController())
+        present(viewController, animated: true, completion: nil)
     }
 
-    private func update(amount: BalanceController.BalanceState) {
+    private func update(amount: BalanceState) {
         tabBarItem = UITabBarItem(amount: amount.balance)
         balanceView.display(balance: amount.balance)
         accountView.display(balance: amount.account)

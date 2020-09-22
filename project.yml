@@ -31,7 +31,7 @@ targets:
       - path: Sources/Core
     
     dependencies:
-      - target: TodayExtension
+      - target: Widget
       - carthage: LinkKit
     
     entitlements:
@@ -48,6 +48,7 @@ targets:
       VERSIONING_SYSTEM: Apple Generic
       CURRENT_PROJECT_VERSION: 1
       TARGETED_DEVICE_FAMILY: 1
+      MARKETING_VERSION: "0.0.1"
   
   KnucklesTests:
     type: bundle.unit-test
@@ -59,15 +60,15 @@ targets:
     dependencies:
       - target: Knuckles
 
-  TodayExtension:
+  Widget:
     type: app-extension
     platform: iOS
 
     dependencies:
-      - sdk: NotificationCenter.framework
+      - sdk: WidgetKit.framework
 
     entitlements:
-      path: TodayExtension.entitlements
+      path: Widget.entitlements
       properties:
         com.apple.security.application-groups:
           - group.com.kylebashour.knuckles
@@ -77,11 +78,12 @@ targets:
       Release: xcconfig/TodayExtension-Release.xcconfig
 
     sources:
-      - path: Sources/TodayExtension
+      - path: Sources/Widget
       - path: Sources/Core
 
     settings:
-      INFOPLIST_FILE: Sources/TodayExtension/Info.plist
+      IPHONEOS_DEPLOYMENT_TARGET: 14.0
+      INFOPLIST_FILE: Sources/Widget/Info.plist
       ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: true
-      PRODUCT_BUNDLE_IDENTIFIER: "com.kylebashour.knuckles.TodayExtension"
+      PRODUCT_BUNDLE_IDENTIFIER: "com.kylebashour.knuckles.Widget"
 
