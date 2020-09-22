@@ -52,7 +52,7 @@ struct WidgetEntryView: View {
 
     var body: some View {
         ZStack {
-            Color(.greenBackground)
+            Color.white
             HStack {
                 VStack(alignment: .leading) {
                     Text("Balance")
@@ -60,15 +60,35 @@ struct WidgetEntryView: View {
                         .fontWeight(.semibold)
                         .foregroundColor(Color(.customLabel))
                     Text(entry.balance.balance.currency())
-                        .font(.largeTitle)
-                        .fontWeight(.regular)
+                        .font(.title)
+                        .fontWeight(.bold)
                         .foregroundColor(Color(.brand))
                         .minimumScaleFactor(0.1)
                         .scaledToFit()
-                    Spacer()
+                    Spacer(minLength: 12)
+                    Text("COMING UP")
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                    Spacer(minLength: 12)
+                    ZStack {
+                        Color(.systemGroupedBackground)
+                            .clipShape(ContainerRelativeShape())
+                        HStack(alignment: .center) {
+                            VStack {
+                                Text("Netflix")
+                                    .font(.body)
+                                    .fontWeight(.semibold)
+                                Text("$15.99")
+                                    .font(.body)
+                            }
+                            Spacer()
+                            Image(systemName: "arrow.up.right")
+                                .font(Font.system(size: 15, weight: .semibold))
+                                .foregroundColor(.red)
+                        }.padding(8)
+                    }.padding(-8)
                 }
                 .padding()
-                Spacer()
             }
         }
     }
@@ -89,7 +109,7 @@ struct BalanceWidget: Widget {
 
 struct Widget_Previews: PreviewProvider {
     static var previews: some View {
-        let entry = SimpleEntry(date: Date(), configuration: ConfigurationIntent(), balance: BalanceState(balance: 100, account: 0, expenses: 0, goals: 0))
+        let entry = SimpleEntry(date: Date(), configuration: ConfigurationIntent(), balance: BalanceState(balance: 473.19, account: 0, expenses: 0, goals: 0))
         WidgetEntryView(entry: entry)
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
