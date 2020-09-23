@@ -65,30 +65,35 @@ struct WidgetEntryView: View {
                         .foregroundColor(Color(.brand))
                         .minimumScaleFactor(0.1)
                         .scaledToFit()
-                    Spacer()
-                    Text("COMING UP")
-                        .font(.caption)
-                        .fontWeight(.semibold)
-                    Spacer(minLength: 12)
+                    Spacer(minLength: 15)
                     ZStack {
-                        Color(.systemGroupedBackground)
+                        Color(.bubbleBackground)
                             .clipShape(ContainerRelativeShape())
-                        HStack(alignment: .center) {
+                        VStack(alignment: .leading) {
+                            Text("Due next")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.secondary)
+
+                        HStack {
                             VStack(alignment: .leading) {
+
                                 Text("Netflix")
                                     .font(.body)
                                     .fontWeight(.semibold)
                                 Text("$15.99")
                                     .font(.body)
+                                    .foregroundColor(.secondary)
                             }
                             Spacer()
                             Image(systemName: "arrow.up.right")
                                 .font(Font.system(size: 15, weight: .semibold))
                                 .foregroundColor(.red)
                         }
+                        }
                         .padding(8)
                     }
-                    .padding(-8)
+                    .padding([.leading, .trailing, .bottom], -8)
                 }
                 .padding()
             }

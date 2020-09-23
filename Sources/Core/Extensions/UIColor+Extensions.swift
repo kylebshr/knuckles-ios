@@ -14,6 +14,7 @@ extension UIColor {
 
     static let brand = UIColor(displayP3Red: 0.152, green: 0.368, blue: 0.871, alpha: 1)
     static let greenBackground = UIColor(displayP3Red: 0.878, green: 0.976, blue: 0.953, alpha: 1)
+    static let bubbleBackground = UIColor(displayP3Red: 0.962, green: 0.962, blue: 0.962, alpha: 1)
 
     static let customBlue = UIColor(displayP3Red: 0.325, green: 0.596, blue: 1.000, alpha: 1)
     static let customRed = UIColor(displayP3Red: 1, green: 0.376, blue: 0.486, alpha: 1)
