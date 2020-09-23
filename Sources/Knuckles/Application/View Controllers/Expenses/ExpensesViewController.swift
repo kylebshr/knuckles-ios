@@ -103,7 +103,6 @@ class ExpensesViewController: ViewController, UITableViewDelegate {
 
     private func reload(using expenses: [Expense]) {
         let animate = !dataSource.snapshot().itemIdentifiers.isEmpty
-        let expenses = expenses.sorted { $0.sortingDate() < $1.sortingDate() }
         var snapshot = NSDiffableDataSourceSnapshot<String, Expense>()
         snapshot.appendSections(["Expenses"])
         snapshot.appendItems(expenses)

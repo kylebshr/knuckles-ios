@@ -53,50 +53,48 @@ struct WidgetEntryView: View {
 
     var body: some View {
         ZStack {
-            Color.white
+            Color(.customBackground)
             HStack {
                 VStack(alignment: .leading) {
                     Text("Balance")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .foregroundColor(Color(.customLabel))
-                    Text(entry.balance?.balance(using: .current).currency() ?? "Loading...")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .foregroundColor(Color(.brand))
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(Color(.customSecondaryLabel))
+                    let balance = entry.balance?.balance(using: .current).currency() ?? "Loading..."
+                    Text(balance)
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundColor(Color(.emphasis))
                         .minimumScaleFactor(0.1)
                         .scaledToFit()
-                    Spacer(minLength: 15)
-                    ZStack {
-                        Color(.bubbleBackground)
-                            .clipShape(ContainerRelativeShape())
-                        VStack(alignment: .leading) {
-                            Text("Due next")
-                                .font(.caption)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.secondary)
-
-                        HStack {
-                            VStack(alignment: .leading) {
-
-                                Text("Netflix")
-                                    .font(.body)
-                                    .fontWeight(.semibold)
-                                Text("$15.99")
-                                    .font(.body)
-                                    .foregroundColor(.secondary)
+                    Spacer()
+                    if let expense = entry.balance?.expenses.first {
+                        Text("Up next")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(Color(.customSecondaryLabel))
+                        Spacer()
+                        ZStack {
+                            Color(.bubbleBackground)
+                                .clipShape(ContainerRelativeShape())
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(expense.name)
+                                        .font(.system(size: 16, weight: .semibold))
+                                        .foregroundColor(Color(.customLabel))
+                                    Text(expense.amount.currency())
+                                        .font(.system(size: 16, weight: .regular))
+                                        .foregroundColor(Color(.customLabel))
+                                }
+                                Spacer()
+                                Image(systemName: "arrow.up.right")
+                                    .font(Font.system(size: 16, weight: .semibold))
+                                    .foregroundColor(.red)
                             }
-                            Spacer()
-                            Image(systemName: "arrow.up.right")
-                                .font(Font.system(size: 15, weight: .semibold))
-                                .foregroundColor(.red)
+                            .padding(8)
                         }
-                        }
-                        .padding(8)
+                        .padding([.leading, .trailing, .bottom], -8)
                     }
-                    .padding([.leading, .trailing, .bottom], -8)
                 }
                 .padding()
+                Spacer()
             }
         }
     }
@@ -118,9 +116,14 @@ struct BalanceWidget: Widget {
 
 struct Widget_Previews: PreviewProvider {
     static var previews: some View {
-        let entry = SimpleEntry(date: Date(), configuration: ConfigurationIntent(), balance: BalanceState(account: 473.19, expenses: [], goals: []))
+        let expense = Expense(emoji: " ", name: "Netflix", amount: 15.99, dayDueAt: 27)
+        let entry = SimpleEntry(date: Date(), configuration: ConfigurationIntent(),
+                                balance: BalanceState(account: 473.19, expenses: [expense], goals: []))
         WidgetEntryView(entry: entry)
             .previewContext(WidgetPreviewContext(family: .systemSmall))
+        WidgetEntryView(entry: entry)
+            .previewContext(WidgetPreviewContext(family: .systemSmall))
+            .environment(\.colorScheme, .dark)
         WidgetEntryView(entry: entry).redacted(reason: .placeholder)
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }

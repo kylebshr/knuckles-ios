@@ -83,6 +83,8 @@ class BalanceController: ObservableObject {
     private func update(account: Decimal) {
         let goals = UserDefaults.shared.goals
         let expenses = UserDefaults.shared.expenses
+            .sorted { $0.sortingDate() < $1.sortingDate() }
+
         let balance = BalanceState(account: account, expenses: expenses, goals: goals)
 
         guard self.balance != balance else { return }
