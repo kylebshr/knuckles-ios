@@ -29,6 +29,7 @@ targets:
     sources:
       - path: Sources/Knuckles
       - path: Sources/Core
+      - path: Sources/Widget/Widget.intentdefinition
     
     dependencies:
       - target: Widget

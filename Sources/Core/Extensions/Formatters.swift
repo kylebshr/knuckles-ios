@@ -42,6 +42,7 @@ extension Date {
     func day() -> String {
         return DateFormatter.dayFormatter.string(from: self)
     }
+    
 }
 
 extension Decimal {
