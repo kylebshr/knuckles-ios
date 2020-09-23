@@ -11,7 +11,8 @@ import Intents
 
 struct Provider: IntentTimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: ConfigurationIntent(), balance: BalanceController.shared.balance)
+        let balance = BalanceController.shared.balance ?? BalanceState(account: 100, expenses: [], goals: [])
+        return SimpleEntry(date: Date(), configuration: ConfigurationIntent(), balance: balance)
     }
 
     func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SimpleEntry) -> Void) {
@@ -44,7 +45,7 @@ struct Provider: IntentTimelineProvider {
 struct SimpleEntry: TimelineEntry {
     let date: Date
     let configuration: ConfigurationIntent
-    let balance: BalanceState
+    let balance: BalanceState?
 }
 
 struct WidgetEntryView: View {
@@ -59,7 +60,7 @@ struct WidgetEntryView: View {
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundColor(Color(.customLabel))
-                    Text(entry.balance.balance.currency())
+                    Text(entry.balance?.balance(using: .current).currency() ?? "Loading...")
                         .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(Color(.brand))
@@ -117,7 +118,7 @@ struct BalanceWidget: Widget {
 
 struct Widget_Previews: PreviewProvider {
     static var previews: some View {
-        let entry = SimpleEntry(date: Date(), configuration: ConfigurationIntent(), balance: BalanceState(balance: 473.19, account: 0, expenses: 0, goals: 0))
+        let entry = SimpleEntry(date: Date(), configuration: ConfigurationIntent(), balance: BalanceState(account: 473.19, expenses: [], goals: []))
         WidgetEntryView(entry: entry)
             .previewContext(WidgetPreviewContext(family: .systemSmall))
         WidgetEntryView(entry: entry).redacted(reason: .placeholder)

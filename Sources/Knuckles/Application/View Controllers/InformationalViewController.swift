@@ -53,12 +53,11 @@ class InformationalViewController: ViewController {
         present(viewController, animated: true, completion: nil)
     }
 
-    private func update(amount: BalanceState) {
-        tabBarItem = UITabBarItem(amount: amount.balance)
-        balanceView.display(balance: amount.balance)
-        accountView.display(balance: amount.account)
-        expensesView.display(balance: amount.expenses)
-        goalsView.display(balance: amount.goals)
+    private func update(amount: BalanceState?) {
+        guard let amount = amount else { return }
+        let balance = amount.balance(using: .current)
+        tabBarItem = UITabBarItem(amount: balance)
+        balanceView.display(balance: balance)
     }
 }
 

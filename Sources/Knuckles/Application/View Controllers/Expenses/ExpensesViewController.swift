@@ -5,14 +5,19 @@
 //  Created by Kyle Bashour on 5/20/20.
 //
 
+import Combine
 import UIKit
 
-class ExpensesViewController: ViewController, UITableViewDataSource, UITableViewDelegate {
-    private let tableView = UITableView()
+class ExpensesViewController: ViewController, UITableViewDelegate {
+    private class DataSource: UITableViewDiffableDataSource<String, Expense> {
+        override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+            true
+        }
+    }
 
-    private let payPeriod = PayPeriod.firstAndFifteenth(adjustForWeekends: true)
-    private var observation: NSKeyValueObservation?
-    private var expenses: [Expense] = []
+    private let tableView = UITableView()
+    private var observation: AnyCancellable?
+    private lazy var dataSource = makeDataSource()
 
     override init() {
         super.init()
@@ -35,34 +40,26 @@ class ExpensesViewController: ViewController, UITableViewDataSource, UITableView
 
         tableView.showsVerticalScrollIndicator = true
         tableView.tableFooterView = UIView()
-        tableView.dataSource = self
+        tableView.dataSource = dataSource
         tableView.delegate = self
         tableView.backgroundColor = .customBackground
         tableView.register(cell: ExpenseCell.self)
 
-        observation = UserDefaults.shared.observe(\.expenses, options: .initial) { [weak self] _, _ in
-            self?.reload()
+        observation = BalanceController.shared.$balance.sink { [weak self] state in
+            self?.reload(using: state?.expenses ?? [])
         }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        reload()
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        expenses.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeue(for: indexPath) as ExpenseCell
-        let expense = expenses[indexPath.row]
-        cell.display(expense: expense, in: payPeriod)
-        return cell
+    private func makeDataSource() -> DataSource {
+        DataSource(tableView: tableView) { tableView, indexPath, item in
+            let cell = tableView.dequeue(for: indexPath) as ExpenseCell
+            cell.display(expense: item, in: .current)
+            return cell
+        }
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let expense = expenses[indexPath.row]
+        let expense = dataSource.itemIdentifier(for: indexPath)!
         let detailViewController = ExpenseDetailViewController(expense: expense)
         show(detailViewController, sender: self)
     }
@@ -83,14 +80,11 @@ class ExpensesViewController: ViewController, UITableViewDataSource, UITableView
     }
 
     func presentDelete(for indexPath: IndexPath, confirm: @escaping (Bool) -> Void) {
-        let sheet = UIAlertController(
-            title: "Delete \(expenses[indexPath.row].name)?",
-            message: nil,
-            preferredStyle: .actionSheet
-        )
+        let expense = dataSource.itemIdentifier(for: indexPath)!
+        let sheet = UIAlertController(title: "Delete \(expense.name)?", message: nil, preferredStyle: .actionSheet)
 
         sheet.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
-            self?.delete(at: indexPath)
+            self?.delete(expense: expense)
             confirm(true)
         }))
 
@@ -101,19 +95,19 @@ class ExpensesViewController: ViewController, UITableViewDataSource, UITableView
         present(sheet, animated: true, completion: nil)
     }
 
-    private func delete(at indexPath: IndexPath) {
-        tableView.beginUpdates()
-        expenses.remove(at: indexPath.row)
-        tableView.deleteRows(at: [indexPath], with: .automatic)
-        tableView.endUpdates()
-
-        UserDefaults.shared.expenses.remove(at: indexPath.row)
+    private func delete(expense: Expense) {
+        var expenses = UserDefaults.shared.expenses
+        expenses.removeAll(where: { $0 == expense })
+        UserDefaults.shared.expenses = expenses
     }
 
-    private func reload() {
-        expenses = UserDefaults.shared.expenses
-            .sorted { $0.sortingDate() < $1.sortingDate() }
-        tableView.reloadData()
+    private func reload(using expenses: [Expense]) {
+        let animate = !dataSource.snapshot().itemIdentifiers.isEmpty
+        let expenses = expenses.sorted { $0.sortingDate() < $1.sortingDate() }
+        var snapshot = NSDiffableDataSourceSnapshot<String, Expense>()
+        snapshot.appendSections(["Expenses"])
+        snapshot.appendItems(expenses)
+        dataSource.apply(snapshot, animatingDifferences: animate)
     }
 }
 

@@ -9,18 +9,29 @@ import Combine
 import UIKit
 import WidgetKit
 
-struct BalanceState {
-    var balance: Decimal
+struct BalanceState: Equatable {
     var account: Decimal
-    var expenses: Decimal
-    var goals: Decimal
+    var expenses: [Expense]
+    var goals: [Goal]
+
+    func balance(using period: PayPeriod) -> Decimal {
+        account - goalsAmount(using: period) - expensesAmount(using: period)
+    }
+
+    func goalsAmount(using period: PayPeriod) -> Decimal {
+        goals.reduce(0, { $0 + $1.amountSaved(using: period) })
+    }
+
+    func expensesAmount(using period: PayPeriod) -> Decimal {
+        expenses.reduce(0, { $0 + $1.amountSaved(using: period) })
+    }
 }
 
 class BalanceController: ObservableObject {
 
     static let shared = BalanceController()
 
-    @Published var balance: BalanceState = BalanceState(balance: 0, account: 0, expenses: 0, goals: 0)
+    @Published var balance: BalanceState?
 
     private var expensesObservation: NSKeyValueObservation?
     private var lastUpdate = Date(timeIntervalSince1970: 0)
@@ -30,10 +41,7 @@ class BalanceController: ObservableObject {
         refresh(completion: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(refresh), name: UIApplication.didBecomeActiveNotification, object: nil)
-
-        expensesObservation = UserDefaults.shared.observe(\.expenses, changeHandler: { [weak self] _, _ in
-            self?.update(account: UserDefaults.shared.account)
-        })
+        NotificationCenter.default.addObserver(self, selector: #selector(updateIfPossible), name: UserDefaults.didChangeNotification, object: nil)
     }
 
     @objc private func refresh() {
@@ -64,17 +72,22 @@ class BalanceController: ObservableObject {
         }
     }
 
+    @objc private func updateIfPossible() {
+        guard let account = balance?.account else {
+            return
+        }
+
+        update(account: account)
+    }
+
     private func update(account: Decimal) {
         let goals = UserDefaults.shared.goals
         let expenses = UserDefaults.shared.expenses
+        let balance = BalanceState(account: account, expenses: expenses, goals: goals)
 
-        let period = PayPeriod.current
+        guard self.balance != balance else { return }
 
-        let goalAmount = goals.reduce(0, { $0 + $1.amountSaved(using: period) })
-        let expenseAmount = expenses.reduce(0, { $0 + $1.amountSaved(using: period) })
-
-        let balance = account - goalAmount - expenseAmount
-        self.balance = .init(balance: balance, account: account, expenses: expenseAmount, goals: goalAmount)
+        self.balance = balance
 
         if #available(iOS 14.0, *) {
             WidgetCenter.shared.reloadAllTimelines()
