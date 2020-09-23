@@ -27,15 +27,14 @@ struct Provider: IntentTimelineProvider {
 
     func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> Void) {
 
-        BalanceController.shared.refresh()
+        BalanceController.shared.refresh { _ in
+            let currentDate = Date()
+            let refreshDate = Calendar.current.date(byAdding: .minute, value: 1, to: currentDate)!
+            let entry = SimpleEntry(date: refreshDate, configuration: configuration, balance: BalanceController.shared.balance)
+            let timeline: Timeline<SimpleEntry> = Timeline(entries: [entry], policy: .atEnd)
 
-        let currentDate = Date()
-        let refreshDate = Calendar.current.date(byAdding: .minute, value: 1, to: currentDate)!
-        let entry = SimpleEntry(date: refreshDate, configuration: configuration, balance: BalanceController.shared.balance)
-        let timeline: Timeline<SimpleEntry> = Timeline(entries: [entry], policy: .atEnd)
-
-        completion(timeline)
-
+            completion(timeline)
+        }
     }
 }
 

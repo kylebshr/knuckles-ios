@@ -7,7 +7,6 @@
 
 import Combine
 import UIKit
-import WidgetKit
 
 struct BalanceState: Equatable {
     var account: Decimal
@@ -84,15 +83,9 @@ class BalanceController: ObservableObject {
         let goals = UserDefaults.shared.goals
         let expenses = UserDefaults.shared.expenses
             .sorted { $0.sortingDate() < $1.sortingDate() }
-
         let balance = BalanceState(account: account, expenses: expenses, goals: goals)
 
         guard self.balance != balance else { return }
-
         self.balance = balance
-
-        if #available(iOS 14.0, *) {
-            WidgetCenter.shared.reloadAllTimelines()
-        }
     }
 }

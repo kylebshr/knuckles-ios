@@ -7,9 +7,13 @@
 //
 
 import UIKit
+import WidgetKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+
+    var stateAtBecomeActive: BalanceState?
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         let buttonAppearance = UIBarButtonItemAppearance(style: .plain)
@@ -31,5 +35,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UINavigationBar.appearance().scrollEdgeAppearance = scrollAppearance
 
         return true
+    }
+
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        stateAtBecomeActive = BalanceController.shared.balance
+    }
+
+    func applicationWillResignActive(_ application: UIApplication) {
+        if BalanceController.shared.balance != stateAtBecomeActive {
+            if #available(iOS 14.0, *) {
+                print("Reloading timelines")
+                WidgetCenter.shared.reloadAllTimelines()
+            }
+        }
     }
 }

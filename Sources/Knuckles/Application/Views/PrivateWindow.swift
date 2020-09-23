@@ -13,6 +13,8 @@ class PrivateWindow: UIWindow {
 
     private var observers: [NSObjectProtocol] = []
 
+    private var hideAnimation: UIViewPropertyAnimator?
+
     override init(windowScene: UIWindowScene) {
         super.init(windowScene: windowScene)
 
@@ -29,6 +31,8 @@ class PrivateWindow: UIWindow {
             return
         }
 
+        hideAnimation?.stopAnimation(true)
+
         addSubview(blur)
         blur.effect = nil
         UIViewPropertyAnimator {
@@ -37,17 +41,17 @@ class PrivateWindow: UIWindow {
     }
 
     @objc private func removeBlur() {
-        let animation = UIViewPropertyAnimator {
+        hideAnimation = UIViewPropertyAnimator {
             self.blur.effect = nil
         }
 
-        animation.addCompletion { state in
+        hideAnimation?.addCompletion { state in
             if state == .end {
                 self.blur.removeFromSuperview()
             }
         }
 
-        animation.startAnimation()
+        hideAnimation?.startAnimation()
     }
 
     override func layoutSubviews() {
