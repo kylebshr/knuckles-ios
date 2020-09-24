@@ -37,7 +37,6 @@ extension UITableView {
     }
 }
 
-extension UICollectionViewCell: Reusable {}
 extension UICollectionReusableView: Reusable {}
 
 extension UICollectionView {
