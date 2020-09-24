@@ -1,3 +1,4 @@
+import Combine
 import UIKit
 
 class ViewController: UIViewController {
@@ -5,6 +6,8 @@ class ViewController: UIViewController {
     private var keyboardLayoutGuideBottom: NSLayoutConstraint!
 
     let keyboardLayoutGuide = UILayoutGuide()
+
+    var cancelBag = Set<AnyCancellable>()
 
     init() {
         super.init(nibName: nil, bundle: nil)

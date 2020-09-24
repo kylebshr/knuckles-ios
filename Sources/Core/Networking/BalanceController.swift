@@ -43,7 +43,7 @@ class BalanceController: ObservableObject {
         NotificationCenter.default.addObserver(self, selector: #selector(updateIfPossible), name: UserDefaults.didChangeNotification, object: nil)
     }
 
-    @objc private func refresh() {
+    @objc func refresh() {
         refresh(completion: nil)
     }
 

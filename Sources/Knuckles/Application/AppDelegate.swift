@@ -17,12 +17,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         let buttonAppearance = UIBarButtonItemAppearance(style: .plain)
-        buttonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.customSecondaryLabel]
+        buttonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.brand]
 
         let appearance = UINavigationBarAppearance()
         appearance.configureWithDefaultBackground()
         appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.brand]
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.customSecondaryLabel]
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.customLabel]
         appearance.buttonAppearance = buttonAppearance
 
         UINavigationBar.appearance().standardAppearance = appearance
@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let scrollAppearance = UINavigationBarAppearance()
         scrollAppearance.configureWithTransparentBackground()
         scrollAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.brand]
-        scrollAppearance.titleTextAttributes = [.foregroundColor: UIColor.customSecondaryLabel]
+        scrollAppearance.titleTextAttributes = [.foregroundColor: UIColor.customLabel]
         scrollAppearance.buttonAppearance = buttonAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = scrollAppearance
 

@@ -50,11 +50,7 @@ extension Decimal {
 
     func currency() -> String {
         let string = NumberFormatter.currency.string(from: self as NSNumber)!
-        if string.suffix(3) == ".00" {
-            return String(string.dropLast(3))
-        } else {
-            return string
-        }
+        return string
     }
 
     func abbreviated() -> String {
