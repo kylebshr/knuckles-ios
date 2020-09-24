@@ -46,7 +46,7 @@ extension UIColor {
     static let customSecondaryLabel = UIColor { traits in
         switch traits.userInterfaceStyle {
         case .light: return UIColor(displayP3Red: 0.42, green: 0.439, blue: 0.482, alpha: 1)
-        default: return UIColor(displayP3Red: 0.836, green: 0.858, blue: 0.921, alpha: 1)
+        default: return UIColor(displayP3Red: 0.836, green: 0.858, blue: 0.921, alpha: 0.9)
         }
     }
 

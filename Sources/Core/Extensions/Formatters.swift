@@ -79,9 +79,10 @@ extension Decimal {
         numFormatter.positiveSuffix = abbreviation.suffix
         numFormatter.negativeSuffix = abbreviation.suffix
         numFormatter.allowsFloats = true
+        numFormatter.roundingMode = .down
         numFormatter.minimumIntegerDigits = 1
         numFormatter.minimumFractionDigits = 0
-        numFormatter.maximumFractionDigits = 1
+        numFormatter.maximumFractionDigits = abbreviation.suffix.isEmpty ? 0 : 1
 
         return numFormatter.string(from: value as NSNumber)!
     }

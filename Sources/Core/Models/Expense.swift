@@ -80,7 +80,7 @@ extension Expense {
             case .paid:
                 return "Paid today"
             case .funded:
-                return "Funded"
+                return "Ready"
             case .onTrack:
                 return "On track"
             }

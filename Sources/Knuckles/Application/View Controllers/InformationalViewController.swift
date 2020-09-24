@@ -124,7 +124,7 @@ class InformationalViewController: ViewController, UICollectionViewDelegate {
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = .init(top: 15, leading: 15, bottom: 15, trailing: 15)
+        section.contentInsets = .init(top: 0, leading: 15, bottom: 15, trailing: 15)
 
         return section
     }
@@ -226,7 +226,7 @@ private class HeaderCell: UICollectionViewCell {
         stack.axis = .vertical
         contentView.addSubview(stack)
         stack.pinEdges([.left, .right, .bottom], to: contentView)
-        stack.bottomAnchor.pin(to: contentView.topAnchor)
+        stack.bottomAnchor.pin(to: contentView.topAnchor, constant: 1)
     }
 
     required init?(coder: NSCoder) {

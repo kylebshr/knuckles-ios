@@ -50,6 +50,20 @@ class ExpensesViewController: ViewController, UITableViewDelegate {
         }
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        if let selectedIndexPath = self.tableView.indexPathForSelectedRow {
+            transitionCoordinator?.animate(alongsideTransition: { _ in
+                self.tableView.deselectRow(at: selectedIndexPath, animated: animated)
+            }, completion: { context in
+                if context.isCancelled {
+                    self.tableView.selectRow(at: selectedIndexPath, animated: false, scrollPosition: .none)
+                }
+            })
+        }
+    }
+
     private func makeDataSource() -> DataSource {
         DataSource(tableView: tableView) { tableView, indexPath, item in
             let cell = tableView.dequeue(for: indexPath) as ExpenseCell
@@ -112,11 +126,9 @@ class ExpensesViewController: ViewController, UITableViewDelegate {
 
 private class ExpenseCell: UITableViewCell {
 
-    private let nameLabel = UILabel(font: .systemFont(ofSize: 20, weight: .medium))
-    private let statusLabel = UILabel(font: .systemFont(ofSize: 17, weight: .medium))
-
-    private let paymentControl = RevenueControl(direction: .payment)
-    private let incomeControl = RevenueControl(direction: .income)
+    private let nameLabel = UILabel(font: .systemFont(ofSize: 20, weight: .semibold))
+    private let statusLabel = UILabel(font: .systemFont(ofSize: 18, weight: .medium), color: .secondaryLabel)
+    private let amountSavedLabel = UILabel(font: .systemFont(ofSize: 14, weight: .medium), color: .secondaryLabel)
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -128,20 +140,13 @@ private class ExpenseCell: UITableViewCell {
         contentView.layoutMargins.bottom = 16
         backgroundColor = .customBackground
 
-        let topStack = UIStackView(arrangedSubviews: [nameLabel, statusLabel])
-        topStack.alignment = .firstBaseline
-        topStack.distribution = .equalSpacing
-        topStack.spacing = 8
+        let leftStack = UIStackView(arrangedSubviews: [nameLabel, amountSavedLabel])
+        leftStack.axis = .vertical
+        leftStack.spacing = 2
 
-        let bottomStack = UIStackView(arrangedSubviews: [incomeControl, paymentControl])
-        bottomStack.alignment = .fill
-        bottomStack.distribution = .equalSpacing
-        bottomStack.spacing = 8
-
-        let containerStack = UIStackView(arrangedSubviews: [topStack, bottomStack])
-        containerStack.axis = .vertical
-        containerStack.distribution = .fill
-        containerStack.alignment = .fill
+        let containerStack = UIStackView(arrangedSubviews: [leftStack, statusLabel])
+        containerStack.distribution = .equalSpacing
+        containerStack.alignment = .center
         containerStack.spacing = 6
 
         contentView.addSubview(containerStack)
@@ -154,18 +159,9 @@ private class ExpenseCell: UITableViewCell {
 
     func display(expense: Expense, in period: PayPeriod) {
         nameLabel.text = expense.name
+        amountSavedLabel.text = "\(expense.amountSaved(using: .current).currency()) Saved"
 
         let state = expense.fundingState(using: period)
         statusLabel.text = state.text
-
-        switch state {
-        case .funded:
-            statusLabel.textColor = .customLabel
-        case .paid, .onTrack:
-            statusLabel.textColor = .customLabel
-        }
-
-        paymentControl.display(amount: expense.amount, text: DateFormatter.readyByFormatter.string(from: expense.nextDueDate()))
-        incomeControl.display(amount: expense.nextAmountSaved(), text: "Payday")
     }
 }

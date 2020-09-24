@@ -42,11 +42,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        if BalanceController.shared.balance != stateAtBecomeActive {
-            if #available(iOS 14.0, *) {
-                print("Reloading timelines")
-                WidgetCenter.shared.reloadAllTimelines()
-            }
+        if #available(iOS 14.0, *) {
+            print("Reloading timelines")
+            WidgetCenter.shared.reloadAllTimelines()
         }
     }
 }
