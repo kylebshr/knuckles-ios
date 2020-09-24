@@ -52,4 +52,18 @@ extension UIView {
             layer.removeAnimation(forKey: #function)
         }
     }
+
+    func superview<T>(ofType: T.Type) -> T? {
+        var superview = self.superview
+
+        while superview != nil {
+            if let superview = superview as? T {
+                return superview
+            } else {
+                superview = superview?.superview
+            }
+        }
+        
+        return nil
+    }
 }

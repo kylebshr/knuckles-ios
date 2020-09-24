@@ -29,6 +29,13 @@ extension UIColor {
         }
     }
 
+    static let bubbleBackgroundHighlight = UIColor { traits in
+        switch traits.userInterfaceStyle {
+        case .light: return UIColor(displayP3Red: 0.812, green: 0.812, blue: 0.812, alpha: 1)
+        default: return UIColor(displayP3Red: 0.962, green: 0.962, blue: 0.962, alpha: 0.25)
+        }
+    }
+
     static let customLabel = UIColor { traits in
         switch traits.userInterfaceStyle {
         case .light: return .customBlack

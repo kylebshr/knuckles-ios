@@ -49,13 +49,13 @@ class InformationalViewController: ViewController, UICollectionViewDelegate {
         collectionView.pinEdges(to: view)
         collectionView.dataSource = dataSource
         collectionView.register(cell: HeaderCell.self)
-        collectionView.register(cell: UpNextExpenseCell.self)
-        collectionView.register(UpNextDateHeader.self, forSupplementaryViewOfKind: "header", withReuseIdentifier: "DateHeader")
+        collectionView.register(cell: BubbleCell.self)
+        collectionView.register(view: DateHeader.self, for: "header")
         collectionView.alwaysBounceVertical = true
         collectionView.backgroundColor = .customBackground
-//        collectionView.contentInset.top = -largeHeaderOffset
         collectionView.delegate = self
         collectionView.layoutMargins = .init(vertical: 0, horizontal: 15)
+        collectionView.allowsSelection = false
 
         collectionView.refreshControl = UIRefreshControl()
         collectionView.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -129,30 +129,6 @@ class InformationalViewController: ViewController, UICollectionViewDelegate {
         return section
     }
 
-    private func upNextLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                          heightDimension: .estimated(60))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .estimated(60))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
-
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = .init(top: 0, leading: 15, bottom: 15, trailing: 15)
-        section.interGroupSpacing = 10
-
-        let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                    heightDimension: .estimated(80))
-        let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize,
-                                                                     elementKind: "header",
-                                                                     alignment: .top)
-        headerItem.pinToVisibleBounds = true
-        section.boundarySupplementaryItems = [headerItem]
-
-        return section
-    }
-
     private func makeLayout() -> UICollectionViewLayout {
         UICollectionViewCompositionalLayout { [weak self] section, _ in
             guard let self = self else {
@@ -161,7 +137,7 @@ class InformationalViewController: ViewController, UICollectionViewDelegate {
 
             switch section {
             case 0: return self.headerLayout()
-            default: return self.upNextLayout()
+            default: return .bubbleCellLayout()
             }
         }
     }
@@ -174,21 +150,14 @@ class InformationalViewController: ViewController, UICollectionViewDelegate {
                 cell.display(amount: balance)
                 return cell
             case .expense(let expense):
-                let cell = collectionView.dequeue(for: indexPath) as UpNextExpenseCell
+                let cell = collectionView.dequeue(for: indexPath) as BubbleCell
                 cell.display(expense: expense)
                 return cell
             }
         }
 
         dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
-            guard let header = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: "DateHeader",
-                for: indexPath
-            ) as? UpNextDateHeader else {
-                return nil
-            }
-
+            let header = collectionView.dequeue(kind: kind, for: indexPath) as DateHeader
             let section = dataSource.snapshot().sectionIdentifiers[indexPath.section]
 
             switch section {
@@ -238,58 +207,10 @@ private class HeaderCell: UICollectionViewCell {
     }
 }
 
-private class UpNextDateHeader: UICollectionReusableView {
-
-    private let titleLabel = UILabel(font: .systemFont(ofSize: 17, weight: .semibold), color: .customSecondaryLabel)
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-
-        backgroundColor = .customBackground
-
-        addSubview(titleLabel)
-        titleLabel.pinEdges(to: self, insets: .init(top: 15, left: 0, bottom: 15, right: 0))
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func display(date: Date) {
-        titleLabel.text = DateFormatter.readyByFormatter.string(from: date)
-    }
-}
-
-private class UpNextExpenseCell: UICollectionViewCell {
-    private let bubbleView = UIView()
-    private let titleLabel = UILabel(font: .systemFont(ofSize: 20, weight: .semibold), color: .customLabel)
-    private let amountLabel = UILabel(font: .systemFont(ofSize: 18, weight: .medium), color: .customSecondaryLabel)
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-
-        contentView.addSubview(bubbleView)
-        bubbleView.pinEdges(to: contentView)
-        bubbleView.backgroundColor = .bubbleBackground
-        bubbleView.layer.cornerRadius = 12
-        bubbleView.layer.cornerCurve = .continuous
-        bubbleView.layoutMargins = .init(vertical: 17, horizontal: 15)
-
-        let stack = UIStackView(arrangedSubviews: [titleLabel, amountLabel])
-        stack.alignment = .center
-        stack.distribution = .equalSpacing
-
-        bubbleView.addSubview(stack)
-        stack.pinEdges(to: bubbleView.layoutMarginsGuide)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
+private extension BubbleCell {
     func display(expense: Expense) {
         titleLabel.text = expense.name
-        amountLabel.text = expense.amount.currency()
+        detailLabel.text = expense.amount.currency()
     }
 }
 
@@ -308,20 +229,4 @@ private extension UITabBarItem {
         self.init(title: "", image: image, tag: 0)
     }
 
-}
-
-extension UIView {
-    func superview<T>(ofType: T.Type) -> T? {
-        var superview = self.superview
-
-        while superview != nil {
-            if let superview = superview as? T {
-                return superview
-            } else {
-                superview = superview?.superview
-            }
-        }
-
-        return nil
-    }
 }
