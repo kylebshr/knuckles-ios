@@ -97,7 +97,7 @@ private class PlaceholderCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        let label = UILabel(font: .systemFont(ofSize: 17, weight: .bold), color: .customTertiaryLabel, alignment: .center)
+        let label = UILabel(font: .systemFont(ofSize: 17, weight: .bold), color: .customSecondaryLabel, alignment: .center)
         label.text = "Coming soon"
         contentView.addSubview(label)
         label.pinEdges(to: contentView.layoutMarginsGuide, insets: .init(vertical: 80, horizontal: 0))

@@ -162,7 +162,7 @@ private class ExpenseCell: UITableViewCell {
         case .funded:
             statusLabel.textColor = .customLabel
         case .paid, .onTrack:
-            statusLabel.textColor = .customTertiaryLabel
+            statusLabel.textColor = .customLabel
         }
 
         paymentControl.display(amount: expense.amount, text: DateFormatter.readyByFormatter.string(from: expense.nextDueDate()))

@@ -17,8 +17,8 @@ class RevenueControl: UIView {
     private static let font = UIFont.systemFont(ofSize: 14, weight: .semibold)
 
     private let icon = UIImageView()
-    private lazy var amountLabel = UILabel(font: Self.font, color: .customTertiaryLabel)
-    private lazy var secondaryLabel = UILabel(font: Self.font, color: .customTertiaryLabel)
+    private lazy var amountLabel = UILabel(font: Self.font, color: .customSecondaryLabel)
+    private lazy var secondaryLabel = UILabel(font: Self.font, color: .customSecondaryLabel)
 
     init(direction: Direction) {
         let config = UIImage.SymbolConfiguration(font: Self.font)

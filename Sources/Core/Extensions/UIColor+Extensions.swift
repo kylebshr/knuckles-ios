@@ -50,13 +50,6 @@ extension UIColor {
         }
     }
 
-    static let customTertiaryLabel = UIColor { traits in
-        switch traits.userInterfaceStyle {
-        case .light: return UIColor(displayP3Red: 0.121, green: 0.164, blue: 0.262, alpha: 0.7)
-        default: return .tertiaryLabel
-        }
-    }
-
     static let customBackground = UIColor { traits in
         switch traits.userInterfaceStyle {
         case .light: return .systemBackground

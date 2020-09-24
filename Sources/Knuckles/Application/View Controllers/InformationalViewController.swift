@@ -29,10 +29,6 @@ class InformationalViewController: ViewController, UICollectionViewDelegate {
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: makeLayout())
 
     private let titleView = UILabel(font: .preferredFont(forTextStyle: .headline))
-    private let balanceView = BalanceButton(style: .balance)
-    private let accountView = BalanceButton(style: .account(name: "Account"))
-    private let expensesView = BalanceButton(style: .account(name: "Expenses"))
-    private let goalsView = BalanceButton(style: .account(name: "Goals"))
 
     init(user: User) {
         super.init()
