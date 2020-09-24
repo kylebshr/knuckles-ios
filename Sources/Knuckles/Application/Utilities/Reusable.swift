@@ -1,15 +1,15 @@
 import UIKit
 
-protocol Dequeueable {
+protocol Reusable {
     static var reuseIdentifier: String { get }
 }
 
-extension Dequeueable {
+extension Reusable {
     static var reuseIdentifier: String { return String(describing: self) }
 }
 
-extension UITableViewCell: Dequeueable {}
-extension UITableViewHeaderFooterView: Dequeueable {}
+extension UITableViewCell: Reusable {}
+extension UITableViewHeaderFooterView: Reusable {}
 
 extension UITableView {
     func register(cell: UITableViewCell.Type) {
@@ -37,8 +37,8 @@ extension UITableView {
     }
 }
 
-extension UICollectionViewCell: Dequeueable {}
-extension UICollectionReusableView: Dequeueable {}
+extension UICollectionViewCell: Reusable {}
+extension UICollectionReusableView: Reusable {}
 
 extension UICollectionView {
     func register(cell: UICollectionViewCell.Type) {
