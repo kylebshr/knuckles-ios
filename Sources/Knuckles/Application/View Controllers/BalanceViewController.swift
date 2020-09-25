@@ -1,5 +1,5 @@
 //
-//  InformationalViewController.swift
+//  BalanceViewController.swift
 //  Knuckles
 //
 //  Created by Kyle Bashour on 5/21/20.
@@ -9,8 +9,6 @@ import Combine
 import UIKit
 
 class BalanceViewController: ViewController, UICollectionViewDelegate {
-
-    private let largeHeaderOffset: CGFloat = 52
 
     enum Section: Hashable {
         case header
@@ -28,7 +26,7 @@ class BalanceViewController: ViewController, UICollectionViewDelegate {
     private lazy var dataSource = makeDataSource()
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: makeLayout())
 
-    private let titleView = UILabel(font: .preferredFont(forTextStyle: .headline))
+    private let titleView = BalanceTitleView()
 
     init(user: User) {
         super.init()
@@ -38,17 +36,12 @@ class BalanceViewController: ViewController, UICollectionViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.shadowColor = nil
-        navigationController?.navigationBar.standardAppearance = appearance
-
         navigationItem.titleView = titleView
 
         view.addSubview(collectionView)
         collectionView.pinEdges(to: view)
         collectionView.dataSource = dataSource
-        collectionView.register(cell: HeaderCell.self)
+        collectionView.register(cell: BalanceCell.self)
         collectionView.register(cell: BubbleCell.self)
         collectionView.register(view: DateHeader.self, for: UICollectionView.elementKindSectionHeader)
         collectionView.alwaysBounceVertical = true
@@ -68,6 +61,11 @@ class BalanceViewController: ViewController, UICollectionViewDelegate {
         )
 
         BalanceController.shared.$balance.sink(receiveValue: update).store(in: &cancelBag)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateTitleView()
     }
 
     @objc private func openSettings() {
@@ -93,7 +91,7 @@ class BalanceViewController: ViewController, UICollectionViewDelegate {
         let balance = amount.balance(using: .current)
 
         tabBarItem = UITabBarItem(amount: balance)
-        titleView.text = balance.currency()
+        titleView.display(amount: balance)
         titleView.sizeToFit()
 
         var snapshot = Snapshot()
@@ -146,7 +144,7 @@ class BalanceViewController: ViewController, UICollectionViewDelegate {
         let dataSource = DataSource(collectionView: collectionView) { collectionView, indexPath, item -> UICollectionViewCell? in
             switch item {
             case .header(let balance):
-                let cell = collectionView.dequeue(for: indexPath) as HeaderCell
+                let cell = collectionView.dequeue(for: indexPath) as BalanceCell
                 cell.display(amount: balance)
                 return cell
             case .expense(let expense):
@@ -173,16 +171,48 @@ class BalanceViewController: ViewController, UICollectionViewDelegate {
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let offset = 140 - scrollView.safeAreaInsets.top
-        titleView.alpha = offset / largeHeaderOffset
+        updateTitleView()
+    }
+
+    private func updateTitleView() {
+        let hackyAlpha = navigationController?.navigationBar.subviews[0].subviews[1].alpha ?? 0
+        let hackierAlpha = hackyAlpha < 0.02 ? 0 : hackyAlpha
+        titleView.alpha = hackierAlpha
     }
 }
 
-private class HeaderCell: UICollectionViewCell {
+private class BalanceTitleView: UIView {
+    private let titleLabel = UILabel(font: .systemFont(ofSize: 14, weight: .semibold), color: .customLabel)
+    private let amountLabel = UILabel(font: .systemFont(ofSize: 18, weight: .bold), color: .emphasis)
 
-    static let sizing = HeaderCell()
+    private lazy var stack = UIStackView(arrangedSubviews: [titleLabel, amountLabel])
 
-    private let titleLabel = UILabel(font: .systemFont(ofSize: 17, weight: .semibold), color: .customSecondaryLabel)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        titleLabel.text = "Balance"
+        amountLabel.text = "-"
+
+        stack.axis = .vertical
+        stack.alignment = .center
+        addSubview(stack)
+        stack.pinEdges(to: self)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func display(amount: Decimal) {
+        amountLabel.text = amount.currency()
+    }
+}
+
+private class BalanceCell: UICollectionViewCell {
+
+    static let sizing = BalanceCell()
+
+    private let titleLabel = UILabel(font: .systemFont(ofSize: 17, weight: .semibold), color: .customLabel)
     private let amountLabel = UILabel(font: .systemFont(ofSize: 35, weight: .bold), color: .emphasis)
 
     override init(frame: CGRect) {

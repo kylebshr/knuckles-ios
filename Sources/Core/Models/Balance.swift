@@ -1,5 +1,5 @@
 import Foundation
 
-struct Balance: Codable{
+struct Balance: Codable {
     var amount: Decimal
 }

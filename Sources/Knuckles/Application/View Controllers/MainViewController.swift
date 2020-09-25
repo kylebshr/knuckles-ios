@@ -11,10 +11,10 @@ import UIKit
 class MainViewController: ViewController {
 
     private let tabBarViewController = UITabBarController()
-    private let informationalViewController: InformationalViewController
+    private let informationalViewController: BalanceViewController
 
     init(user: User) {
-        informationalViewController = InformationalViewController(user: user)
+        informationalViewController = BalanceViewController(user: user)
         super.init()
     }
 
