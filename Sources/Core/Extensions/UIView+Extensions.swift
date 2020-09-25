@@ -66,4 +66,16 @@ extension UIView {
 
         return nil
     }
+
+    func subview<T: UIView>(ofType type: T.Type) -> T? {
+        for view in subviews {
+            if let view = view as? T {
+                return view
+            } else {
+                return view.subview(ofType: type)
+            }
+        }
+
+        return nil
+    }
 }

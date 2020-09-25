@@ -175,7 +175,8 @@ class BalanceViewController: ViewController, UICollectionViewDelegate {
     }
 
     private func updateTitleView() {
-        let hackyAlpha = navigationController?.navigationBar.subviews[0].subviews[1].alpha ?? 0
+        let visualEffectView = navigationController?.navigationBar.subview(ofType: UIVisualEffectView.self)
+        let hackyAlpha = visualEffectView?.alpha ?? 0
         let hackierAlpha = hackyAlpha < 0.02 ? 0 : hackyAlpha
         titleView.alpha = hackierAlpha
     }

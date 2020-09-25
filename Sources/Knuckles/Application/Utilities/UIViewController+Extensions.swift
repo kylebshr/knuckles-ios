@@ -31,5 +31,4 @@ extension UIViewController {
     func parent<T: UIViewController>(ofType: T.Type) -> T? {
         return parent as? T ?? parent?.parent(ofType: ofType)
     }
-
 }

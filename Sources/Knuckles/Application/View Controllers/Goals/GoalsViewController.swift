@@ -15,7 +15,7 @@ class GoalsViewController: ViewController, UITableViewDelegate, UITableViewDataS
 
     override init() {
         super.init()
-        tabBarItem = UITabBarItem(title: "Goals", image: UIImage(systemName: "checkmark.square"), tag: 2)
+        tabBarItem = UITabBarItem(title: "Goals", image: UIImage(systemName: "chart.bar"), tag: 2)
     }
 
     override func viewDidLoad() {
