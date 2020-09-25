@@ -15,7 +15,7 @@ class FullWidthButton: Control {
         didSet { label.text = text }
     }
 
-    private let label = UILabel(font: .rubik(ofSize: 18, weight: .medium), alignment: .center)
+    private let label = UILabel(font: .systemFont(ofSize: 18, weight: .medium), alignment: .center)
 
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -109,11 +109,11 @@ private class PlaceholderCell: UITableViewCell {
 }
 
 private class GoalCell: UITableViewCell {
-    private let nameLabel = UILabel(font: .rubik(ofSize: 18, weight: .medium))
-    private let amountLabel = UILabel(font: .rubik(ofSize: 18, weight: .medium), alignment: .right)
-    private let nextAmountLabel = UILabel(font: .rubik(ofSize: 13, weight: .medium), color: .customBlue, alignment: .right)
-    private let emojiView = UILabel(font: .rubik(ofSize: 24, weight: .regular))
-    private let readyLabel = UILabel(font: .rubik(ofSize: 13, weight: .medium))
+    private let nameLabel = UILabel(font: .systemFont(ofSize: 18, weight: .medium))
+    private let amountLabel = UILabel(font: .systemFont(ofSize: 18, weight: .medium), alignment: .right)
+    private let nextAmountLabel = UILabel(font: .systemFont(ofSize: 13, weight: .medium), color: .customBlue, alignment: .right)
+    private let emojiView = UILabel(font: .systemFont(ofSize: 24, weight: .regular))
+    private let readyLabel = UILabel(font: .systemFont(ofSize: 13, weight: .medium))
     private let progressView = ProgressView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

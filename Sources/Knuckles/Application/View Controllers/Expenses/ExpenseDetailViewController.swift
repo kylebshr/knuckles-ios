@@ -27,10 +27,10 @@ class ExpenseDetailViewController: ViewController {
         view.addSubview(scrollView)
         scrollView.pinEdges(to: view)
 
-        let amountLabel = UILabel(font: .rubik(ofSize: 48, weight: .medium), alignment: .center)
+        let amountLabel = UILabel(font: .systemFont(ofSize: 48, weight: .medium), alignment: .center)
         amountLabel.text = expense.fundingState(using: .current).amount
 
-        let statusLabel = UILabel(font: .rubik(ofSize: 16, weight: .medium))
+        let statusLabel = UILabel(font: .systemFont(ofSize: 16, weight: .medium))
         statusLabel.text = expense.fundingState(using: .current).text
 
         let nextAmountView = NextAmountView(expense: expense)
@@ -67,7 +67,7 @@ class ExpenseDetailViewController: ViewController {
 private class NextAmountView: UIView {
 
     private let icon = UIImageView()
-    private let title = UILabel(font: .rubik(ofSize: 18, weight: .medium))
+    private let title = UILabel(font: .systemFont(ofSize: 18, weight: .medium))
 
     init(expense: Expense) {
         super.init(frame: .zero)
@@ -106,8 +106,8 @@ private class NextAmountView: UIView {
 private class EditControl: Control {
 
     private let icon = UIImageView()
-    private let title = UILabel(font: .rubik(ofSize: 18, weight: .medium))
-    private let edit = UILabel(font: .rubik(ofSize: 18, weight: .medium), alignment: .right)
+    private let title = UILabel(font: .systemFont(ofSize: 18, weight: .medium))
+    private let edit = UILabel(font: .systemFont(ofSize: 18, weight: .medium), alignment: .right)
 
     init(symbolName: String, text: String) {
         super.init(frame: .zero)
@@ -141,7 +141,7 @@ private class EditControl: Control {
 
 private class DeleteControl: Control {
 
-    private let label = UILabel(font: .rubik(ofSize: 13, weight: .medium), color: .customRed, alignment: .center)
+    private let label = UILabel(font: .systemFont(ofSize: 13, weight: .medium), color: .customRed, alignment: .center)
 
     override init(frame: CGRect) {
         super.init(frame: frame)

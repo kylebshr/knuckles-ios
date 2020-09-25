@@ -28,7 +28,7 @@ class NavigationView: UIView {
         didSet { updateActions() }
     }
 
-    private let label = UILabel(font: .rubik(ofSize: 24, weight: .medium))
+    private let label = UILabel(font: .systemFont(ofSize: 24, weight: .medium))
     private let leftButton = UIButton(type: .system)
     private let rightButton = UIButton(type: .system)
 

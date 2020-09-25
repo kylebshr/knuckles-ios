@@ -26,7 +26,7 @@ class RetroButton: Control {
         set { label.text = newValue }
     }
 
-    private let label = UILabel(font: .rubik(ofSize: 18, weight: .medium), alignment: .center)
+    private let label = UILabel(font: .systemFont(ofSize: 18, weight: .medium), alignment: .center)
     private lazy var retroView = RetroView(content: label, borderWidth: 3, offset: 7)
 
     init(text: String, color: UIColor, style: Style = .secondary) {
