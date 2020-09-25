@@ -16,22 +16,18 @@ struct Provider: IntentTimelineProvider {
     }
 
     func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SimpleEntry) -> Void) {
-        print("------ Getting snapshot")
-
-        BalanceController.shared.refresh { _ in
-            print("------ Returning snapshot")
-            let entry = SimpleEntry(date: Date(), configuration: ConfigurationIntent(), balance: BalanceController.shared.balance)
-            completion(entry)
-        }
+        let balance = BalanceController.shared.balance ?? BalanceState(account: 100, expenses: [], goals: [])
+        let entry = SimpleEntry(date: Date(), configuration: configuration, balance: balance)
+        completion(entry)
     }
 
     func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> Void) {
-
         BalanceController.shared.refresh { _ in
             let currentDate = Date()
             let refreshDate = Calendar.current.date(byAdding: .minute, value: 1, to: currentDate)!
-            let entry = SimpleEntry(date: refreshDate, configuration: configuration, balance: BalanceController.shared.balance)
-            let timeline: Timeline<SimpleEntry> = Timeline(entries: [entry], policy: .atEnd)
+
+            let entry = SimpleEntry(date: currentDate, configuration: configuration, balance: BalanceController.shared.balance)
+            let timeline = Timeline<SimpleEntry>(entries: [entry], policy: .after(refreshDate))
 
             completion(timeline)
         }
