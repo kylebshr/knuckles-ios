@@ -16,7 +16,7 @@ class BalanceViewController: ViewController, UICollectionViewDelegate {
     }
 
     enum Item: Hashable {
-        case header(Decimal)
+        case header(String)
         case expense(Expense)
     }
 
@@ -86,7 +86,17 @@ class BalanceViewController: ViewController, UICollectionViewDelegate {
     }
 
     private func update(amount: BalanceState?) {
-        guard let amount = amount else { return }
+        guard let amount = amount else {
+            var snapshot = Snapshot()
+
+            snapshot.appendSections([.header])
+            snapshot.appendItems([.header("-")])
+
+            dataSource.apply(snapshot)
+            tabBarItem = .noBalance
+
+            return
+        }
 
         let balance = amount.balance(using: .current)
 
@@ -97,7 +107,7 @@ class BalanceViewController: ViewController, UICollectionViewDelegate {
         var snapshot = Snapshot()
 
         snapshot.appendSections([.header])
-        snapshot.appendItems([.header(balance)])
+        snapshot.appendItems([.header(balance.currency())])
 
         let expenses = Dictionary(grouping: amount.expenses, by: \.dayDueAt)
         let sortedExpenses = expenses.sorted { lhs, rhs in
@@ -233,8 +243,8 @@ private class BalanceCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func display(amount: Decimal) {
-        amountLabel.text = amount.currency()
+    func display(amount: String) {
+        amountLabel.text = amount
     }
 }
 
@@ -248,6 +258,10 @@ private extension BubbleCell {
 private extension UITabBarItem {
 
     private static let label = UILabel(font: .systemFont(ofSize: 20, weight: .bold))
+
+    static let noBalance = UITabBarItem(title: "Balance",
+                                        image: UIImage(systemName: "house")!,
+                                        selectedImage: UIImage(systemName: "house.fill")!)
 
     convenience init(amount: Decimal) {
         Self.label.text = "$\(amount.abbreviated())"

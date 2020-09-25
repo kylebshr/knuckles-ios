@@ -60,7 +60,7 @@ struct ResourceProvider {
                 let response = response as? HTTPURLResponse
                 DispatchQueue.main.async {
                     if response?.statusCode == 401 {
-                        print("Unauthorizard")
+                        print("Unauthorized")
                         completion(nil, nil, nil)
 //                        UserDefaults.shared.logout()
                     } else {

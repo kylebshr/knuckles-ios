@@ -44,8 +44,8 @@ extension UserDefaults {
         set { set(codable: newValue, forKey: #function) }
     }
 
-    var account: Decimal {
-        get { codable(forKey: #function) ?? 0 }
+    var accountBalance: Decimal? {
+        get { codable(forKey: #function) }
         set { set(codable: newValue, forKey: #function) }
     }
 

@@ -59,7 +59,7 @@ class ExpenseCreationViewController: ViewController {
     }
 
     private func enterDay(_ day: Int) {
-        let expense = Expense(emoji: "🐮", name: name, amount: amount, dayDueAt: day)
+        let expense = Expense(name: name, amount: amount, dayDueAt: day)
         let viewController = ExpenseConfirmationViewController(expense: expense)
         viewController.navigationItem.rightBarButtonItem = makeItem()
         navigationContainer.pushViewController(viewController, animated: true)

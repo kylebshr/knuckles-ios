@@ -13,16 +13,13 @@ struct Expense: Codable, Equatable, Hashable {
 
     var name: String
 
-    var emoji: String
-
     var amount: Decimal
 
     var dayDueAt: Int
 
     var createdAt: Date
 
-    init(emoji: Character, name: String, amount: Decimal, dayDueAt: Int) {
-        self.emoji = "\(emoji)"
+    init(name: String, amount: Decimal, dayDueAt: Int) {
         self.name = name
         self.amount = amount
         self.dayDueAt = dayDueAt

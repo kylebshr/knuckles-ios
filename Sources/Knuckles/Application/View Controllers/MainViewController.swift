@@ -11,10 +11,10 @@ import UIKit
 class MainViewController: ViewController {
 
     private let tabBarViewController = UITabBarController()
-    private let informationalViewController: BalanceViewController
+    private let balanceViewController: BalanceViewController
 
     init(user: User) {
-        informationalViewController = BalanceViewController(user: user)
+        balanceViewController = BalanceViewController(user: user)
         super.init()
     }
 
@@ -29,7 +29,7 @@ class MainViewController: ViewController {
         let expenses = NavigationController(rootViewController: ExpensesViewController())
         expenses.navigationBar.prefersLargeTitles = true
 
-        let information = NavigationController(rootViewController: informationalViewController)
+        let information = NavigationController(rootViewController: balanceViewController)
         information.navigationBar.prefersLargeTitles = true
 
         tabBarViewController.viewControllers = [

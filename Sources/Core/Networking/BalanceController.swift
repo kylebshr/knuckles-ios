@@ -37,7 +37,7 @@ class BalanceController: ObservableObject {
     private var lastUpdate = Date(timeIntervalSince1970: 0)
 
     init() {
-        update(account: UserDefaults.shared.account)
+        updateFromDefaults()
         refresh(completion: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(refresh), name: UIApplication.didBecomeActiveNotification, object: nil)
@@ -65,7 +65,7 @@ class BalanceController: ObservableObject {
 
             switch result {
             case .success(let balance):
-                UserDefaults.shared.account = balance.amount
+                UserDefaults.shared.accountBalance = balance.amount
                 self.update(account: balance.amount)
                 completion?(true)
             default:
@@ -75,7 +75,8 @@ class BalanceController: ObservableObject {
     }
 
     @objc private func updateFromDefaults() {
-        self.update(account: UserDefaults.shared.account)
+        guard let storedBalance = UserDefaults.shared.accountBalance else { return }
+        self.update(account: storedBalance)
     }
 
     private func update(account: Decimal) {

@@ -35,7 +35,7 @@ struct WidgetEntryView: View {
 
 struct Widget_Previews: PreviewProvider {
     static var previews: some View {
-        let expense = Expense(emoji: " ", name: "Netflix", amount: 15.99, dayDueAt: 27)
+        let expense = Expense(name: "Netflix", amount: 15.99, dayDueAt: 27)
         let balance = BalanceState(account: 47.19, expenses: [expense], goals: [])
 
         let entry = BalanceEntry(date: Date(), configuration: .init(), isLoggedIn: true, balance: balance)

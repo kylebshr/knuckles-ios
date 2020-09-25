@@ -28,14 +28,20 @@ struct Provider: IntentTimelineProvider {
     func placeholder(in context: Context) -> BalanceEntry {
         print("--- Requesting placeholder")
 
-        return BalanceEntry(date: Date(), configuration: ConfigurationIntent(), isLoggedIn: isLoggedIn, balance: controller.balance)
+        let nextDay = Calendar.current.component(.day, from: Date()) + 1
+        let balance = BalanceState(account: 109.99, expenses: [Expense(name: "Apple Music", amount: 9.99, dayDueAt: nextDay)], goals: [])
+        return BalanceEntry(date: Date(), configuration: ConfigurationIntent(), isLoggedIn: true, balance: balance)
     }
 
     func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (BalanceEntry) -> Void) {
         print("--- Requesting snapshot")
 
-        let entry = BalanceEntry(date: Date(), configuration: configuration, isLoggedIn: isLoggedIn, balance: controller.balance)
-        completion(entry)
+        if context.isPreview, !isLoggedIn {
+            completion(placeholder(in: context))
+        } else {
+            let entry = BalanceEntry(date: Date(), configuration: configuration, isLoggedIn: isLoggedIn, balance: controller.balance)
+            completion(entry)
+        }
     }
 
     func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> Void) {
