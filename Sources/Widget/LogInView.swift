@@ -16,7 +16,7 @@ struct LogInView: View {
                     .foregroundColor(Color(.customSecondaryLabel))
 
                 Spacer()
-                Text("Please open the app to log in.")
+                Text("Please open the app to sign in.")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(Color(.emphasis))
                 Spacer()

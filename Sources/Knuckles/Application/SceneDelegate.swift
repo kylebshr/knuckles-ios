@@ -12,8 +12,6 @@ import WidgetKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
-    private var stateAtBecomeActive: BalanceState?
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = scene as? UIWindowScene else { return }
 
@@ -26,12 +24,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
     }
 
-    func sceneDidBecomeActive(_ scene: UIScene) {
-        stateAtBecomeActive = BalanceController.shared.balance
-    }
-
     func sceneWillResignActive(_ scene: UIScene) {
-        if #available(iOS 14.0, *), stateAtBecomeActive != BalanceController.shared.balance {
+        if #available(iOS 14.0, *) {
             WidgetCenter.shared.reloadAllTimelines()
         }
     }
