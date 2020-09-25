@@ -12,7 +12,7 @@ class ExpensesViewController: ViewController, UICollectionViewDelegate {
 
     typealias DataSource = UICollectionViewDiffableDataSource<Date, Expense>
 
-    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: makeLayout())
+    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: .bubble())
     private lazy var dataSource = makeDataSource()
 
     override init() {
@@ -38,7 +38,7 @@ class ExpensesViewController: ViewController, UICollectionViewDelegate {
         collectionView.dataSource = dataSource
         collectionView.delegate = self
         collectionView.backgroundColor = .customBackground
-        collectionView.register(view: DateHeader.self, for: "header")
+        collectionView.register(view: DateHeader.self, for: UICollectionView.elementKindSectionHeader)
         collectionView.register(cell: BubbleCell.self)
 
         BalanceController.shared.$balance.sink { [weak self] state in
@@ -58,6 +58,9 @@ class ExpensesViewController: ViewController, UICollectionViewDelegate {
                 }
             })
         }
+
+        collectionView.setNeedsLayout()
+        collectionView.layoutIfNeeded()
     }
 
     private func makeDataSource() -> DataSource {
@@ -75,10 +78,6 @@ class ExpensesViewController: ViewController, UICollectionViewDelegate {
         }
 
         return dataSource
-    }
-
-    private func makeLayout() -> UICollectionViewLayout {
-        UICollectionViewCompositionalLayout(section: .bubbleCellLayout())
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

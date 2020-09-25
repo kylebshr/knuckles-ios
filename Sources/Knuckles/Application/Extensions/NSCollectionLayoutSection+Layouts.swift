@@ -24,12 +24,27 @@ extension NSCollectionLayoutSection {
         let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                     heightDimension: .estimated(80))
         let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize,
-                                                                     elementKind: "header",
+                                                                     elementKind: UICollectionView.elementKindSectionHeader,
                                                                      alignment: .top)
         headerItem.pinToVisibleBounds = true
         section.boundarySupplementaryItems = [headerItem]
 
         return section
     }
+}
 
+extension UICollectionViewLayout {
+    static func bubble() -> UICollectionViewCompositionalLayout {
+        .init(section: .bubbleCellLayout())
+    }
+
+    @available(iOS 14, *)
+    static func grouped(trailingSwipeActionsProvider: UICollectionLayoutListConfiguration.SwipeActionsConfigurationProvider? = nil)
+    -> UICollectionViewCompositionalLayout {
+        var layout = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+        layout.backgroundColor = .customBackground
+        layout.headerMode = .supplementary
+        layout.trailingSwipeActionsConfigurationProvider = trailingSwipeActionsProvider
+        return UICollectionViewCompositionalLayout.list(using: layout)
+    }
 }

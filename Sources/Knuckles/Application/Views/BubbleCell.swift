@@ -7,8 +7,15 @@
 
 import UIKit
 
+class GroupedBubbleCell: BubbleCell {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        bubbleView.layer.cornerRadius = 0
+    }
+}
+
 class BubbleCell: UICollectionViewCell {
-    private let bubbleView = UIView()
+    fileprivate let bubbleView = UIView()
 
     let titleLabel = UILabel(font: .systemFont(ofSize: 18, weight: .medium), color: .customLabel)
     let subtitleLabel = UILabel(font: .systemFont(ofSize: 14, weight: .medium), color: .secondaryLabel)
@@ -49,6 +56,7 @@ class BubbleCell: UICollectionViewCell {
         stack.centerYAnchor.pin(to: bubbleView.centerYAnchor)
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

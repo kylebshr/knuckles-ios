@@ -50,7 +50,7 @@ class InformationalViewController: ViewController, UICollectionViewDelegate {
         collectionView.dataSource = dataSource
         collectionView.register(cell: HeaderCell.self)
         collectionView.register(cell: BubbleCell.self)
-        collectionView.register(view: DateHeader.self, for: "header")
+        collectionView.register(view: DateHeader.self, for: UICollectionView.elementKindSectionHeader)
         collectionView.alwaysBounceVertical = true
         collectionView.backgroundColor = .customBackground
         collectionView.delegate = self
