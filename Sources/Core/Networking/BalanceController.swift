@@ -7,6 +7,7 @@
 
 import Combine
 import UIKit
+import WidgetKit
 
 struct BalanceState: Equatable {
     var account: Decimal
@@ -40,7 +41,7 @@ class BalanceController: ObservableObject {
         refresh(completion: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(refresh), name: UIApplication.didBecomeActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateIfPossible), name: UserDefaults.didChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateFromDefaults), name: UserDefaults.didChangeNotification, object: nil)
     }
 
     @objc func refresh() {
@@ -48,6 +49,8 @@ class BalanceController: ObservableObject {
     }
 
     func refresh(completion: ((Bool) -> Void)? = nil) {
+        updateFromDefaults()
+
         guard Date().timeIntervalSince(lastUpdate) > 60 else {
             completion?(false)
             return
@@ -71,12 +74,8 @@ class BalanceController: ObservableObject {
         }
     }
 
-    @objc private func updateIfPossible() {
-        guard let account = balance?.account else {
-            return
-        }
-
-        update(account: account)
+    @objc private func updateFromDefaults() {
+        self.update(account: UserDefaults.shared.account)
     }
 
     private func update(account: Decimal) {

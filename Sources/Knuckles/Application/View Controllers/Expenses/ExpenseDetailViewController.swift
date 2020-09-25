@@ -41,6 +41,7 @@ class ExpenseDetailViewController: ViewController {
 
         let moveButton = RetroButton(text: "Move Money", color: .customBlue, style: .secondary)
         let deleteButton = DeleteControl()
+        deleteButton.addTarget(self, action: #selector(deleteExpense), for: .touchUpInside)
 
         let stackView = UIStackView(arrangedSubviews: [
             amountLabel, statusLabel, nextAmountView,
@@ -61,6 +62,11 @@ class ExpenseDetailViewController: ViewController {
         dueButton.widthAnchor.pin(to: view.widthAnchor)
         amountButton.widthAnchor.pin(to: view.widthAnchor)
         moveButton.widthAnchor.pin(to: view.widthAnchor, constant: -40)
+    }
+
+    @objc private func deleteExpense() {
+        navigationController?.popViewController(animated: true)
+        UserDefaults.shared.expenses.removeAll(where: { $0 == expense })
     }
 }
 

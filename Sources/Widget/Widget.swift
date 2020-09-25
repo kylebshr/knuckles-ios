@@ -5,32 +5,51 @@
 //  Created by Kyle Bashour on 9/20/20.
 //
 
+import Combine
 import WidgetKit
 import SwiftUI
 import Intents
 
 struct Provider: IntentTimelineProvider {
+    let controller = BalanceController()
+    var cancellable: AnyCancellable?
+
+    init() {
+        cancellable = controller.$balance.sink { _ in
+            print("--- Published balance change")
+            WidgetCenter.shared.reloadAllTimelines()
+        }
+    }
+
     func placeholder(in context: Context) -> SimpleEntry {
-        let balance = BalanceController.shared.balance ?? BalanceState(account: 100, expenses: [], goals: [])
+        print("--- Requesting placeholder")
+
+        let balance = controller.balance ?? BalanceState(account: 100, expenses: [], goals: [])
         return SimpleEntry(date: Date(), configuration: ConfigurationIntent(), balance: balance)
     }
 
     func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (SimpleEntry) -> Void) {
-        let balance = BalanceController.shared.balance ?? BalanceState(account: 100, expenses: [], goals: [])
+        print("--- Requesting snapshot")
+
+        let balance = controller.balance ?? BalanceState(account: 100, expenses: [], goals: [])
         let entry = SimpleEntry(date: Date(), configuration: configuration, balance: balance)
         completion(entry)
     }
 
     func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> Void) {
-        BalanceController.shared.refresh { _ in
-            let currentDate = Date()
-            let refreshDate = Calendar.current.date(byAdding: .minute, value: 1, to: currentDate)!
+        print("--- Requesting timeline")
 
-            let entry = SimpleEntry(date: currentDate, configuration: configuration, balance: BalanceController.shared.balance)
-            let timeline = Timeline<SimpleEntry>(entries: [entry], policy: .after(refreshDate))
-
-            completion(timeline)
+        controller.refresh { didRefresh in
+            print("--- Controller refreshed \(didRefresh)")
         }
+
+        let currentDate = Date()
+        let refreshDate = Calendar.current.date(byAdding: .minute, value: 1, to: currentDate)!
+
+        let entry = SimpleEntry(date: currentDate, configuration: configuration, balance: controller.balance)
+        let timeline = Timeline<SimpleEntry>(entries: [entry], policy: .after(refreshDate))
+
+        completion(timeline)
     }
 }
 
