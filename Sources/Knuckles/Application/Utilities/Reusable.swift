@@ -52,11 +52,11 @@ extension UICollectionView {
         return cell
     }
 
-    func register(view: UICollectionReusableView.Type, for kind: String) {
+    func register(view: UICollectionReusableView.Type, for kind: String = UICollectionView.elementKindSectionHeader) {
         register(view, forSupplementaryViewOfKind: kind, withReuseIdentifier: view.reuseIdentifier)
     }
 
-    func dequeue<T>(kind: String, for indexPath: IndexPath) -> T where T: UICollectionReusableView {
+    func dequeue<T>(kind: String = UICollectionView.elementKindSectionHeader, for indexPath: IndexPath) -> T where T: UICollectionReusableView {
         guard let view = dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: T.reuseIdentifier, for: indexPath) as? T else {
             fatalError("Register view of type \(T.self) before dequeueing")
         }

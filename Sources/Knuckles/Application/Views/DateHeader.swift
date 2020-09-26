@@ -25,6 +25,10 @@ class DateHeader: UICollectionReusableView {
     }
 
     func display(date: Date) {
-        titleLabel.text = DateFormatter.readyByFormatter.string(from: date)
+        display(text: DateFormatter.readyByFormatter.string(from: date))
+    }
+
+    func display(text: String) {
+        titleLabel.text = text
     }
 }

@@ -42,6 +42,10 @@ extension Date {
     func day() -> String {
         return DateFormatter.dayFormatter.string(from: self)
     }
+
+    func readyBy() -> String {
+        DateFormatter.readyByFormatter.string(from: self)
+    }
 }
 
 extension Decimal {
