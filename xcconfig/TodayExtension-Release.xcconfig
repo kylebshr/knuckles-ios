@@ -6,6 +6,7 @@
 //
 
 #include "TodayExtension-Shared.xcconfig"
+#include "../Pods/Target Support Files/Pods-Widget/Pods-Widget.release.xcconfig"
 
 // Debug Information Format
 // 

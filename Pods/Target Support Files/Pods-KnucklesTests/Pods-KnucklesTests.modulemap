@@ -1,0 +1,6 @@
+framework module Pods_KnucklesTests {
+  umbrella header "Pods-KnucklesTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

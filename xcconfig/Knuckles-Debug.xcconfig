@@ -6,6 +6,7 @@
 //
 
 #include "Knuckles-Shared.xcconfig"
+#include "../Pods/Target Support Files/Pods-Knuckles/Pods-Knuckles.debug.xcconfig"
 
 //********************************************//
 //* Currently no build settings in this file *//

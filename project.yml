@@ -22,6 +22,9 @@ targets:
     preBuildScripts:
       - path: tools/swiftlint.sh
         name: Run swiftlint
+    postBuildScripts:
+      - path: tools/prepare-plaid.sh
+        name: Prepare Plaid for Distribution
     
     scheme:
       testTargets: [KnucklesTests]
@@ -33,7 +36,6 @@ targets:
     
     dependencies:
       - target: Widget
-      - carthage: LinkKit
     
     entitlements:
       path: knuckles.entitlements

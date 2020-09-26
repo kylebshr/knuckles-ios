@@ -1,4 +1,4 @@
-task default: %w[generate]
+task default: %w[generate install_deps]
 
 task :generate do
 	if command?('xcodegen')
@@ -7,6 +7,11 @@ task :generate do
     	install_xcodegen()
     	generate()
     end
+end
+
+task :install_deps do
+    puts "Installing pods..."
+    `pod install`
 end
 
 task :set_marketing_number, :marketing_number do |t, args|
