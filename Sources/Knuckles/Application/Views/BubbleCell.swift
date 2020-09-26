@@ -18,7 +18,7 @@ class BubbleCell: UICollectionViewCell {
     fileprivate let bubbleView = UIView()
 
     let titleLabel = UILabel(font: .systemFont(ofSize: 18, weight: .medium), color: .customLabel)
-    let subtitleLabel = UILabel(font: .systemFont(ofSize: 14, weight: .medium), color: .secondaryLabel)
+    let subtitleLabel = UILabel(font: .systemFont(ofSize: 14, weight: .medium), color: .customSecondaryLabel)
     let detailLabel = UILabel(font: .systemFont(ofSize: 16, weight: .medium), color: .customSecondaryLabel)
 
     override var isSelected: Bool {

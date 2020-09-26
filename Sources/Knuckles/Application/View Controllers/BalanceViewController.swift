@@ -264,9 +264,9 @@ private class BalanceCell: UICollectionViewCell {
 }
 
 private class ExpenseCell: UICollectionViewCell {
-    private let titleLabel = UILabel(font: .systemFont(ofSize: 18, weight: .semibold), color: .customLabel)
-    private let dateLabel = UILabel(font: .systemFont(ofSize: 18, weight: .medium), color: .secondaryLabel)
-    private let amountLabel = UILabel(font: .systemFont(ofSize: 15, weight: .medium), color: .customSecondaryLabel)
+    private let titleLabel = UILabel(font: .systemFont(ofSize: 18, weight: .medium), color: .customLabel)
+    private let dateLabel = UILabel(font: .systemFont(ofSize: 16, weight: .medium), color: .customSecondaryLabel)
+    private let amountLabel = UILabel(font: .systemFont(ofSize: 14, weight: .medium), color: .customSecondaryLabel)
     private let imageView = UIImageView()
 
     override init(frame: CGRect) {

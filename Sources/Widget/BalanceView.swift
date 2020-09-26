@@ -46,7 +46,7 @@ struct BalanceView: View {
                                     .foregroundColor(Color(.customLabel))
                                 Text(DateFormatter.readyByFormatter.string(from: expense.nextDueDate()))
                                     .font(.system(size: 16, weight: .regular))
-                                    .foregroundColor(Color(.customLabel))
+                                    .foregroundColor(Color(.customSecondaryLabel))
                             }
                             Spacer()
                             Image(systemName: "arrow.up.right")
