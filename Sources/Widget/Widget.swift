@@ -70,15 +70,36 @@ struct BalanceEntry: TimelineEntry {
 }
 
 @main
-struct BalanceWidget: Widget {
-    let kind: String = "Widget"
+struct Widgets: WidgetBundle {
+    @WidgetBundleBuilder
+    var body: some Widget {
+        BalanceWidget()
+        UpNextWidget()
+    }
+}
+
+struct UpNextWidget: Widget {
+    let kind = "UpNextWidget"
 
     var body: some WidgetConfiguration {
         IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
-            WidgetEntryView(entry: entry)
+            UpNextEntryView(entry: entry)
         }
-        .configurationDisplayName("Balance")
+        .configurationDisplayName("Up Next")
         .description("Check your balance and see your next expense.")
         .supportedFamilies([.systemSmall])
+    }
+}
+
+struct BalanceWidget: Widget {
+    let kind = "BalanceWidget"
+
+    var body: some WidgetConfiguration {
+        IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
+            BalanceEntryView(entry: entry)
+        }
+        .configurationDisplayName("Current Balance")
+        .description("Check your available balance, bigly.")
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }

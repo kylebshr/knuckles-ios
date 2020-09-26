@@ -8,7 +8,7 @@
 import SwiftUI
 import WidgetKit
 
-struct WidgetEntryView: View {
+struct UpNextEntryView: View {
     var entry: BalanceEntry
 
     private var showUpNext: Bool {
@@ -42,20 +42,20 @@ struct Widget_Previews: PreviewProvider {
         let expenseEntry = BalanceEntry(date: Date(), configuration: .init(), isLoggedIn: true, balance: balance)
         let loggedOut = BalanceEntry(date: Date(), configuration: .init(), isLoggedIn: false, balance: nil)
 
-        WidgetEntryView(entry: entry)
+        UpNextEntryView(entry: entry)
             .previewContext(WidgetPreviewContext(family: .systemSmall))
 
-        WidgetEntryView(entry: loggedOut)
+        UpNextEntryView(entry: loggedOut)
             .previewContext(WidgetPreviewContext(family: .systemSmall))
 
-        WidgetEntryView(entry: expenseEntry)
+        UpNextEntryView(entry: expenseEntry)
             .previewContext(WidgetPreviewContext(family: .systemSmall))
 
-        WidgetEntryView(entry: expenseEntry)
+        UpNextEntryView(entry: expenseEntry)
             .previewContext(WidgetPreviewContext(family: .systemSmall))
             .environment(\.colorScheme, .dark)
 
-        WidgetEntryView(entry: expenseEntry).redacted(reason: .placeholder)
+        UpNextEntryView(entry: expenseEntry).redacted(reason: .placeholder)
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }
