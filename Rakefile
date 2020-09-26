@@ -52,5 +52,5 @@ def install_xcodegen()
 end
 
 def test()
-    `set -o pipefail && xcodebuild test -scheme Knuckles -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.4.1' | xcpretty`
+    `set -o pipefail && xcodebuild test -workspace knuckles.xcworkspace -scheme Knuckles -destination 'platform=iOS Simulator,name=iPhone 11 Pro,OS=13.4' | xcpretty`
 end

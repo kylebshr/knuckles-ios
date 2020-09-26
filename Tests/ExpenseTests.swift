@@ -14,7 +14,7 @@ class ExpenseTests: XCTestCase {
      */
 
     func testExpenseDueOnPayDayWeeklyFunding() {
-        let expense = Expense(emoji: "🌯", name: "Fri May 1", amount: 100, dayDueAt: 1)
+        let expense = Expense(name: "Fri May 1", amount: 100, dayDueAt: 1)
         let payPeriod = PayPeriod.weekly(day: 6)
 
         let dayBeforeDue: Date = "04/30/2020"
@@ -35,7 +35,7 @@ class ExpenseTests: XCTestCase {
     }
 
     func testExpenseDueOffPayDayWeeklyFunding() {
-        let expense = Expense(emoji: "🌯", name: "Wed May 5", amount: 100, dayDueAt: 5)
+        let expense = Expense(name: "Wed May 5", amount: 100, dayDueAt: 5)
         let payPeriod = PayPeriod.weekly(day: 6)
 
         let dayBeforeDue: Date = "05/04/2020"
@@ -56,7 +56,7 @@ class ExpenseTests: XCTestCase {
     }
 
     func testExpenseDueOnPayDayFirstFifteenFunding() {
-        let expense = Expense(emoji: "🌯", name: "Fri May 1", amount: 100, dayDueAt: 1)
+        let expense = Expense(name: "Fri May 1", amount: 100, dayDueAt: 1)
         let payPeriod = PayPeriod.firstAndFifteenth(adjustForWeekends: false)
 
         let dayBeforeDue: Date = "04/30/2020"
@@ -77,7 +77,7 @@ class ExpenseTests: XCTestCase {
     }
 
     func testExpenseDueOffPayDayFifteenLastFunding() {
-        let expense = Expense(emoji: "🌯", name: "Wed May 5", amount: 100, dayDueAt: 5)
+        let expense = Expense(name: "Wed May 5", amount: 100, dayDueAt: 5)
         let payPeriod = PayPeriod.fifteenthAndLast(adjustForWeekends: false)
 
         let dayBeforeDue: Date = "05/04/2020"
