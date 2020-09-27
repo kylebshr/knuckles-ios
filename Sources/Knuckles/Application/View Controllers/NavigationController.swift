@@ -13,6 +13,23 @@ class NavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let buttonAppearance = UIBarButtonItemAppearance(style: .plain)
+        buttonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.emphasis]
+
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithDefaultBackground()
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.customLabel]
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.customLabel]
+        appearance.buttonAppearance = buttonAppearance
+        navigationBar.standardAppearance = appearance
+
+        let scrollAppearance = UINavigationBarAppearance()
+        scrollAppearance.configureWithTransparentBackground()
+        scrollAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.customLabel]
+        scrollAppearance.titleTextAttributes = [.foregroundColor: UIColor.customLabel]
+        scrollAppearance.buttonAppearance = buttonAppearance
+        navigationBar.scrollEdgeAppearance = scrollAppearance
+
         delegate = self
 
         if let controllerSelector = "X2NhY2hlZEludGVyYWN0aW9uQ29udHJvbGxlcg==".base64Decoded,

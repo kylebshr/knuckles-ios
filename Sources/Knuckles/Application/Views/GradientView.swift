@@ -27,7 +27,7 @@ class GradientView: UIView {
 
     func update() {
         gradientLayer.colors = colors.map { $0.cgColor }
-        gradientLayer.startPoint = .init(x: 0.4, y: 0.55)
+        gradientLayer.startPoint = .init(x: 0.42, y: 0.55)
         gradientLayer.endPoint = .init(x: 0.75, y: 1)
     }
 }
