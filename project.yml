@@ -86,6 +86,7 @@ targets:
 
     settings:
       MARKETING_VERSION: "0.0.1"
+      CURRENT_PROJECT_VERSION: 1
       IPHONEOS_DEPLOYMENT_TARGET: 14.0
       INFOPLIST_FILE: Sources/Widget/Info.plist
       ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: true

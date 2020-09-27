@@ -13,7 +13,7 @@ extension UIColor {
     static let customWhite = UIColor(displayP3Red: 0.938, green: 0.938, blue: 0.938, alpha: 1)
 
     static let brand = UIColor(displayP3Red: 0.152, green: 0.368, blue: 0.871, alpha: 1)
-    static let greenBackground = UIColor(displayP3Red: 0.878, green: 0.976, blue: 0.953, alpha: 1)
+    static let gradientBlue = UIColor(displayP3Red: 0.875, green: 0.91, blue: 0.988, alpha: 1)
 
     static let customBlue = UIColor(displayP3Red: 0.325, green: 0.596, blue: 1.000, alpha: 1)
     static let customRed = UIColor(displayP3Red: 0.871, green: 0, blue: 0.192, alpha: 1)

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MainViewController: ViewController {
+class MainViewController: ViewController, UITabBarControllerDelegate {
 
     private let tabBarViewController = UITabBarController()
     private let balanceViewController: BalanceViewController
@@ -21,6 +21,7 @@ class MainViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tabBarViewController.delegate = self
         add(tabBarViewController)
 
         let goals = NavigationController(rootViewController: GoalsViewController())
@@ -29,13 +30,29 @@ class MainViewController: ViewController {
         let expenses = NavigationController(rootViewController: ExpensesViewController())
         expenses.navigationBar.prefersLargeTitles = true
 
-        let information = NavigationController(rootViewController: balanceViewController)
-        information.navigationBar.prefersLargeTitles = true
+        let balance = NavigationController(rootViewController: balanceViewController)
+        balance.navigationBar.prefersLargeTitles = true
 
         tabBarViewController.viewControllers = [
-            information,
+            balance,
             expenses,
             goals,
         ]
+
+        tabBarController(tabBarViewController, didSelect: balance)
+    }
+
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        guard let nav = viewController as? UINavigationController, let viewController = nav.viewControllers.first else {
+            return
+        }
+
+        if viewController is BalanceViewController {
+            tabBarController.tabBar.backgroundImage = UIImage()
+            tabBarController.tabBar.shadowImage = UIImage()
+        } else {
+            tabBarController.tabBar.backgroundImage = nil
+            tabBarController.tabBar.shadowImage = nil
+        }
     }
 }

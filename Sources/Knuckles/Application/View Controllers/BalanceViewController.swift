@@ -36,9 +36,15 @@ class BalanceViewController: ViewController, UICollectionViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.titleView = titleView
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        navigationController?.navigationBar.standardAppearance = appearance
+
+        let gradientView = GradientView()
+        gradientView.colors = [.white, .gradientBlue]
 
         view.addSubview(collectionView)
+        collectionView.backgroundView = gradientView
         collectionView.pinEdges(to: view)
         collectionView.dataSource = dataSource
         collectionView.register(cell: BalanceCell.self)
@@ -108,8 +114,10 @@ class BalanceViewController: ViewController, UICollectionViewDelegate {
         snapshot.appendSections([.header])
         snapshot.appendItems([.header(balance.currency())])
 
-        snapshot.appendSections([.thisWeek])
-        snapshot.appendItems(state.expenses.map { .expense($0) })
+        if !state.expenses.isEmpty {
+            snapshot.appendSections([.thisWeek])
+            snapshot.appendItems(state.expenses.map { .expense($0) })
+        }
 
         dataSource.apply(snapshot)
     }
